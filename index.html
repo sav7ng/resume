@@ -59,7 +59,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, 110px);
             grid-template-rows: repeat(auto-fill, 110px);
-            gap: 3px;
+            gap: 0;
             padding: 0;
             overflow: hidden;
         }
@@ -82,7 +82,7 @@
             -webkit-text-fill-color: transparent;
             color: transparent;
             opacity: 0.2;
-            border-radius: 4px;
+            border-radius: 0;
             padding: 0;
             -webkit-user-select: none;
             user-select: none;
@@ -126,7 +126,7 @@
             .ascii-background {
                 grid-template-columns: repeat(auto-fill, 80px);
                 grid-template-rows: repeat(auto-fill, 80px);
-                gap: 12px;
+                gap: 0;
             }
             
             .ascii-tile {
@@ -141,8 +141,8 @@
             .ascii-background {
                 grid-template-columns: repeat(auto-fill, 60px);
                 grid-template-rows: repeat(auto-fill, 60px);
-                gap: 10px;
-                padding: 10px;
+                gap: 0;
+                padding: 0;
             }
             
             .ascii-tile {
@@ -169,8 +169,8 @@
             .ascii-background {
                 grid-template-columns: repeat(auto-fill, 50px);
                 grid-template-rows: repeat(auto-fill, 50px);
-                gap: 8px;
-                padding: 8px;
+                gap: 0;
+                padding: 0;
             }
             
             .ascii-tile {
@@ -726,29 +726,29 @@
             if (width <= 480) {
                 return {
                     tileSize: 50,
-                    gap: 5,
-                    maxTiles: 50,
+                    gap: 0,
+                    maxTiles: 200,
                     animationDuration: 6
                 };
             } else if (width <= 768) {
                 return {
                     tileSize: 60,
-                    gap: 5,
-                    maxTiles: 80,
+                    gap: 0,
+                    maxTiles: 300,
                     animationDuration: 5
                 };
             } else if (width <= 1024) {
                 return {
                     tileSize: 80,
-                    gap: 4,
-                    maxTiles: 120,
+                    gap: 0,
+                    maxTiles: 400,
                     animationDuration: 5
                 };
             } else {
                 return {
                     tileSize: 110,
-                    gap: 3,
-                    maxTiles: 200,
+                    gap: 0,
+                    maxTiles: 600,
                     animationDuration: 5
                 };
             }
@@ -764,13 +764,16 @@
             if (!container) return;
             
             // 计算可容纳的网格数量
-            const cols = Math.floor(window.innerWidth / (config.tileSize + config.gap));
-            const rows = Math.floor(window.innerHeight / (config.tileSize + config.gap));
+            const cols = Math.ceil(window.innerWidth / (config.tileSize + config.gap));
+            const rows = Math.ceil(window.innerHeight / (config.tileSize + config.gap));
             let total = cols * rows;
             
-            // 限制最大数量（性能优化）
+            // 如果计算出的数量超过限制，则使用计算值以确保铺满（优先视觉效果）
             if (total > config.maxTiles) {
-                total = config.maxTiles;
+                // 仅当差异极大时才限制，防止性能问题
+                if (total > 1000) {
+                     total = 1000;
+                }
             }
             
             // 清空容器
