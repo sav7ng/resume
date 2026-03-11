@@ -1,845 +1,909 @@
 <!doctype html>
-<html class="white">
+<html lang="zh-CN">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
-        integrity="sha512-+NqPlbbtM1QqiK8ZAo4Yrj2c4lNQoGv8P79DPtKzj++l5jnN39rHA/xsqn8zE9l0uSoxaCdrOgFs6yjyfbBxSg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <link href="./obsidian.mini.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap"
+        rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
+        :root {
+            --page-bg: #ffffff;
+            --surface: #f5f5f5;
+            --surface-strong: #000000;
+            --text: #000000;
+            --text-secondary: #666666;
+            --text-tertiary: #888888;
+            --text-muted: #999999;
+            --text-disabled: #cccccc;
+            --divider: #e5e5e5;
+            --page-width: min(calc(100% - 32px), 760px);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             margin: 0;
-            padding: 0;
-            list-style: none;
-            -webkit-tap-highlight-color: transparent;
+            background: var(--page-bg);
+            color: var(--text);
+            font-family: "Crimson Text", "Songti SC", "STSong", serif;
             -webkit-font-smoothing: antialiased;
-            background-color: #1a1a1a;
-            font-family: Smiley Sans !important;
-            font-weight: 700;
-            position: relative;
-            overflow-x: hidden;
-            font-size: 1em;
-            line-height: 2 !important;
-            color: #ddd;
-            z-index: -1;
+            text-rendering: optimizeLegibility;
         }
 
-        h1:hover,
+        img {
+            display: block;
+            max-width: 100%;
+        }
+
+        a {
+            color: inherit;
+            text-decoration-line: underline;
+            text-decoration-thickness: 1px;
+            text-underline-offset: 3px;
+            transition: background-color 180ms ease, color 180ms ease;
+        }
+
         a:hover {
-            color: #2196f3 !important;
+            background: var(--surface-strong);
+            color: var(--page-bg);
         }
 
-        @keyframes pulse {
-            0% {
-                opacity: 1
-            }
-
-            50% {
-                opacity: .3
-            }
-
-            100% {
-                opacity: 1
-            }
+        a:focus-visible {
+            outline: 2px solid currentColor;
+            outline-offset: 3px;
         }
 
-        /* ASCII瓷砖背景容器 */
-        .ascii-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
+        .metric.dark a:hover,
+        .info-card.dark a:hover,
+        .experience-card.dark a:hover,
+        .editorial-item.dark a:hover,
+        .thanks-card a:hover {
+            background: var(--page-bg);
+            color: var(--surface-strong);
+        }
+
+        ::selection {
+            background: var(--surface-strong);
+            color: var(--page-bg);
+        }
+
+        .page {
+            width: var(--page-width);
+            margin: 0 auto;
+            padding: 20px 0 72px;
+        }
+
+        .hero {
             display: grid;
-            grid-template-columns: repeat(auto-fill, 110px);
-            grid-template-rows: repeat(auto-fill, 110px);
-            gap: 0;
-            padding: 0;
-            overflow: hidden;
+            gap: 20px;
         }
 
-        /* 单个ASCII瓷砖块 */
-        .ascii-tile {
-            width: 110px;
-            height: 110px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-evenly;
-            align-items: center;
-            font-family: 'Courier New', Consolas, Monaco, monospace;
-            font-size: 20px;
-            line-height: 1;
-            font-weight: bold;
-            background: linear-gradient(135deg, #b8c6db 0%, #778899 40%, #4a5568 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            color: transparent;
-            opacity: 0.2;
-            border-radius: 0;
-            padding: 0;
-            -webkit-user-select: none;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-            -webkit-transform: translateZ(0);
-            transform: translateZ(0);
-            will-change: opacity, transform;
+        .hero-grid {
+            display: grid;
+            gap: 20px;
         }
 
-        .ascii-tile div {
-            white-space: nowrap;
+        .eyebrow,
+        .section-label,
+        .card-label,
+        .detail-term,
+        .skill-tag,
+        .block-label,
+        .period-caption,
+        .list-kicker {
+            font-family: "Anton", Impact, sans-serif;
+            text-transform: uppercase;
             letter-spacing: 2px;
         }
 
-        /* 呼吸动画 */
-        @keyframes breathe {
-            0%, 100% {
-                opacity: 0.15;
-                transform: scale(1);
+        .eyebrow {
+            margin: 0;
+            color: var(--text-tertiary);
+            font-size: 11px;
+        }
+
+        .hero-name {
+            margin: 0;
+            font-family: "Anton", Impact, sans-serif;
+            font-size: clamp(4rem, 17vw, 7rem);
+            line-height: 0.85;
+            letter-spacing: -2px;
+            text-transform: uppercase;
+        }
+
+        .hero-kicker {
+            margin: 0;
+            font-family: "Anton", Impact, sans-serif;
+            font-size: 14px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .hero-tagline {
+            margin: 0;
+            font-size: clamp(1.35rem, 5vw, 1.85rem);
+            line-height: 1.1;
+            font-style: italic;
+            max-width: 18ch;
+        }
+
+        .hero-summary {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: 18px;
+            line-height: 1.45;
+            max-width: 34ch;
+        }
+
+        .portrait-shell,
+        .info-card,
+        .experience-card,
+        .editorial-item,
+        .thanks-card {
+            padding: 20px;
+            background: var(--surface);
+        }
+
+        .portrait-shell {
+            display: grid;
+            gap: 12px;
+            align-content: start;
+        }
+
+        .portrait-frame {
+            position: relative;
+            padding: 14px;
+            background:
+                linear-gradient(180deg, #ffffff 0%, #f1f1f1 100%);
+        }
+
+        .portrait-shell img {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            object-position: center 18%;
+            background: #efefef;
+        }
+
+        .portrait-badge {
+            position: absolute;
+            left: 14px;
+            bottom: 14px;
+            margin: 0;
+            padding: 8px 10px 7px;
+            background: var(--surface-strong);
+            color: var(--page-bg);
+            font-family: "Anton", Impact, sans-serif;
+            font-size: 11px;
+            line-height: 1;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .portrait-caption {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: 15px;
+            line-height: 1.4;
+            font-style: italic;
+        }
+
+        .hero-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .metric {
+            padding: 16px;
+            background: var(--surface);
+            min-height: 112px;
+            display: grid;
+            align-content: space-between;
+            gap: 8px;
+        }
+
+        .metric.dark,
+        .info-card.dark,
+        .experience-card.dark,
+        .thanks-card {
+            background: var(--surface-strong);
+            color: var(--page-bg);
+        }
+
+        .metric-value {
+            margin: 0;
+            font-family: "Anton", Impact, sans-serif;
+            font-size: clamp(2rem, 7vw, 2.65rem);
+            line-height: 0.9;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+        }
+
+        .metric-label,
+        .card-label,
+        .period-caption,
+        .list-kicker {
+            margin: 0;
+            font-size: 11px;
+            line-height: 1.2;
+            opacity: 0.8;
+        }
+
+        .section {
+            margin-top: 40px;
+            display: grid;
+            gap: 16px;
+        }
+
+        .section-header {
+            display: grid;
+            gap: 4px;
+        }
+
+        .section-label {
+            margin: 0;
+            color: var(--text-tertiary);
+            font-size: 11px;
+        }
+
+        .section-title {
+            margin: 0;
+            font-family: "Anton", Impact, sans-serif;
+            font-size: clamp(2rem, 8vw, 2.8rem);
+            line-height: 0.9;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .intro-grid,
+        .experience-stack,
+        .editorial-list {
+            display: grid;
+            gap: 16px;
+        }
+
+        .info-card {
+            display: grid;
+            gap: 14px;
+        }
+
+        .card-title {
+            margin: 0;
+            font-family: "Anton", Impact, sans-serif;
+            font-size: 28px;
+            line-height: 0.95;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .lead-text {
+            margin: 0;
+            font-size: 20px;
+            line-height: 1.45;
+            font-style: italic;
+        }
+
+        .detail-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .detail-row {
+            display: grid;
+            grid-template-columns: 110px minmax(0, 1fr);
+            gap: 12px;
+            align-items: start;
+        }
+
+        .detail-term {
+            margin: 0;
+            font-size: 12px;
+            line-height: 1.2;
+        }
+
+        .detail-desc {
+            margin: 0;
+            font-size: 18px;
+            line-height: 1.35;
+        }
+
+        .skill-wall {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .skill-tag {
+            background: var(--surface);
+            padding: 10px 12px;
+            font-size: 11px;
+            line-height: 1;
+        }
+
+        .period-marker {
+            display: grid;
+            gap: 4px;
+            margin-top: 4px;
+        }
+
+        .period-value {
+            margin: 0;
+            font-family: "Anton", Impact, sans-serif;
+            font-size: 32px;
+            line-height: 0.9;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .experience-card {
+            display: grid;
+            gap: 18px;
+        }
+
+        .experience-company {
+            margin: 0;
+            font-family: "Anton", Impact, sans-serif;
+            font-size: 12px;
+            line-height: 1.3;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.85;
+        }
+
+        .experience-role {
+            margin: 0;
+            font-family: "Anton", Impact, sans-serif;
+            font-size: 28px;
+            line-height: 0.95;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .project-title {
+            margin: 0;
+            font-size: 22px;
+            line-height: 1.1;
+            font-style: italic;
+            font-weight: 600;
+        }
+
+        .experience-body,
+        .block {
+            display: grid;
+            gap: 8px;
+        }
+
+        .block-label {
+            margin: 0;
+            font-size: 12px;
+            line-height: 1.2;
+        }
+
+        .block p,
+        .block li {
+            margin: 0;
+            font-size: 18px;
+            line-height: 1.55;
+        }
+
+        .block ul {
+            margin: 0;
+            padding-left: 20px;
+            display: grid;
+            gap: 8px;
+        }
+
+        .editorial-item {
+            display: grid;
+            gap: 8px;
+        }
+
+        .list-title {
+            margin: 0;
+            font-size: 22px;
+            line-height: 1.15;
+            font-weight: 600;
+        }
+
+        .list-meta {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: 15px;
+            line-height: 1.35;
+            font-style: italic;
+        }
+
+        .editorial-item.dark .list-meta,
+        .thanks-card .list-meta {
+            color: var(--text-disabled);
+        }
+
+        .thanks-card {
+            display: grid;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .thanks-message {
+            margin: 0;
+            font-size: 22px;
+            line-height: 1.3;
+            font-style: italic;
+        }
+
+        @media (min-width: 768px) {
+            .page {
+                padding-top: 28px;
+                padding-bottom: 96px;
             }
-            50% {
-                opacity: 0.5;
-                transform: scale(1.05);
+
+            .hero-grid {
+                grid-template-columns: minmax(0, 1.3fr) minmax(260px, 0.9fr);
+                align-items: end;
+            }
+
+            .intro-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .info-card:first-child {
+                grid-column: 1 / -1;
             }
         }
 
-        .ascii-tile {
-            animation: breathe 5s ease-in-out infinite;
-        }
+        @media (max-width: 560px) {
+            .page {
+                width: min(calc(100% - 24px), 760px);
+            }
 
-        /* 闪光效果 */
-        .ascii-tile.flash {
-            opacity: 0.8 !important;
-            transform: scale(1.1) !important;
-            box-shadow: 0 0 20px rgba(119, 136, 153, 0.5);
-            transition: all 0.3s ease-out;
-        }
+            .hero-metrics {
+                grid-template-columns: 1fr;
+            }
 
-        /* 平板端响应式 */
-        @media (max-width: 1024px) {
-            .ascii-background {
-                grid-template-columns: repeat(auto-fill, 80px);
-                grid-template-rows: repeat(auto-fill, 80px);
-                gap: 0;
+            .detail-row {
+                grid-template-columns: 1fr;
+                gap: 4px;
             }
-            
-            .ascii-tile {
-                width: 80px;
-                height: 80px;
-                font-size: 9px;
-            }
-        }
 
-        /* 移动端响应式 */
-        @media (max-width: 768px) {
-            .ascii-background {
-                grid-template-columns: repeat(auto-fill, 60px);
-                grid-template-rows: repeat(auto-fill, 60px);
-                gap: 0;
-                padding: 0;
+            .detail-desc {
+                font-size: 17px;
             }
-            
-            .ascii-tile {
-                width: 60px;
-                height: 60px;
-                font-size: 7px;
-                letter-spacing: 0.5px;
-            }
-            
-            @keyframes breathe {
-                0%, 100% {
-                    opacity: 0.15;
-                    transform: scale(1);
-                }
-                50% {
-                    opacity: 0.35;
-                    transform: scale(1.02);
-                }
-            }
-        }
 
-        /* 小屏手机响应式 */
-        @media (max-width: 480px) {
-            .ascii-background {
-                grid-template-columns: repeat(auto-fill, 50px);
-                grid-template-rows: repeat(auto-fill, 50px);
-                gap: 0;
-                padding: 0;
-            }
-            
-            .ascii-tile {
-                width: 50px;
-                height: 50px;
-                font-size: 6px;
-                line-height: 1.1;
-            }
-            
-            .ascii-tile div {
-                letter-spacing: 0;
+            .block p,
+            .block li,
+            .lead-text {
+                font-size: 17px;
             }
         }
     </style>
 </head>
 
-<title>CV</title>
-
-<!-- <body class="bg-repeat"
-    style="background-image: linear-gradient(to bottom, rgba(26, 26, 26, 0.8), rgba(26, 26, 26, 0.8)), url(./s.png)"> -->
-
 <body>
-    <!-- ASCII瓷砖背景 -->
-    <div class="ascii-background" id="asciiBackground"></div>
-
-    <div class="container mx-auto p-8">
-
-        <div class="m-2" data-aos="zoom-out">
-            <img class="shadow-lg shadow-cyan-500/50 w-36 h-36 rounded-full mx-auto border-2 border-sky-500"
-                src="./avatar.jpg" alt="">
-        </div>
-
-        <h1 data-aos="fade-left" class="flex justify-center" style="font-size: 60px;"><span
-                class="gradient-text font-black">「 Saving
-                」</span></h1>
-
-        </p>
-        <div class="py-2 flex justify-center" data-aos="fade-right">
-            <h1><span class="gradient-text font-black italic">Trying to do better</span></h1>
-        </div>
-
-        <div class="py-2 flex justify-center">
-            <div class="w-4"
-                style="border-top-style: none; border-right-style:none; border-bottom-style:solid; border-left-style:none; border-width: 3px;">
+    <main class="page">
+        <section class="hero">
+            <div class="hero-grid">
+                <div data-aos="fade-up">
+                    <p class="eyebrow">Resume / Monochrome Editorial Profile</p>
+                    <h1 class="hero-name">Saving</h1>
+                    <p class="hero-kicker">Senior Backend Developer / Team Lead</p>
+                    <p class="hero-tagline">Trying to do better.</p>
+                    <p class="hero-summary">
+                        一位高级后端开发人员，在 Java，Golang 和 Kotlin 方面共拥有 6 年的经验。提供高效和高质量的计划。一个热爱运动，追求改进和完美的创造者。
+                    </p>
+                </div>
+                <aside class="portrait-shell" data-aos="fade-up" data-aos-delay="80">
+                    <div class="portrait-frame">
+                        <img src="./avatar.jpg" alt="Saving 头像">
+                        <p class="portrait-badge">Saving / Backend</p>
+                    </div>
+                    <p class="portrait-caption">
+                        Back-end systems, distributed architecture, high-traffic services, and team collaboration.
+                    </p>
+                </aside>
             </div>
-        </div>
-        <div class="py-2 pt-6 flex justify-center text-xl">
-            <h1 style="color: #0ed2f7;"><strong>PROFILE / 简介</strong></h1>
-        </div>
-        <div class="grid grid-flow-row auto-rows-max text-center">
-            <p>一位高级后端开发人员，在 Java，Golang 和 Kotlin 方面共拥有 6
-                年的经验。提供高效和高质量的计划。一个热爱运动，追求改进和完美的创造者</p>
-        </div>
-
-        <div class="py-2 pt-6 flex justify-center text-xl">
-            <h1 style="color: #0ed2f7;"><strong>PERSONAL DETAILS / 个人信息</strong></h1>
-        </div>
-        <div class="grid grid-flow-row auto-rows-max">
-            <p>
-                姓名: 吴煌全<span class="gradient-text font-black">「 Saving 」</span>/ 男 / 1997
-            </p>
-            <p>
-                专业: 软件技术
-            </p>
-            <p>
-                毕业院校: 广州城建职业学院
-            </p>
-            <p>
-                期望职位: 高级后端开发 / <strong>TeamLeader</strong>
-            </p>
-        </div>
-
-        <div class="py-2 pt-6 flex justify-center text-xl">
-            <h1 style="color: #0ed2f7;"><strong>CONTACT / 联系方式</strong></h1>
-        </div>
-        <div class="grid grid-flow-row auto-rows-max">
-            <p>
-                Phone: 18316260997
-            </p>
-            <p>
-                Wechat: sav7ng
-            </p>
-            <p>
-                Email: <a class="underline decoration-sky-500"><strong>savingrun@gmail.com</strong></a>
-            </p>
-            <p>
-                Github: <a class="underline decoration-sky-500"
-                    href='https://github.com/sav7ng'><strong>https://github.com/sav7ng</strong></a>
-            </p>
-            <p>
-                WechatBlog: <strong>爱敲代码的猫</strong>
-            </p>
-        </div>
-
-        <div class="py-2 pt-6 flex justify-center text-xl">
-            <h1 style="color: #0ed2f7;"><strong>SKILLS / 技能</strong></h1>
-        </div>
-        <div class="flex flex-wrap">
-            <div
-                class="rounded-xl mt-2 mr-2 px-3 outline outline-1 outline-cyan-500 outline-offset-0 shadow-md shadow-cyan-500/50 hover:outline-2">
-                Java</div>
-            <div
-                class="rounded-xl mt-2 mr-2 px-3 outline outline-1 outline-cyan-500 outline-offset-0 shadow-md shadow-cyan-500/50 hover:outline-2">
-                Kotlin</div>
-            <div
-                class="rounded-xl mt-2 mr-2 px-3 outline outline-1 outline-cyan-500 outline-offset-0 shadow-md shadow-cyan-500/50 hover:outline-2">
-                Golang</div>
-            <div
-                class="rounded-xl mt-2 mr-2 px-3 outline outline-1 outline-cyan-500 outline-offset-0 shadow-md shadow-cyan-500/50 hover:outline-2">
-                SpringFramework</div>
-            <div
-                class="rounded-xl mt-2 mr-2 px-3 outline outline-1 outline-cyan-500 outline-offset-0 shadow-md shadow-cyan-500/50 hover:outline-2">
-                Maven/Gradle</div>
-            <div
-                class="rounded-xl mt-2 mr-2 px-3 outline outline-1 outline-cyan-500 outline-offset-0 shadow-md shadow-cyan-500/50 hover:outline-2">
-                Mybatis</div>
-            <div
-                class="rounded-xl mt-2 mr-2 px-3 outline outline-1 outline-cyan-500 outline-offset-0 shadow-md shadow-cyan-500/50 hover:outline-2">
-                Kratos</div>
-            <div
-                class="rounded-xl mt-2 mr-2 px-3 outline outline-1 outline-cyan-500 outline-offset-0 shadow-md shadow-cyan-500/50 hover:outline-2">
-                Qmgo</div>
-            <div
-                class="rounded-xl mt-2 mr-2 px-3 outline outline-1 outline-cyan-500 outline-offset-0 shadow-md shadow-cyan-500/50 hover:outline-2">
-                MySQL</div>
-            <div
-                class="rounded-xl mt-2 mr-2 px-3 outline outline-1 outline-cyan-500 outline-offset-0 shadow-md shadow-cyan-500/50 hover:outline-2">
-                Redis</div>
-            <div
-                class="rounded-xl mt-2 mr-2 px-3 outline outline-1 outline-cyan-500 outline-offset-0 shadow-md shadow-cyan-500/50 hover:outline-2">
-                MongoDB</div>
-            <div
-                class="rounded-xl mt-2 mr-2 px-3 outline outline-1 outline-cyan-500 outline-offset-0 shadow-md shadow-cyan-500/50 hover:outline-2">
-                ClickHouse</div>
-            <div
-                class="rounded-xl mt-2 mr-2 px-3 outline outline-1 outline-cyan-500 outline-offset-0 shadow-md shadow-cyan-500/50 hover:outline-2">
-                Metabase</div>
-            <div
-                class="rounded-xl mt-2 mr-2 px-3 outline outline-1 outline-cyan-500 outline-offset-0 shadow-md shadow-cyan-500/50 hover:outline-2">
-                APISIX</div>
-            <div
-                class="rounded-xl mt-2 mr-2 px-3 outline outline-1 outline-cyan-500 outline-offset-0 shadow-md shadow-cyan-500/50 hover:outline-2">
-                RocketMQ</div>
-            <div
-                class="rounded-xl mt-2 mr-2 px-3 outline outline-1 outline-cyan-500 outline-offset-0 shadow-md shadow-cyan-500/50 hover:outline-2">
-                Pulsar</div>
-            <div
-                class="rounded-xl mt-2 mr-2 px-3 outline outline-1 outline-cyan-500 outline-offset-0 shadow-md shadow-cyan-500/50 hover:outline-2">
-                Seata</div>
-            <div
-                class="rounded-xl mt-2 mr-2 px-3 outline outline-1 outline-cyan-500 outline-offset-0 shadow-md shadow-cyan-500/50 hover:outline-2">
-                XxlJob</div>
-            <div
-                class="rounded-xl mt-2 mr-2 px-3 outline outline-1 outline-cyan-500 outline-offset-0 shadow-md shadow-cyan-500/50 hover:outline-2">
-                Sentinel</div>
-            <div
-                class="rounded-xl mt-2 mr-2 px-3 outline outline-1 outline-cyan-500 outline-offset-0 shadow-md shadow-cyan-500/50 hover:outline-2">
-                Kafka</div>
-            <div
-                class="rounded-xl mt-2 mr-2 px-3 outline outline-1 outline-cyan-500 outline-offset-0 shadow-md shadow-cyan-500/50 hover:outline-2">
-                RPC</div>
-            <div
-                class="rounded-xl mt-2 mr-2 px-3 outline outline-1 outline-cyan-500 outline-offset-0 shadow-md shadow-cyan-500/50 hover:outline-2">
-                Docker</div>
-            <div
-                class="rounded-xl mt-2 mr-2 px-3 outline outline-1 outline-cyan-500 outline-offset-0 shadow-md shadow-cyan-500/50 hover:outline-2">
-                CI/CD</div>
-        </div>
-
-        <div class="mt-2 py-2 pt-6 flex justify-center">
-            <h1 class="py-2 timeline-title text-xl" style="color: #0ed2f7;"><strong>WORK EXPERIENCE /
-                    工作经历</strong></h1>
-        </div>
-
-
-        <ul class="timeline timeline-centered py-2">
-            <li class="timeline-item period">
-                <div class="timeline-info"></div>
-                <div class="timeline-marker"></div>
-                <div class="timeline-content" data-aos="fade-up">
-                    <h2 class="timeline-title text-xl">至今</h2>
+            <div class="hero-metrics">
+                <div class="metric dark" data-aos="fade-up" data-aos-delay="40">
+                    <p class="metric-label">Primary Stack</p>
+                    <p class="metric-value">Java / Go / Kotlin</p>
                 </div>
-            </li>
-
-            <li class="timeline-item">
-                <div class="timeline-info" data-aos="fade-up">
-                    <span class="gradient-text">广州大事件科技网络有限公司「后端开发组长」</span>
+                <div class="metric" data-aos="fade-up" data-aos-delay="80">
+                    <p class="metric-label">Experience</p>
+                    <p class="metric-value">6 Years</p>
                 </div>
-                <div class="timeline-marker"></div>
-                <div class="timeline-content">
-                    <a class="timeline-title" target="_self" data-aos="fade-up">贪吃商城小程序 <span
-                            class="gradient-text">▪</span> 移动端 <span class="gradient-text">▪</span> 商家端</a>
-                    <div class="text-pretty" data-aos="fade-up">
-                        <p class="mt-6 font-medium" data-aos="fade-up">
-                            <span class="gradient-text">分布式微服务架构</span>
-                        </p>
-                        <p class="text-pretty mt-2 text-left" data-aos="fade-up">
-                            SpringCloud / MybatisPlus / MySql(polarDB) / Redis / MongoDB / ClickHouse / ES / RocketMQ /
-                            Pulsar / Sentry / Seata / XxlJob / Sentinel / OpenFeign / APISIX / Swagger / Kubernet /
-                            分布式发号器 / Jenkins
-                        </p>
-                        <p class="mt-6 font-medium" data-aos="fade-up">
-                            <span class="gradient-text">项目概况</span>
-                        </p>
-                        <p class="mt-2 text-left" data-aos="fade-up">
-                            贪吃商城 <a class="underline decoration-sky-500" href="https://www.boomsj.com">boomsj.com</a>
-                            是自研从0到1，现注册会员400W，月流水平均2.5KW的本地生活服务电商平台。依托微信十亿生态，及大事件流量优势，以技术为驱动力，帮助本地商家精准匹配消费群体，降低营销门槛，为本地商户打造一站式推广服务。从0到1的参与到项目开发中，在其中负责系统架构的讨论以及担任相关模块设计开发，并且参与需求评审参与需求讨论原型设计是否合理，并且在其中独立对发号器进行调研测试开发设计，负责多渠道数据的用户行为数据埋点与数据统计系统设计开发。协助组员工作分配，以及完成需求开发方案。
-                        </p>
-                        <p class="mt-6 font-medium" data-aos="fade-up">
-                            <span class="gradient-text">担任职责</span>
-                        </p>
-                        <ul class="mt-2 text-left text-pretty">
-                            <li data-aos="fade-up"><span class="gradient-text">▪</span> 用户中心 <strong
-                                    class="gradient-text">/</strong>
-                                负责用户接入兼容多端(网页/微信/抖音/支付宝)中统一登录注册的SAAS用户层功能，和用户服务中心的设计与开发，确保高流量场景下用户的正常登录注册;用户等级功能模块开发，用户任务系统，行为事件系统
-                            </li>
-                            <li class="mt-1" data-aos="fade-up"><span class="gradient-text">▪</span> 消息中心 <strong
-                                    class="gradient-text">/</strong>
-                                个人负责担任设计，开发主导角色，进行融合统一第三方消息发送渠道(短信/APP极光推送/站内信/微信公众号模板消息/微信小程序订阅消息/支付宝小程序推送)，设计其中管理关键字与事件中心进行配合进行管理，解决商场架构中消息多渠道统一发送的难点，该服务在
-                                架构中承担着小程序/APP多端的消息推送，使商场的转化率提高，更好触达以激活用户
-                            </li>
-                            <li class="mt-1" data-aos="fade-up"><span class="gradient-text">▪</span> APISIX网关 <strong
-                                    class="gradient-text">/</strong>
-                                负责网关是后端服务的统一入口，所有的客户端都通过统一的网关接入微服务，网关通过负载均衡将客户端请求转发到具体的后端服务，在网关层处理
-                                所有的非业务功能;实现Route(路由)，Token身份认证，用户鉴权，较验租户ID，全局异常，限流处理功能
-                            </li>
-                            <li class="mt-1" data-aos="fade-up"><span class="gradient-text">▪</span> OpenAPI网关 <strong
-                                    class="gradient-text">/</strong>
-                                负责开发第三方的关鉴权，参数校验，API请求次数，黑白名单功能
-                            </li>
-                            <li class="mt-1" data-aos="fade-up"><span class="gradient-text">▪</span> 微信中心 <strong
-                                    class="gradient-text">/</strong>
-                                负责微信服务设计开发重构;开发微信开放平台的第三方平台，实现微信多媒体平台(公众号)授权管理，监听授权公众号事件如扫码，自动回复客服消息实现公众号引流功能，并且对起做缓存性能优化;开发对接微信生成小程序UrlLink功能，URL跳转打开小程序场景;公众号带参二维码生成跳转功能添加转发长内容转换，解决回调信息长度超出限制问题;订阅消息发送功能
-                            </li>
-                            <li class="mt-1" data-aos="fade-up"><span class="gradient-text">▪</span> 渠道码数据统计中心 <strong
-                                    class="gradient-text">/</strong>
-                                负责交易分析图表支付总金额，支付人数，单均支付金额和人均消费次数标识指数开发;负责开发渠道码功能，并且把推广码兼容升级到渠道码相同功能，实现渠道ID绑定小程序的用户行为记录链路功能;负责开发使用ClickHouse实现渠道码查看埋点数据分析相关功能，可以详细看到该渠道码带来的访问人数，访问次数，客单价，下单人数，下单订单数，下单件数，下单金额，支付人数，支付订单数，支付件数，支付金额，新增用户数
-                            </li>
-                            <li class="mt-1" data-aos="fade-up"><span class="gradient-text">▪</span> 第三方服务(腾讯广告附近推/哗啦啦)
-                                <strong class="gradient-text">/</strong>
-                                负责开发对接微信第三方附近推朋友圈广告功能，广告投放流程开发，以及浏览/购券/核销的用户行为数据回传流程开发，集成渠道码特性，实现观察链路;对接哗啦啦第三方，实现与其门店管理和扫码核销功能
-                            </li>
-                            <li class="mt-1" data-aos="fade-up"><span class="gradient-text">▪</span> 商品订单模块 <strong
-                                    class="gradient-text">/</strong>
-                                后期人员调整负责商品订单模块，对商品库存以及订单过期分账回补库存等业务开发
-                            </li>
-                            <li class="mt-1" data-aos="fade-up"><span class="gradient-text">▪</span> CodeReview <strong
-                                    class="gradient-text">/</strong>
-                                审核代码合并请求，指出其他同学在开发代码中和优化问题，对项目方案进行整体把关
-                            </li>
-                        </ul>
-                        <p class="mt-6 font-medium" data-aos="fade-up">
-                            <span class="gradient-text">TECHNICAL POINTS</span>
-                        </p>
-                        <ul class="mt-2 text-left">
-                            <li data-aos="fade-up"><span class="gradient-text">▪</span>
-                                灵活使用「策略+工厂+模版」设计模式进行对用户统一登录注册功能和消息中心进行开发设计，实现多渠道登录注册业务和多渠道发送信息，大大降低代码复杂程度提高可读性和拓展性，一套接口，多处实现，方便后期拓展渠道与业务
-                            </li>
-                            <li class="mt-1" data-aos="fade-up"><span class="gradient-text">▪</span>
-                                使用RocketMQ实现异步通信、解耦系统组件、实现分布式事件系统，服务与用户任务/行为模块，多处服务行为触发后进行统一消费处理，以及保障失败重试和使用数据库操作保障消费的幂等性，实现该服务模块的高吞吐量，高可靠性，防止业务高并发场景下对服务产生高负载或者打崩服务的情况
-                            </li>
-                            <li class="mt-1" data-aos="fade-up"><span class="gradient-text">▪</span>
-                                引入APISIX替换Spring Cloud
-                                Gateway，由于业务发展后期发现在高并发场景下性能相对较低，因为它使用了Reactor异步编程模型，而不是传统的阻塞式IO。虽然它在并发连接数方面表现良好，但在单个请求的吞吐量上可能相对较低。所以将其废弃，并且引入使用了OpenResty架构性能更强的APISIX，它具有灵活的路由、负载均衡、熔断、限流、认证授权、动态配置等特性，并且可以通过插件进行功能扩展和定制化，在其之下使用了它的动态配置etcd开发动态用户黑名单功能实现实时拉黑用户功能，并且定制开发授权Token验签插件，用于APISIX中的路由配置中，开发中参与多次开源社区讨论以及bug反馈
-                            </li>
-                            <li class="mt-1" data-aos="fade-up"><span class="gradient-text">▪</span>
-                                设计业务用户埋点数据模型，利用ClickHouse列式数据库管理系统，进行打点记录以及统计，因为其的并行查询处理能力提高查询性能和吞吐量，业务服务使用Pulsar配合前端进行消息传递分批上报，并在其业务中进行打点数据统计实现多维度的数据展示
-                            </li>
-                            <li class="mt-1" data-aos="fade-up"><span class="gradient-text">▪</span>
-                                利用MongoDB单文档级别的原子性操作能力和多文档事务功能实现商品库存扣减以及回补功能
-                            </li>
-                            <li class="mt-1" data-aos="fade-up"><span class="gradient-text">▪</span>
-                                集成对接微信第三方开放平台，实现统一管理众多公众号和小程序的业务功能
-                            </li>
-                            <li class="mt-1" data-aos="fade-up"><span class="gradient-text">▪</span>
-                                熟悉实用Arthas进行对线上服务进行诊断性能/bug排除，达到快速解决问题以及优化服务接口性能
-                            </li>
-                        </ul>
-                        <p class="mt-6 font-medium" data-aos="fade-up">
-                            <span class="gradient-text">个人收获</span>
-                        </p>
-                        <p class="mt-2 text-left" data-aos="fade-up">
-                            提升了我对系统架构的大局观的思考和微服务分布式架构的更加深入的了解以及不同业务划分不同的服务。使我在现实商城中高并发高流量的场景中处理方案得到更多的实践，对场景有更完善的考虑与处理方案;提升了对SAAS多租户系统设计能力;提升会员系统的设计;提升了代码重构和设计模式的能力;在我主要负责的用户中心/消息中心中实践融合了多种设计模式架构，使代码可复用性/拓展性提升，以及在其中提高了对业务的设计能力。
-                        </p>
-                    </div>
+                <div class="metric" data-aos="fade-up" data-aos-delay="120">
+                    <p class="metric-label">Target Role</p>
+                    <p class="metric-value">Senior Backend / Team Lead</p>
                 </div>
-            </li>
-
-            <li class="timeline-item">
-                <div class="timeline-info" data-aos="fade-up">
-                    <span class="gradient-text">广州大事件科技网络有限公司「后端开发工程师」</span>
+                <div class="metric dark" data-aos="fade-up" data-aos-delay="160">
+                    <p class="metric-label">Focus</p>
+                    <p class="metric-value">Architecture / Delivery / Improvement</p>
                 </div>
-                <div class="timeline-marker"></div>
-                <div class="timeline-content">
-                    <a class="timeline-title" target="_self" data-aos="fade-up">贪吃商城Disco社区项目</a>
-                    <div class="text-pretty">
-                        <p class="mt-6 font-medium" data-aos="fade-up">
-                            <span class="gradient-text">分布式微服务架构</span>
-                        </p>
-                        <p class="mt-2 text-left" data-aos="fade-up">
-                            Golang / Kratos / Protobuf / Kafka / Redis / MongoDB / prometheus / goscrew / OpenAPI /
-                            Swagger / Wire / Docker / XxlJob / APISIX
-                        </p>
-                        <p class="mt-6 font-medium" data-aos="fade-up">
-                            <span class="gradient-text">项目概况</span>
-                        </p>
-                        <p class="mt-2 text-left" data-aos="fade-up">
-                            吃喝玩乐的社交平台，与贪吃商城相互结合，为其补齐社交部分，内设吃喝玩乐帖子发布以及评论，贪吃商场商品转卖以及拼单等功能。
-                        </p>
-                        <p class="mt-6 font-medium" data-aos="fade-up">
-                            <span class="gradient-text">担任职责</span>
-                        </p>
-                        <ul class="mt-2 text-left">
-                            <li data-aos="fade-up"><span class="gradient-text">▪</span>
-                                项目架构设计以及把控，前期Go相关的架构Kratos,Gin,go-micro,go-zero等调研和选择，以及多次进行GO相关开发分析会议，并且技术文档沉淀</li>
-                            <li class="mt-1" data-aos="fade-up"><span class="gradient-text">▪</span>
-                                负责用户模块/商城核销码转卖功能开发，贪吃商城用户授权注册社区会员功能，会员等级/收藏夹等功能开发
-                            </li>
-                            <li class="mt-1" data-aos="fade-up"><span class="gradient-text">▪</span>
-                                推行内部开源goscrew螺丝钉开发，类似Java中的hutool轮子工具包
-                            </li>
-                        </ul>
-                        <p class="mt-6 font-medium" data-aos="fade-up">
-                            <span class="gradient-text">个人收获</span>
-                        </p>
-                        <p class="mt-2 text-left" data-aos="fade-up">
-                            在个人时间中学习的golang得到实践，在公司中进行推行其开发的优点并落地，增加go分布式架构系统的开发经验，开发过程中学习并实践DDD领域模型开发，高内聚，低耦合到开发模式
-                        </p>
-                    </div>
-                </div>
-            </li>
-
-            <li class="timeline-item period">
-                <div class="timeline-info"></div>
-                <div class="timeline-marker"></div>
-                <div class="timeline-content data-aos=" data-aos="fade-up">
-                    <h2 class="timeline-title text-xl">十一月 2020</h2>
-                </div>
-            </li>
-
-            <li class="timeline-item">
-                <div class="timeline-info" data-aos="fade-up">
-                    <span class="gradient-text">唐朝科技(广州)有限公司「后端开发工程师」</span>
-                </div>
-                <div class="timeline-marker"></div>
-                <div class="timeline-content">
-                    <a class="timeline-title" target="_self" data-aos="fade-up">斑马同校小程序</a>
-                    <div class="text-pretty">
-                        <p class="mt-6 font-medium" data-aos="fade-up">
-                            <span class="gradient-text">技术架构</span>
-                        </p>
-                        <p class="mt-2 text-left" data-aos="fade-up">
-                            Spring / SpringMVC / SpringBoot / MybatisPlus / MySql / Maven / Swagger / Lombok /
-                            JsonWebToke(JWT) / Shiro
-                        </p>
-                        <p class="mt-6 font-medium" data-aos="fade-up">
-                            <span class="gradient-text">项目概况</span>
-                        </p>
-                        <p class="mt-2 text-left" data-aos="fade-up">
-                            校园小程序，提供给学生发布代拿快递，代跑购物，代课信息和点外卖功能，并在斑马同校骑手端进行任务抢单和完成新订单，骑手钱包管理，还有校园合伙人功能，提供给合伙人管理该学校的基本权限和功能。
-                        </p>
-                        <p class="mt-6 font-medium" data-aos="fade-up">
-                            <span class="gradient-text">担任职责</span>
-                        </p>
-                        <p class="mt-2 text-left" data-aos="fade-up">
-                            开发外卖模块的开发担任负责人，对接微信支付，还有微信小程序和公众号的授权，与推送信息，与处理新需求与解决并且优化代码中遗留的问题，并且用Swagger搭建Api文档提高后端与前端开发对接速度。后台审核外卖模块中的商家与商品模块，用户提现审核模块，给后台系统集成Shiro安全框架用于后台多用户权限管理功能。
-                        </p>
-                        <p class="mt-6 font-medium" data-aos="fade-up">
-                            <span class="gradient-text">个人收获</span>
-                        </p>
-                        <p class="mt-2 text-left" data-aos="fade-up">
-                            熟练运用于对接微信接口，可快速开发与对接，还有对外卖类型的项目有更深层的考虑，从表设计到项目模块落地实现需要考虑的种种问题，学习到Shiro从0到1集成系统并且利用它开发权限管理系统有了自己的了解与认识，对Shiro的框架知识和源码的有了更近一步的了解。
-                        </p>
-                    </div>
-                </div>
-            </li>
-
-
-            <li class="timeline-item">
-                <div class="timeline-info" data-aos="fade-up">
-                    <span class="gradient-text">唐朝科技(广州)有限公司「后端开发工程师」</span>
-                </div>
-                <div class="timeline-marker"></div>
-                <div class="timeline-content">
-                    <a class="timeline-title" target="_self" data-aos="fade-up">睿妃医美公众号平台</a>
-                    <div class="text-pretty">
-                        <p class="mt-6 font-medium" data-aos="fade-up">
-                            <span class="gradient-text">技术架构</span>
-                        </p>
-                        <p class="mt-2 text-left" data-aos="fade-up">
-                            Spring / SpringMVC / SpringBoot / SpringSecurity / MybatisPlus / MySql / Redis / Maven /
-                            Swagger2 / Lombok / JsonWebToke(JWT) / Docker
-                        </p>
-                        <p class="mt-6 font-medium" data-aos="fade-up">
-                            <span class="gradient-text">项目概况</span>
-                        </p>
-                        <p class="mt-2 text-left" data-aos="fade-up">
-                            医美共享队列金平台，消费返利平台
-                        </p>
-                        <p class="mt-6 font-medium" data-aos="fade-up">
-                            <span class="gradient-text">担任职责</span>
-                        </p>
-                        <p class="mt-2 text-left" data-aos="fade-up">
-                            项目原先是属于PHP开发语言，我负责主导整个项目转变重构成Java语言，利用自己编写的开源脚手架框架IRON有maven版本和gradle版本，原有数据库结构分析优化，业务逻辑重新分析优化，并且把项目进行了Docker容器化，使用DockerFile和Git实现CI/CD（DevOps思想），持续构建交付，减少开发后要部署的操作，加快发开发速度，解决项目中共享金队列分佣奖励的繁琐点，使其按规定的用户奖励相应的金额等。
-                        </p>
-                        <p class="mt-6 font-medium" data-aos="fade-up">
-                            <span class="gradient-text">个人收获</span>
-                        </p>
-                        <p class="mt-2 text-left" data-aos="fade-up">
-                            对Docker理解更深一步，熟系了DockerFile编写规则和编写基本的文件，但是Docker打包优化这块我还有待提高，比如基础镜像需要怎么选择要选着alpine版本等，构建后需要删除掉构建产生无需的文件减少Docker容器的体积。
-                        </p>
-                    </div>
-                </div>
-            </li>
-
-
-            <li class="timeline-item period">
-                <div class="timeline-info"></div>
-                <div class="timeline-marker"></div>
-                <div class="timeline-content" data-aos="fade-up">
-                    <h2 class="timeline-title text-xl">八月 2019</h2>
-                </div>
-            </li>
-
-            <li class="timeline-item">
-                <div class="timeline-info" data-aos="fade-up">
-                    <span class="gradient-text">广州市网地软件科技有限公司「后端开发工程师」</span>
-                </div>
-                <div class="timeline-marker"></div>
-                <div class="timeline-content">
-                    <a class="timeline-title" target="_self" data-aos="fade-up">威时沛运货运(广州)有限公司易贸通系统</a>
-                    <div class="text-pretty">
-                        <p class="mt-6 font-medium" data-aos="fade-up">
-                            <span class="gradient-text">技术架构</span>
-                        </p>
-                        <p class="mt-2 text-left" data-aos="fade-up">
-                            Spring / SpringMVC / ibatis / JSP / oracle
-                        </p>
-                        <p class="mt-6 font-medium" data-aos="fade-up">
-                            <span class="gradient-text">项目概况</span>
-                        </p>
-                        <p class="mt-2 text-left" data-aos="fade-up">
-                            配合威时沛运的仓储管理，商品保税，飞机退运等境外物流功能，从前端多元化客户应用，到后端云平台大数据计算，全方位覆盖国际贸易所有环节，自动适应客户个性化偏好，为客户智慧化匹配最优解决方案。
-                        </p>
-                        <p class="mt-6 font-medium" data-aos="fade-up">
-                            <span class="gradient-text">担任职责</span>
-                        </p>
-                        <p class="mt-2 text-left" data-aos="fade-up">
-                            负责项目的新科宇航模块的费用分摊核算功能，更好的计算出货物在空运费，物流费，税费中分别是多少和不同本币和源币之间的汇率转换，还负责项目中的实际入仓记录模块的导出Excel功能和打印航空标签功能/CD（DevOps思想），持续构建交付，减少开发后要部署的操作，加快发开发速度，解决项目中共享金队列分佣奖励的繁琐点，使其按规定的用户奖励相应的金额等。
-                        </p>
-                        <p class="mt-6 font-medium" data-aos="fade-up">
-                            <span class="gradient-text">个人收获</span>
-                        </p>
-                        <p class="mt-2 text-left" data-aos="fade-up">
-                            对境外物流系统更加深入的了解，体会到了需求理解的重要性，不能盲目开始写代码，一定要弄清楚整个模块的流程之后再进行开发。
-                        </p>
-                    </div>
-                </div>
-            </li>
-
-
-
-            <li class="timeline-item period">
-                <div class="timeline-info"></div>
-                <div class="timeline-marker"></div>
-                <div class="timeline-content" data-aos="fade-up">
-                    <h2 class="timeline-title text-xl">十二月 2017</h2>
-                </div>
-            </li>
-        </ul>
-
-
-        <div class="py-2 flex justify-center text-xl">
-            <h1 style="color: #0ed2f7;"><strong>ARTICLES / 文章</strong></h1>
-        </div>
-        <div class="mt-2 grid grid-flow-row auto-rows-max">
-            <ul class="text-center">
-                <li><a class="underline decoration-sky-500"
-                        href="https://mp.weixin.qq.com/s?__biz=MzU1NzA0NDM2OA==&mid=2247484393&idx=1&sn=86c95c8ce70f780dcb587b06974c64d0&chksm=fc3a8416cb4d0d00c6d5dc36106237a0d4f3c25dbced63e0586d092f1a89488aeedb9b641f6b#rd">分布式系统架构中使用发号器</a>
-                </li>
-                <li><a class="underline decoration-sky-500"
-                        href="https://mp.weixin.qq.com/s?__biz=MzU1NzA0NDM2OA==&mid=2247484587&idx=1&sn=db1693f8b3edc9642ebe925640a5120d&chksm=fc3a8354cb4d0a42b52099b336ac274941c8b277d2d809690a010856f7ff2f3cc31597def04a#rd">Git分支命名规范</a>
-                </li>
-                <li><a class="underline decoration-sky-500"
-                        href="https://mp.weixin.qq.com/s?__biz=MzU1NzA0NDM2OA==&mid=2247484257&idx=1&sn=0495cb0ad344dd1e4376d98a9bac5f61&chksm=fc3a849ecb4d0d886dbf02f249d1b5da38cf5eb13bb4a4e502011c053df8ad05b943f77df21d#rd">微信小程序云开发—云函数连接MySQL</a>
-                </li>
-                <li><a class="underline decoration-sky-500"
-                        href="https://mp.weixin.qq.com/s?__biz=MzU1NzA0NDM2OA==&mid=2247484299&idx=1&sn=f0ba1618211477dcfc7b3b1b3a5601d9&chksm=fc3a8474cb4d0d6287e65a9002187d0f4570fe3cc1111864ad89d1da76ffb58a91b9b5fbaffd#rd">Collections的singleton,singletonList,singletonMap</a>
-                </li>
-            </ul>
-        </div>
-
-
-
-        <div class="py-2 pt-6 flex justify-center mt-2 text-xl">
-            <h1 style="color: #0ed2f7;"><strong>OPEN SOURCES / 开源项目</strong></h1>
-        </div>
-        <div class="mt-2 text-center flex justify-center items-center">
-            <div>
-                <a class="underline decoration-sky-500" href="https://github.com/sav7ng/WeHalo"><span
-                        class="gradient-text mt-6 font-semibold">WeHalo</span> 简约风的微信小程序版博客</a>
             </div>
-            <div class="pl-2"><img src="https://img.shields.io/github/stars/sav7ng/wehalo"
-                    alt="https://img.shields.io/github/stars/sav7ng/wehalo"></div>
-        </div>
+        </section>
 
-        <div class="py-2 pt-6 flex justify-center mt-2 text-xl">
-            <h1 style="color: #0ed2f7;"><strong>THANKS FOR YOUR / 致谢</strong></h1>
-        </div>
-        <div class="mt-2 grid grid-flow-row auto-rows-max text-center">
-            <p>感谢您花时间阅读我的简历，期待能有机会和您共事。</p>
-        </div>
+        <section class="section">
+            <header class="section-header" data-aos="fade-up">
+                <p class="section-label">Intro Blocks</p>
+                <h2 class="section-title">Profile / Personal Details / Contact</h2>
+            </header>
+            <div class="intro-grid">
+                <article class="info-card dark" data-aos="fade-up">
+                    <p class="card-label">Profile / 简介</p>
+                    <h3 class="card-title">Who I Am</h3>
+                    <p class="lead-text">
+                        一位高级后端开发人员，在 Java，Golang 和 Kotlin 方面共拥有 6 年的经验。提供高效和高质量的计划。一个热爱运动，追求改进和完美的创造者。
+                    </p>
+                </article>
 
+                <article class="info-card" data-aos="fade-up" data-aos-delay="40">
+                    <p class="card-label">Personal Details / 个人信息</p>
+                    <h3 class="card-title">Core Facts</h3>
+                    <div class="detail-list">
+                        <div class="detail-row">
+                            <p class="detail-term">Name</p>
+                            <p class="detail-desc">吴煌全「Saving」 / 男 / 1997</p>
+                        </div>
+                        <div class="detail-row">
+                            <p class="detail-term">Major</p>
+                            <p class="detail-desc">软件技术</p>
+                        </div>
+                        <div class="detail-row">
+                            <p class="detail-term">School</p>
+                            <p class="detail-desc">广州城建职业学院</p>
+                        </div>
+                        <div class="detail-row">
+                            <p class="detail-term">Target</p>
+                            <p class="detail-desc">高级后端开发 / TeamLeader</p>
+                        </div>
+                    </div>
+                </article>
 
+                <article class="info-card" data-aos="fade-up" data-aos-delay="80">
+                    <p class="card-label">Contact / 联系方式</p>
+                    <h3 class="card-title">Reach Out</h3>
+                    <div class="detail-list">
+                        <div class="detail-row">
+                            <p class="detail-term">Phone</p>
+                            <p class="detail-desc">18316260997</p>
+                        </div>
+                        <div class="detail-row">
+                            <p class="detail-term">Wechat</p>
+                            <p class="detail-desc">sav7ng</p>
+                        </div>
+                        <div class="detail-row">
+                            <p class="detail-term">Email</p>
+                            <p class="detail-desc">
+                                <a href="mailto:savingrun@gmail.com">savingrun@gmail.com</a>
+                            </p>
+                        </div>
+                        <div class="detail-row">
+                            <p class="detail-term">Github</p>
+                            <p class="detail-desc">
+                                <a href="https://github.com/sav7ng" target="_blank" rel="noreferrer">https://github.com/sav7ng</a>
+                            </p>
+                        </div>
+                        <div class="detail-row">
+                            <p class="detail-term">WechatBlog</p>
+                            <p class="detail-desc">爱敲代码的猫</p>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
 
-    </div>
+        <section class="section">
+            <header class="section-header" data-aos="fade-up">
+                <p class="section-label">Skill Wall</p>
+                <h2 class="section-title">Skills / 技能</h2>
+            </header>
+            <div class="skill-wall" data-aos="fade-up" data-aos-delay="40">
+                <span class="skill-tag">Java</span>
+                <span class="skill-tag">Kotlin</span>
+                <span class="skill-tag">Golang</span>
+                <span class="skill-tag">SpringFramework</span>
+                <span class="skill-tag">Maven / Gradle</span>
+                <span class="skill-tag">Mybatis</span>
+                <span class="skill-tag">Kratos</span>
+                <span class="skill-tag">Qmgo</span>
+                <span class="skill-tag">MySQL</span>
+                <span class="skill-tag">Redis</span>
+                <span class="skill-tag">MongoDB</span>
+                <span class="skill-tag">ClickHouse</span>
+                <span class="skill-tag">Metabase</span>
+                <span class="skill-tag">APISIX</span>
+                <span class="skill-tag">RocketMQ</span>
+                <span class="skill-tag">Pulsar</span>
+                <span class="skill-tag">Seata</span>
+                <span class="skill-tag">XxlJob</span>
+                <span class="skill-tag">Sentinel</span>
+                <span class="skill-tag">Kafka</span>
+                <span class="skill-tag">RPC</span>
+                <span class="skill-tag">Docker</span>
+                <span class="skill-tag">CI / CD</span>
+            </div>
+        </section>
 
+        <section class="section">
+            <header class="section-header" data-aos="fade-up">
+                <p class="section-label">Experience Stack</p>
+                <h2 class="section-title">Work Experience / 工作经历</h2>
+            </header>
+
+            <div class="experience-stack">
+                <div class="period-marker" data-aos="fade-up">
+                    <p class="period-caption">Current Marker</p>
+                    <p class="period-value">至今</p>
+                </div>
+
+                <article class="experience-card dark" data-aos="fade-up">
+                    <div>
+                        <p class="experience-company">广州大事件科技网络有限公司「后端开发组长」</p>
+                        <h3 class="experience-role">贪吃商城小程序 / 移动端 / 商家端</h3>
+                    </div>
+                    <div class="experience-body">
+                        <section class="block">
+                            <p class="block-label">分布式微服务架构</p>
+                            <p>
+                                SpringCloud / MybatisPlus / MySql(polarDB) / Redis / MongoDB / ClickHouse / ES /
+                                RocketMQ / Pulsar / Sentry / Seata / XxlJob / Sentinel / OpenFeign / APISIX /
+                                Swagger / Kubernet / 分布式发号器 / Jenkins
+                            </p>
+                        </section>
+                        <section class="block">
+                            <p class="block-label">项目概况</p>
+                            <p>
+                                贪吃商城
+                                <a href="https://www.boomsj.com" target="_blank" rel="noreferrer">boomsj.com</a>
+                                是自研从 0 到 1，现注册会员 400W，月流水平均 2.5KW 的本地生活服务电商平台。依托微信十亿生态，及大事件流量优势，以技术为驱动力，帮助本地商家精准匹配消费群体，降低营销门槛，为本地商户打造一站式推广服务。从 0 到 1 的参与到项目开发中，在其中负责系统架构的讨论以及担任相关模块设计开发，并且参与需求评审参与需求讨论原型设计是否合理，并且在其中独立对发号器进行调研测试开发设计，负责多渠道数据的用户行为数据埋点与数据统计系统设计开发。协助组员工作分配，以及完成需求开发方案。
+                            </p>
+                        </section>
+                        <section class="block">
+                            <p class="block-label">担任职责</p>
+                            <ul>
+                                <li>用户中心 / 负责用户接入兼容多端(网页 / 微信 / 抖音 / 支付宝)中统一登录注册的 SAAS 用户层功能，和用户服务中心的设计与开发，确保高流量场景下用户的正常登录注册;用户等级功能模块开发，用户任务系统，行为事件系统。</li>
+                                <li>消息中心 / 个人负责担任设计，开发主导角色，进行融合统一第三方消息发送渠道(短信 / APP 极光推送 / 站内信 / 微信公众号模板消息 / 微信小程序订阅消息 / 支付宝小程序推送)，设计其中管理关键字与事件中心进行配合进行管理，解决商场架构中消息多渠道统一发送的难点，该服务在架构中承担着小程序 / APP 多端的消息推送，使商场的转化率提高，更好触达以激活用户。</li>
+                                <li>APISIX 网关 / 负责网关是后端服务的统一入口，所有的客户端都通过统一的网关接入微服务，网关通过负载均衡将客户端请求转发到具体的后端服务，在网关层处理所有的非业务功能;实现 Route(路由)，Token 身份认证，用户鉴权，较验租户 ID，全局异常，限流处理功能。</li>
+                                <li>OpenAPI 网关 / 负责开发第三方的关鉴权，参数校验，API 请求次数，黑白名单功能。</li>
+                                <li>微信中心 / 负责微信服务设计开发重构;开发微信开放平台的第三方平台，实现微信多媒体平台(公众号)授权管理，监听授权公众号事件如扫码，自动回复客服消息实现公众号引流功能，并且对其做缓存性能优化;开发对接微信生成小程序 UrlLink 功能，URL 跳转打开小程序场景;公众号带参二维码生成跳转功能添加转发长内容转换，解决回调信息长度超出限制问题;订阅消息发送功能。</li>
+                                <li>渠道码数据统计中心 / 负责交易分析图表支付总金额，支付人数，单均支付金额和人均消费次数标识指数开发;负责开发渠道码功能，并且把推广码兼容升级到渠道码相同功能，实现渠道 ID 绑定小程序的用户行为记录链路功能;负责开发使用 ClickHouse 实现渠道码查看埋点数据分析相关功能，可以详细看到该渠道码带来的访问人数，访问次数，客单价，下单人数，下单订单数，下单件数，下单金额，支付人数，支付订单数，支付件数，支付金额，新增用户数。</li>
+                                <li>第三方服务(腾讯广告附近推 / 哗啦啦) / 负责开发对接微信第三方附近推朋友圈广告功能，广告投放流程开发，以及浏览 / 购券 / 核销的用户行为数据回传流程开发，集成渠道码特性，实现观察链路;对接哗啦啦第三方，实现与其门店管理和扫码核销功能。</li>
+                                <li>商品订单模块 / 后期人员调整负责商品订单模块，对商品库存以及订单过期分账回补库存等业务开发。</li>
+                                <li>CodeReview / 审核代码合并请求，指出其他同学在开发代码中和优化问题，对项目方案进行整体把关。</li>
+                            </ul>
+                        </section>
+                        <section class="block">
+                            <p class="block-label">Technical Points</p>
+                            <ul>
+                                <li>灵活使用「策略 + 工厂 + 模版」设计模式进行对用户统一登录注册功能和消息中心进行开发设计，实现多渠道登录注册业务和多渠道发送信息，大大降低代码复杂程度提高可读性和拓展性，一套接口，多处实现，方便后期拓展渠道与业务。</li>
+                                <li>使用 RocketMQ 实现异步通信、解耦系统组件、实现分布式事件系统，服务与用户任务 / 行为模块，多处服务行为触发后进行统一消费处理，以及保障失败重试和使用数据库操作保障消费的幂等性，实现该服务模块的高吞吐量，高可靠性，防止业务高并发场景下对服务产生高负载或者打崩服务的情况。</li>
+                                <li>引入 APISIX 替换 Spring Cloud Gateway，由于业务发展后期发现在高并发场景下性能相对较低，因为它使用了 Reactor 异步编程模型，而不是传统的阻塞式 IO。虽然它在并发连接数方面表现良好，但在单个请求的吞吐量上可能相对较低。所以将其废弃，并且引入使用了 OpenResty 架构性能更强的 APISIX，它具有灵活的路由、负载均衡、熔断、限流、认证授权、动态配置等特性，并且可以通过插件进行功能扩展和定制化，在其之下使用了它的动态配置 etcd 开发动态用户黑名单功能实现实时拉黑用户功能，并且定制开发授权 Token 验签插件，用于 APISIX 中的路由配置中，开发中参与多次开源社区讨论以及 bug 反馈。</li>
+                                <li>设计业务用户埋点数据模型，利用 ClickHouse 列式数据库管理系统，进行打点记录以及统计，因为其的并行查询处理能力提高查询性能和吞吐量，业务服务使用 Pulsar 配合前端进行消息传递分批上报，并在其业务中进行打点数据统计实现多维度的数据展示。</li>
+                                <li>利用 MongoDB 单文档级别的原子性操作能力和多文档事务功能实现商品库存扣减以及回补功能。</li>
+                                <li>集成对接微信第三方开放平台，实现统一管理众多公众号和小程序的业务功能。</li>
+                                <li>熟悉实用 Arthas 进行对线上服务进行诊断性能 / bug 排除，达到快速解决问题以及优化服务接口性能。</li>
+                            </ul>
+                        </section>
+                        <section class="block">
+                            <p class="block-label">个人收获</p>
+                            <p>
+                                提升了我对系统架构的大局观的思考和微服务分布式架构的更加深入的了解以及不同业务划分不同的服务。使我在现实商城中高并发高流量的场景中处理方案得到更多的实践，对场景有更完善的考虑与处理方案;提升了对 SAAS 多租户系统设计能力;提升会员系统的设计;提升了代码重构和设计模式的能力;在我主要负责的用户中心 / 消息中心中实践融合了多种设计模式架构，使代码可复用性 / 拓展性提升，以及在其中提高了对业务的设计能力。
+                            </p>
+                        </section>
+                    </div>
+                </article>
+
+                <article class="experience-card" data-aos="fade-up">
+                    <div>
+                        <p class="experience-company">广州大事件科技网络有限公司「后端开发工程师」</p>
+                        <h3 class="experience-role">贪吃商城 Disco 社区项目</h3>
+                    </div>
+                    <div class="experience-body">
+                        <section class="block">
+                            <p class="block-label">分布式微服务架构</p>
+                            <p>Golang / Kratos / Protobuf / Kafka / Redis / MongoDB / prometheus / goscrew / OpenAPI / Swagger / Wire / Docker / XxlJob / APISIX</p>
+                        </section>
+                        <section class="block">
+                            <p class="block-label">项目概况</p>
+                            <p>吃喝玩乐的社交平台，与贪吃商城相互结合，为其补齐社交部分，内设吃喝玩乐帖子发布以及评论，贪吃商场商品转卖以及拼单等功能。</p>
+                        </section>
+                        <section class="block">
+                            <p class="block-label">担任职责</p>
+                            <ul>
+                                <li>项目架构设计以及把控，前期 Go 相关的架构 Kratos、Gin、go-micro、go-zero 等调研和选择，以及多次进行 GO 相关开发分析会议，并且技术文档沉淀。</li>
+                                <li>负责用户模块 / 商城核销码转卖功能开发，贪吃商城用户授权注册社区会员功能，会员等级 / 收藏夹等功能开发。</li>
+                                <li>推行内部开源 goscrew 螺丝钉开发，类似 Java 中的 hutool 轮子工具包。</li>
+                            </ul>
+                        </section>
+                        <section class="block">
+                            <p class="block-label">个人收获</p>
+                            <p>在个人时间中学习的 golang 得到实践，在公司中进行推行其开发的优点并落地，增加 go 分布式架构系统的开发经验，开发过程中学习并实践 DDD 领域模型开发，高内聚，低耦合到开发模式。</p>
+                        </section>
+                    </div>
+                </article>
+
+                <div class="period-marker" data-aos="fade-up">
+                    <p class="period-caption">Previous Marker</p>
+                    <p class="period-value">十一月 2020</p>
+                </div>
+
+                <article class="experience-card dark" data-aos="fade-up">
+                    <div>
+                        <p class="experience-company">唐朝科技(广州)有限公司「后端开发工程师」</p>
+                        <h3 class="experience-role">斑马同校小程序</h3>
+                    </div>
+                    <div class="experience-body">
+                        <section class="block">
+                            <p class="block-label">技术架构</p>
+                            <p>Spring / SpringMVC / SpringBoot / MybatisPlus / MySql / Maven / Swagger / Lombok / JsonWebToke(JWT) / Shiro</p>
+                        </section>
+                        <section class="block">
+                            <p class="block-label">项目概况</p>
+                            <p>校园小程序，提供给学生发布代拿快递，代跑购物，代课信息和点外卖功能，并在斑马同校骑手端进行任务抢单和完成新订单，骑手钱包管理，还有校园合伙人功能，提供给合伙人管理该学校的基本权限和功能。</p>
+                        </section>
+                        <section class="block">
+                            <p class="block-label">担任职责</p>
+                            <p>开发外卖模块的开发担任负责人，对接微信支付，还有微信小程序和公众号的授权，与推送信息，与处理新需求与解决并且优化代码中遗留的问题，并且用 Swagger 搭建 Api 文档提高后端与前端开发对接速度。后台审核外卖模块中的商家与商品模块，用户提现审核模块，给后台系统集成 Shiro 安全框架用于后台多用户权限管理功能。</p>
+                        </section>
+                        <section class="block">
+                            <p class="block-label">个人收获</p>
+                            <p>熟练运用于对接微信接口，可快速开发与对接，还有对外卖类型的项目有更深层的考虑，从表设计到项目模块落地实现需要考虑的种种问题，学习到 Shiro 从 0 到 1 集成系统并且利用它开发权限管理系统有了自己的了解与认识，对 Shiro 的框架知识和源码的有了更近一步的了解。</p>
+                        </section>
+                    </div>
+                </article>
+
+                <article class="experience-card" data-aos="fade-up">
+                    <div>
+                        <p class="experience-company">唐朝科技(广州)有限公司「后端开发工程师」</p>
+                        <h3 class="experience-role">睿妃医美公众号平台</h3>
+                    </div>
+                    <div class="experience-body">
+                        <section class="block">
+                            <p class="block-label">技术架构</p>
+                            <p>Spring / SpringMVC / SpringBoot / SpringSecurity / MybatisPlus / MySql / Redis / Maven / Swagger2 / Lombok / JsonWebToke(JWT) / Docker</p>
+                        </section>
+                        <section class="block">
+                            <p class="block-label">项目概况</p>
+                            <p>医美共享队列金平台，消费返利平台。</p>
+                        </section>
+                        <section class="block">
+                            <p class="block-label">担任职责</p>
+                            <p>项目原先是属于 PHP 开发语言，我负责主导整个项目转变重构成 Java 语言，利用自己编写的开源脚手架框架 IRON 有 maven 版本和 gradle 版本，原有数据库结构分析优化，业务逻辑重新分析优化，并且把项目进行了 Docker 容器化，使用 DockerFile 和 Git 实现 CI / CD(DevOps 思想)，持续构建交付，减少开发后要部署的操作，加快发开发速度，解决项目中共享金队列分佣奖励的繁琐点，使其按规定的用户奖励相应的金额等。</p>
+                        </section>
+                        <section class="block">
+                            <p class="block-label">个人收获</p>
+                            <p>对 Docker 理解更深一步，熟系了 DockerFile 编写规则和编写基本的文件，但是 Docker 打包优化这块我还有待提高，比如基础镜像需要怎么选择要选着 alpine 版本等，构建后需要删除掉构建产生无需的文件减少 Docker 容器的体积。</p>
+                        </section>
+                    </div>
+                </article>
+
+                <div class="period-marker" data-aos="fade-up">
+                    <p class="period-caption">Earlier Marker</p>
+                    <p class="period-value">八月 2019</p>
+                </div>
+
+                <article class="experience-card dark" data-aos="fade-up">
+                    <div>
+                        <p class="experience-company">广州市网地软件科技有限公司「后端开发工程师」</p>
+                        <h3 class="experience-role">威时沛运货运(广州)有限公司易贸通系统</h3>
+                    </div>
+                    <div class="experience-body">
+                        <section class="block">
+                            <p class="block-label">技术架构</p>
+                            <p>Spring / SpringMVC / ibatis / JSP / oracle</p>
+                        </section>
+                        <section class="block">
+                            <p class="block-label">项目概况</p>
+                            <p>配合威时沛运的仓储管理，商品保税，飞机退运等境外物流功能，从前端多元化客户应用，到后端云平台大数据计算，全方位覆盖国际贸易所有环节，自动适应客户个性化偏好，为客户智慧化匹配最优解决方案。</p>
+                        </section>
+                        <section class="block">
+                            <p class="block-label">担任职责</p>
+                            <p>负责项目的新科宇航模块的费用分摊核算功能，更好的计算出货物在空运费，物流费，税费中分别是多少和不同本币和源币之间的汇率转换，还负责项目中的实际入仓记录模块的导出 Excel 功能和打印航空标签功能 / CD(DevOps 思想)，持续构建交付，减少开发后要部署的操作，加快发开发速度，解决项目中共享金队列分佣奖励的繁琐点，使其按规定的用户奖励相应的金额等。</p>
+                        </section>
+                        <section class="block">
+                            <p class="block-label">个人收获</p>
+                            <p>对境外物流系统更加深入的了解，体会到了需求理解的重要性，不能盲目开始写代码，一定要弄清楚整个模块的流程之后再进行开发。</p>
+                        </section>
+                    </div>
+                </article>
+
+                <div class="period-marker" data-aos="fade-up">
+                    <p class="period-caption">Start Marker</p>
+                    <p class="period-value">十二月 2017</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <header class="section-header" data-aos="fade-up">
+                <p class="section-label">Editorial Links</p>
+                <h2 class="section-title">Articles / 文章</h2>
+            </header>
+            <div class="editorial-list">
+                <article class="editorial-item" data-aos="fade-up">
+                    <p class="list-kicker">Article 01</p>
+                    <h3 class="list-title">
+                        <a href="https://mp.weixin.qq.com/s?__biz=MzU1NzA0NDM2OA==&amp;mid=2247484393&amp;idx=1&amp;sn=86c95c8ce70f780dcb587b06974c64d0&amp;chksm=fc3a8416cb4d0d00c6d5dc36106237a0d4f3c25dbced63e0586d092f1a89488aeedb9b641f6b#rd"
+                            target="_blank" rel="noreferrer">分布式系统架构中使用发号器</a>
+                    </h3>
+                    <p class="list-meta">WeChat article link preserved from the original resume page.</p>
+                </article>
+                <article class="editorial-item" data-aos="fade-up" data-aos-delay="40">
+                    <p class="list-kicker">Article 02</p>
+                    <h3 class="list-title">
+                        <a href="https://mp.weixin.qq.com/s?__biz=MzU1NzA0NDM2OA==&amp;mid=2247484587&amp;idx=1&amp;sn=db1693f8b3edc9642ebe925640a5120d&amp;chksm=fc3a8354cb4d0a42b52099b336ac274941c8b277d2d809690a010856f7ff2f3cc31597def04a#rd"
+                            target="_blank" rel="noreferrer">Git分支命名规范</a>
+                    </h3>
+                    <p class="list-meta">工程协作与分支规范相关文章。</p>
+                </article>
+                <article class="editorial-item" data-aos="fade-up" data-aos-delay="80">
+                    <p class="list-kicker">Article 03</p>
+                    <h3 class="list-title">
+                        <a href="https://mp.weixin.qq.com/s?__biz=MzU1NzA0NDM2OA==&amp;mid=2247484257&amp;idx=1&amp;sn=0495cb0ad344dd1e4376d98a9bac5f61&amp;chksm=fc3a849ecb4d0d886dbf02f249d1b5da38cf5eb13bb4a4e502011c053df8ad05b943f77df21d#rd"
+                            target="_blank" rel="noreferrer">微信小程序云开发—云函数连接MySQL</a>
+                    </h3>
+                    <p class="list-meta">云开发与 MySQL 连接的实践文章。</p>
+                </article>
+                <article class="editorial-item" data-aos="fade-up" data-aos-delay="120">
+                    <p class="list-kicker">Article 04</p>
+                    <h3 class="list-title">
+                        <a href="https://mp.weixin.qq.com/s?__biz=MzU1NzA0NDM2OA==&amp;mid=2247484299&amp;idx=1&amp;sn=f0ba1618211477dcfc7b3b1b3a5601d9&amp;chksm=fc3a8474cb4d0d6287e65a9002187d0f4570fe3cc1111864ad89d1da76ffb58a91b9b5fbaffd#rd"
+                            target="_blank" rel="noreferrer">Collections的singleton,singletonList,singletonMap</a>
+                    </h3>
+                    <p class="list-meta">Java Collections 系列整理。</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="section">
+            <header class="section-header" data-aos="fade-up">
+                <p class="section-label">Open Source</p>
+                <h2 class="section-title">Open Sources / 开源项目</h2>
+            </header>
+            <article class="editorial-item dark" data-aos="fade-up">
+                <p class="list-kicker">Featured Repository</p>
+                <h3 class="list-title">
+                    <a href="https://github.com/sav7ng/WeHalo" target="_blank" rel="noreferrer">WeHalo</a>
+                </h3>
+                <p class="list-meta">简约风的微信小程序版博客。</p>
+                <img src="https://img.shields.io/github/stars/sav7ng/wehalo"
+                    alt="https://img.shields.io/github/stars/sav7ng/wehalo">
+            </article>
+        </section>
+
+        <section class="section">
+            <header class="section-header" data-aos="fade-up">
+                <p class="section-label">Final Note</p>
+                <h2 class="section-title">Thanks For Your / 致谢</h2>
+            </header>
+            <div class="thanks-card" data-aos="fade-up">
+                <p class="list-kicker">Closing Message</p>
+                <p class="thanks-message">感谢您花时间阅读我的简历，期待能有机会和您共事。</p>
+            </div>
+        </section>
+    </main>
 
     <script>
         AOS.init({
-            duration: 2000,
+            duration: 650,
+            easing: "ease-out",
+            once: true,
+            offset: 24
         });
-
-        // ===============================================================
-        // ASCII瓷砖背景系统
-        // ===============================================================
-        
-        // ASCII图案库 - 每个图案是4行8字符的正方形
-        const tilePatterns = [
-            ['00001111', '00001111', '>>>>>>>>', '<<<<<<<<'],
-            ['@@@@####', '@@@@####', '++++++++', '--------'],
-            ['********', '********', '~~~~~~~~', '........'],
-            ['////////', '////////', '\\\\\\\\\\\\\\\\', '////////'],
-            ['01010101', '10101010', '01010101', '10101010'],
-            ['$$$$&&&&', '****++++', '====----', '####@@@@'],
-            ['^^^^^^^^', '<<<<<<<<', 'vvvvvvvv', '>>>>>>>>'],
-            ['~~~~~~~~', '........', '~~~~~~~~', '........'],
-            ['01100110', '10011001', '01100110', '10011001'],
-            ['####****', '@@@@++++', '$$$$====', '&&&&----'],
-            ['00000000', '11111111', '00000000', '11111111'],
-            ['>><><><<', '<<><><>>', '>><><><<', '<<><><>>']
-        ];
-
-        // 检测是否为移动设备
-        function isMobile() {
-            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        }
-
-        // 根据屏幕尺寸获取配置
-        function getDeviceConfig() {
-            const width = window.innerWidth;
-            
-            if (width <= 480) {
-                return {
-                    tileSize: 50,
-                    gap: 0,
-                    maxTiles: 200,
-                    animationDuration: 6
-                };
-            } else if (width <= 768) {
-                return {
-                    tileSize: 60,
-                    gap: 0,
-                    maxTiles: 300,
-                    animationDuration: 5
-                };
-            } else if (width <= 1024) {
-                return {
-                    tileSize: 80,
-                    gap: 0,
-                    maxTiles: 400,
-                    animationDuration: 5
-                };
-            } else {
-                return {
-                    tileSize: 110,
-                    gap: 0,
-                    maxTiles: 600,
-                    animationDuration: 5
-                };
-            }
-        }
-
-        let flashIntervalId = null;
-
-        // 生成ASCII瓷砖
-        function generateAsciiTiles() {
-            const config = getDeviceConfig();
-            const container = document.getElementById('asciiBackground');
-            
-            if (!container) return;
-            
-            // 计算可容纳的网格数量
-            const cols = Math.ceil(window.innerWidth / (config.tileSize + config.gap));
-            const rows = Math.ceil(window.innerHeight / (config.tileSize + config.gap));
-            let total = cols * rows;
-            
-            // 如果计算出的数量超过限制，则使用计算值以确保铺满（优先视觉效果）
-            if (total > config.maxTiles) {
-                // 仅当差异极大时才限制，防止性能问题
-                if (total > 1000) {
-                     total = 1000;
-                }
-            }
-            
-            // 清空容器
-            container.innerHTML = '';
-            
-            // 创建文档片段（性能优化）
-            const fragment = document.createDocumentFragment();
-            
-            // 生成瓷砖
-            for (let i = 0; i < total; i++) {
-                // 随机选择图案
-                const pattern = tilePatterns[Math.floor(Math.random() * tilePatterns.length)];
-                
-                // 创建瓷砖元素
-                const tile = document.createElement('div');
-                tile.className = 'ascii-tile';
-                
-                // 创建4行文本
-                pattern.forEach(line => {
-                    const lineDiv = document.createElement('div');
-                    lineDiv.textContent = line;
-                    tile.appendChild(lineDiv);
-                });
-                
-                // 设置随机动画延迟
-                const delay = Math.random() * config.animationDuration;
-                tile.style.animationDelay = `${delay}s`;
-                tile.style.animationDuration = `${config.animationDuration}s`;
-                
-                fragment.appendChild(tile);
-            }
-            
-            container.appendChild(fragment);
-        }
-
-        // 防抖函数
-        function debounce(func, wait) {
-            let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func(...args);
-                };
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
-            };
-        }
-
-        // 窗口大小改变时重新生成
-        const debouncedResize = debounce(() => {
-            generateAsciiTiles();
-        }, 300);
-
-        window.addEventListener('resize', debouncedResize);
-
-        // 页面加载完成后生成瓷砖
-        document.addEventListener('DOMContentLoaded', () => {
-            generateAsciiTiles();
-        });
-
-        // 如果DOM已经加载完成，立即生成
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', generateAsciiTiles);
-        } else {
-            generateAsciiTiles();
-        }
     </script>
 </body>
 
