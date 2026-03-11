@@ -1,10 +1,35 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme-mode="system" data-theme="light">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CV</title>
+    <script>
+        (function () {
+            var storageKey = "resume-theme-mode";
+            var root = document.documentElement;
+            var mediaQuery = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
+            var storedMode = "system";
+
+            try {
+                var savedMode = localStorage.getItem(storageKey);
+                if (savedMode === "light" || savedMode === "dark" || savedMode === "system") {
+                    storedMode = savedMode;
+                }
+            } catch (error) {
+                storedMode = "system";
+            }
+
+            var resolvedTheme = storedMode === "system"
+                ? ((mediaQuery && mediaQuery.matches) ? "dark" : "light")
+                : storedMode;
+
+            root.dataset.themeMode = storedMode;
+            root.dataset.theme = resolvedTheme;
+            root.style.colorScheme = resolvedTheme;
+        }());
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,15 +41,69 @@
     <style>
         :root {
             --page-bg: #ffffff;
+            --page-atmosphere: rgba(0, 0, 0, 0.04);
+            --page-atmosphere-secondary: rgba(0, 0, 0, 0.025);
             --surface: #f5f5f5;
-            --surface-strong: #000000;
+            --surface-elevated: #ececec;
+            --surface-border: #e5e5e5;
+            --surface-inverse: #000000;
+            --surface-inverse-border: transparent;
             --text: #000000;
             --text-secondary: #666666;
             --text-tertiary: #888888;
-            --text-muted: #999999;
-            --text-disabled: #cccccc;
+            --text-disabled: #bdbdbd;
+            --text-inverse: #ffffff;
+            --text-inverse-secondary: #d3d3d3;
+            --text-inverse-muted: #bcbcbc;
             --divider: #e5e5e5;
+            --divider-inverse: rgba(255, 255, 255, 0.16);
+            --focus-ring: #000000;
+            --selection-bg: #000000;
+            --selection-text: #ffffff;
+            --portrait-frame-from: #ffffff;
+            --portrait-frame-to: #f1f1f1;
+            --portrait-image-bg: #efefef;
+            --theme-switch-bg: rgba(255, 255, 255, 0.68);
+            --theme-switch-border: #d6d6d6;
+            --theme-switch-hover: #ececec;
+            --theme-switch-active-bg: #000000;
+            --theme-switch-active-text: #ffffff;
+            --period-accent: #000000;
+            --motion-ease: cubic-bezier(0.16, 1, 0.3, 1);
+            --motion-duration: 560ms;
             --page-width: min(calc(100% - 32px), 760px);
+        }
+
+        html[data-theme="dark"] {
+            --page-bg: #0b0d10;
+            --page-atmosphere: rgba(99, 118, 146, 0.28);
+            --page-atmosphere-secondary: rgba(63, 76, 94, 0.22);
+            --surface: #141922;
+            --surface-elevated: #1b2230;
+            --surface-border: rgba(240, 232, 220, 0.12);
+            --surface-inverse: #f0e8dc;
+            --surface-inverse-border: rgba(22, 24, 28, 0.08);
+            --text: #f3eee5;
+            --text-secondary: #c4bdaf;
+            --text-tertiary: #8f98a6;
+            --text-disabled: #6f7885;
+            --text-inverse: #16181c;
+            --text-inverse-secondary: #4f473d;
+            --text-inverse-muted: #6b6258;
+            --divider: rgba(240, 232, 220, 0.12);
+            --divider-inverse: rgba(22, 24, 28, 0.1);
+            --focus-ring: #f0e8dc;
+            --selection-bg: #f0e8dc;
+            --selection-text: #141922;
+            --portrait-frame-from: #1b2230;
+            --portrait-frame-to: #10151d;
+            --portrait-image-bg: #0f131a;
+            --theme-switch-bg: rgba(20, 25, 34, 0.82);
+            --theme-switch-border: rgba(240, 232, 220, 0.14);
+            --theme-switch-hover: #202838;
+            --theme-switch-active-bg: #f0e8dc;
+            --theme-switch-active-text: #16181c;
+            --period-accent: #f0e8dc;
         }
 
         * {
@@ -33,15 +112,31 @@
 
         html {
             scroll-behavior: smooth;
+            background: var(--page-bg);
         }
 
         body {
+            position: relative;
             margin: 0;
+            min-height: 100vh;
             background: var(--page-bg);
             color: var(--text);
             font-family: "Crimson Text", "Songti SC", "STSong", serif;
             -webkit-font-smoothing: antialiased;
             text-rendering: optimizeLegibility;
+            transition: background-color 220ms ease, color 220ms ease;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            inset: 0 0 auto;
+            height: min(560px, 68vh);
+            background:
+                radial-gradient(circle at 90% 8%, var(--page-atmosphere) 0, transparent 46%),
+                radial-gradient(circle at 10% 12%, var(--page-atmosphere-secondary) 0, transparent 42%);
+            pointer-events: none;
+            z-index: 0;
         }
 
         img {
@@ -58,30 +153,29 @@
         }
 
         a:hover {
-            background: var(--surface-strong);
-            color: var(--page-bg);
+            background: var(--surface-inverse);
+            color: var(--text-inverse);
         }
 
-        a:focus-visible {
-            outline: 2px solid currentColor;
+        a:focus-visible,
+        .theme-switch-options button:focus-visible {
+            outline: 2px solid var(--focus-ring);
             outline-offset: 3px;
         }
 
-        .metric.dark a:hover,
-        .info-card.dark a:hover,
-        .experience-card.dark a:hover,
-        .editorial-item.dark a:hover,
-        .thanks-card a:hover {
+        .tone-inverse a:hover {
             background: var(--page-bg);
-            color: var(--surface-strong);
+            color: var(--surface-inverse);
         }
 
         ::selection {
-            background: var(--surface-strong);
-            color: var(--page-bg);
+            background: var(--selection-bg);
+            color: var(--selection-text);
         }
 
         .page {
+            position: relative;
+            z-index: 1;
             width: var(--page-width);
             margin: 0 auto;
             padding: 20px 0 72px;
@@ -89,12 +183,25 @@
 
         .hero {
             display: grid;
-            gap: 20px;
+            gap: 22px;
         }
 
         .hero-grid {
             display: grid;
             gap: 20px;
+        }
+
+        .hero-copy {
+            display: grid;
+            gap: 16px;
+            align-content: start;
+        }
+
+        .hero-topbar {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
         }
 
         .eyebrow,
@@ -104,7 +211,9 @@
         .skill-tag,
         .block-label,
         .period-caption,
-        .list-kicker {
+        .list-kicker,
+        .theme-switch-label,
+        .theme-switch-options button {
             font-family: "Anton", Impact, sans-serif;
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -114,6 +223,204 @@
             margin: 0;
             color: var(--text-tertiary);
             font-size: 11px;
+            padding-top: 4px;
+        }
+
+        .theme-switch {
+            display: grid;
+            gap: 8px;
+            margin-left: auto;
+            justify-items: end;
+        }
+
+        .theme-switch-label {
+            margin: 0;
+            color: var(--text-tertiary);
+            font-size: 11px;
+            line-height: 1;
+        }
+
+        .theme-switch-options {
+            display: inline-grid;
+            grid-auto-flow: column;
+            gap: 4px;
+            padding: 4px;
+            border: 1px solid var(--theme-switch-border);
+            background: var(--theme-switch-bg);
+            backdrop-filter: blur(10px);
+        }
+
+        .theme-switch-options button {
+            appearance: none;
+            border: 0;
+            background: transparent;
+            color: var(--text);
+            padding: 11px 14px 10px;
+            font-size: 11px;
+            line-height: 1;
+            cursor: pointer;
+            transition: background-color 180ms ease, color 180ms ease, transform 180ms ease;
+        }
+
+        .theme-switch-options button:hover {
+            background: var(--theme-switch-hover);
+        }
+
+        .theme-switch-options button[aria-pressed="true"] {
+            background: var(--theme-switch-active-bg);
+            color: var(--theme-switch-active-text);
+        }
+
+        .theme-switch-options button[aria-pressed="true"]:hover {
+            background: var(--theme-switch-active-bg);
+        }
+
+        [data-aos="hero-rise"],
+        [data-aos="section-rise"],
+        [data-aos="card-rise"],
+        [data-aos="marker-slide"] {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+            transition-property: opacity, transform;
+            transition-duration: var(--motion-duration);
+            transition-timing-function: var(--motion-ease);
+            transition-delay: var(--motion-delay, 0ms);
+            will-change: opacity, transform;
+        }
+
+        [data-aos="hero-rise"].aos-init:not(.aos-animate) {
+            opacity: 0;
+            transform: translate3d(0, 12px, 0);
+        }
+
+        [data-aos="section-rise"].aos-init:not(.aos-animate) {
+            opacity: 0;
+            transform: translate3d(0, 14px, 0);
+        }
+
+        [data-aos="card-rise"].aos-init:not(.aos-animate) {
+            opacity: 0;
+            transform: translate3d(0, 18px, 0);
+        }
+
+        [data-aos="marker-slide"].aos-init:not(.aos-animate) {
+            opacity: 0;
+            transform: translate3d(-16px, 0, 0);
+        }
+
+        [data-aos][data-aos-delay="40"] {
+            --motion-delay: 40ms;
+        }
+
+        [data-aos][data-aos-delay="50"] {
+            --motion-delay: 50ms;
+        }
+
+        [data-aos][data-aos-delay="80"] {
+            --motion-delay: 80ms;
+        }
+
+        [data-aos][data-aos-delay="100"] {
+            --motion-delay: 100ms;
+        }
+
+        [data-aos][data-aos-delay="120"] {
+            --motion-delay: 120ms;
+        }
+
+        [data-aos][data-aos-delay="150"] {
+            --motion-delay: 150ms;
+        }
+
+        .motion-sequence .motion-child {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+            transition-property: opacity, transform;
+            transition-duration: 420ms;
+            transition-timing-function: var(--motion-ease);
+            will-change: opacity, transform;
+        }
+
+        .motion-sequence.aos-init:not(.aos-animate) .motion-child {
+            opacity: 0;
+            transform: translate3d(0, 10px, 0);
+        }
+
+        .motion-sequence.aos-animate .motion-child {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+        }
+
+        .skill-wall.motion-sequence.aos-animate .motion-child:nth-child(1) {
+            transition-delay: 0ms;
+        }
+
+        .skill-wall.motion-sequence.aos-animate .motion-child:nth-child(2) {
+            transition-delay: 18ms;
+        }
+
+        .skill-wall.motion-sequence.aos-animate .motion-child:nth-child(3) {
+            transition-delay: 36ms;
+        }
+
+        .skill-wall.motion-sequence.aos-animate .motion-child:nth-child(4) {
+            transition-delay: 54ms;
+        }
+
+        .skill-wall.motion-sequence.aos-animate .motion-child:nth-child(5) {
+            transition-delay: 72ms;
+        }
+
+        .skill-wall.motion-sequence.aos-animate .motion-child:nth-child(6) {
+            transition-delay: 90ms;
+        }
+
+        .skill-wall.motion-sequence.aos-animate .motion-child:nth-child(7) {
+            transition-delay: 108ms;
+        }
+
+        .skill-wall.motion-sequence.aos-animate .motion-child:nth-child(8) {
+            transition-delay: 126ms;
+        }
+
+        .skill-wall.motion-sequence.aos-animate .motion-child:nth-child(9) {
+            transition-delay: 144ms;
+        }
+
+        .skill-wall.motion-sequence.aos-animate .motion-child:nth-child(10) {
+            transition-delay: 162ms;
+        }
+
+        .skill-wall.motion-sequence.aos-animate .motion-child:nth-child(n + 11) {
+            transition-delay: 180ms;
+        }
+
+        .experience-card.motion-sequence.aos-animate .experience-head {
+            transition-delay: 70ms;
+        }
+
+        .experience-card.motion-sequence.aos-animate .experience-body .motion-child:nth-child(1) {
+            transition-delay: 115ms;
+        }
+
+        .experience-card.motion-sequence.aos-animate .experience-body .motion-child:nth-child(2) {
+            transition-delay: 160ms;
+        }
+
+        .experience-card.motion-sequence.aos-animate .experience-body .motion-child:nth-child(3) {
+            transition-delay: 205ms;
+        }
+
+        .experience-card.motion-sequence.aos-animate .experience-body .motion-child:nth-child(4) {
+            transition-delay: 250ms;
+        }
+
+        .experience-card.motion-sequence.aos-animate .experience-body .motion-child:nth-child(5) {
+            transition-delay: 295ms;
+        }
+
+        .experience-card.motion-sequence.aos-animate .experience-body .motion-child:nth-child(6) {
+            transition-delay: 340ms;
         }
 
         .hero-name {
@@ -153,22 +460,41 @@
         .info-card,
         .experience-card,
         .editorial-item,
-        .thanks-card {
+        .thanks-card,
+        .metric {
             padding: 20px;
+            border: 1px solid var(--surface-border);
             background: var(--surface);
+            transition: background-color 220ms ease, color 220ms ease, border-color 220ms ease, transform 220ms ease;
+        }
+
+        .portrait-shell[data-aos="card-rise"],
+        .info-card[data-aos="card-rise"],
+        .experience-card[data-aos="card-rise"],
+        .editorial-item[data-aos="card-rise"],
+        .thanks-card[data-aos="card-rise"],
+        .metric[data-aos="card-rise"] {
+            transition:
+                opacity var(--motion-duration) var(--motion-ease) var(--motion-delay, 0ms),
+                transform var(--motion-duration) var(--motion-ease) var(--motion-delay, 0ms),
+                background-color 220ms ease,
+                color 220ms ease,
+                border-color 220ms ease;
         }
 
         .portrait-shell {
             display: grid;
             gap: 12px;
             align-content: start;
+            background: linear-gradient(180deg, var(--surface) 0%, var(--surface-elevated) 100%);
         }
 
         .portrait-frame {
             position: relative;
             padding: 14px;
-            background:
-                linear-gradient(180deg, #ffffff 0%, #f1f1f1 100%);
+            border: 1px solid var(--surface-border);
+            background: linear-gradient(180deg, var(--portrait-frame-from) 0%, var(--portrait-frame-to) 100%);
+            transition: background-color 220ms ease, border-color 220ms ease;
         }
 
         .portrait-shell img {
@@ -176,7 +502,7 @@
             aspect-ratio: 1 / 1;
             object-fit: cover;
             object-position: center 18%;
-            background: #efefef;
+            background: var(--portrait-image-bg);
         }
 
         .portrait-badge {
@@ -185,13 +511,14 @@
             bottom: 14px;
             margin: 0;
             padding: 8px 10px 7px;
-            background: var(--surface-strong);
-            color: var(--page-bg);
+            background: var(--surface-inverse);
+            color: var(--text-inverse);
             font-family: "Anton", Impact, sans-serif;
             font-size: 11px;
             line-height: 1;
             letter-spacing: 2px;
             text-transform: uppercase;
+            transition: background-color 220ms ease, color 220ms ease;
         }
 
         .portrait-caption {
@@ -209,20 +536,32 @@
         }
 
         .metric {
-            padding: 16px;
-            background: var(--surface);
             min-height: 112px;
             display: grid;
             align-content: space-between;
             gap: 8px;
         }
 
-        .metric.dark,
-        .info-card.dark,
-        .experience-card.dark,
-        .thanks-card {
-            background: var(--surface-strong);
-            color: var(--page-bg);
+        .tone-inverse {
+            background: var(--surface-inverse);
+            color: var(--text-inverse);
+            border-color: var(--surface-inverse-border);
+        }
+
+        .tone-inverse .metric-label,
+        .tone-inverse .card-label,
+        .tone-inverse .period-caption,
+        .tone-inverse .list-kicker,
+        .tone-inverse .experience-company,
+        .tone-inverse .detail-term,
+        .tone-inverse .block-label {
+            color: var(--text-inverse-secondary);
+            opacity: 1;
+        }
+
+        .tone-inverse .list-meta,
+        .tone-inverse .portrait-caption {
+            color: var(--text-inverse-muted);
         }
 
         .metric-value {
@@ -310,6 +649,15 @@
             align-items: start;
         }
 
+        .detail-row+.detail-row {
+            padding-top: 10px;
+            border-top: 1px solid var(--divider);
+        }
+
+        .tone-inverse .detail-row+.detail-row {
+            border-top-color: var(--divider-inverse);
+        }
+
         .detail-term {
             margin: 0;
             font-size: 12px;
@@ -329,10 +677,23 @@
         }
 
         .skill-tag {
-            background: var(--surface);
+            display: inline-flex;
+            align-items: center;
             padding: 10px 12px;
+            border: 1px solid var(--surface-border);
+            background: var(--surface-elevated);
             font-size: 11px;
             line-height: 1;
+            transition: background-color 220ms ease, color 220ms ease, border-color 220ms ease, transform 220ms ease;
+        }
+
+        .skill-wall.motion-sequence .skill-tag.motion-child {
+            transition:
+                opacity 420ms var(--motion-ease),
+                transform 420ms var(--motion-ease),
+                background-color 220ms ease,
+                color 220ms ease,
+                border-color 220ms ease;
         }
 
         .period-marker {
@@ -343,6 +704,7 @@
 
         .period-value {
             margin: 0;
+            color: var(--period-accent);
             font-family: "Anton", Impact, sans-serif;
             font-size: 32px;
             line-height: 0.9;
@@ -382,10 +744,23 @@
             font-weight: 600;
         }
 
-        .experience-body,
+        .experience-body {
+            display: grid;
+            gap: 14px;
+        }
+
         .block {
             display: grid;
             gap: 8px;
+        }
+
+        .block+.block {
+            padding-top: 12px;
+            border-top: 1px solid var(--divider);
+        }
+
+        .tone-inverse .block+.block {
+            border-top-color: var(--divider-inverse);
         }
 
         .block-label {
@@ -413,6 +788,12 @@
             gap: 8px;
         }
 
+        .editorial-item img {
+            width: fit-content;
+            max-width: 100%;
+            filter: grayscale(1);
+        }
+
         .list-title {
             margin: 0;
             font-size: 22px;
@@ -428,11 +809,6 @@
             font-style: italic;
         }
 
-        .editorial-item.dark .list-meta,
-        .thanks-card .list-meta {
-            color: var(--text-disabled);
-        }
-
         .thanks-card {
             display: grid;
             gap: 8px;
@@ -444,6 +820,37 @@
             font-size: 22px;
             line-height: 1.3;
             font-style: italic;
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            .theme-switch-options button:hover {
+                transform: translate3d(0, -1px, 0);
+                transition-delay: 0ms;
+            }
+
+            .skill-tag:hover {
+                transform: translate3d(0, -2px, 0);
+                background: var(--surface);
+                border-color: var(--divider);
+                transition-delay: 0ms;
+            }
+
+            .portrait-shell:hover,
+            .metric:hover,
+            .info-card:hover,
+            .experience-card:hover,
+            .editorial-item:hover,
+            .thanks-card:hover {
+                transform: translate3d(0, -2px, 0);
+                background: var(--surface-elevated);
+                border-color: var(--divider);
+                transition-delay: 0ms;
+            }
+
+            .tone-inverse:hover {
+                background: var(--surface-inverse);
+                border-color: var(--divider-inverse);
+            }
         }
 
         @media (min-width: 768px) {
@@ -471,6 +878,22 @@
                 width: min(calc(100% - 24px), 760px);
             }
 
+            .hero-topbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .theme-switch {
+                width: 100%;
+                margin-left: 0;
+                justify-items: stretch;
+            }
+
+            .theme-switch-options {
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+
             .hero-metrics {
                 grid-template-columns: 1fr;
             }
@@ -490,6 +913,37 @@
                 font-size: 17px;
             }
         }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+
+            [data-aos="hero-rise"],
+            [data-aos="section-rise"],
+            [data-aos="card-rise"],
+            [data-aos="marker-slide"],
+            .motion-sequence .motion-child {
+                opacity: 1 !important;
+                transform: none !important;
+                transition: none !important;
+            }
+
+            body,
+            a,
+            .theme-switch-options button,
+            .portrait-shell,
+            .info-card,
+            .experience-card,
+            .editorial-item,
+            .thanks-card,
+            .metric,
+            .skill-tag,
+            .portrait-frame,
+            .portrait-badge {
+                transition: none;
+            }
+        }
     </style>
 </head>
 
@@ -497,8 +951,18 @@
     <main class="page">
         <section class="hero">
             <div class="hero-grid">
-                <div data-aos="fade-up">
-                    <p class="eyebrow">Resume / Monochrome Editorial Profile</p>
+                <div class="hero-copy" data-aos="hero-rise">
+                    <div class="hero-topbar">
+                        <p class="eyebrow">Resume / Monochrome Editorial Profile</p>
+                        <div class="theme-switch">
+                            <p class="theme-switch-label">Theme</p>
+                            <div class="theme-switch-options" role="group" aria-label="Theme mode">
+                                <button type="button" data-theme-option="light" aria-pressed="false">Light</button>
+                                <button type="button" data-theme-option="dark" aria-pressed="false">Dark</button>
+                                <button type="button" data-theme-option="system" aria-pressed="false">System</button>
+                            </div>
+                        </div>
+                    </div>
                     <h1 class="hero-name">Saving</h1>
                     <p class="hero-kicker">Senior Backend Developer / Team Lead</p>
                     <p class="hero-tagline">Trying to do better.</p>
@@ -506,7 +970,7 @@
                         一位高级后端开发人员，在 Java，Golang 和 Kotlin 方面共拥有 6 年的经验。提供高效和高质量的计划。一个热爱运动，追求改进和完美的创造者。
                     </p>
                 </div>
-                <aside class="portrait-shell" data-aos="fade-up" data-aos-delay="80">
+                <aside class="portrait-shell" data-aos="card-rise" data-aos-delay="80">
                     <div class="portrait-frame">
                         <img src="./avatar.jpg" alt="Saving 头像">
                         <p class="portrait-badge">Saving / Backend</p>
@@ -517,19 +981,19 @@
                 </aside>
             </div>
             <div class="hero-metrics">
-                <div class="metric dark" data-aos="fade-up" data-aos-delay="40">
+                <div class="metric tone-inverse" data-aos="card-rise">
                     <p class="metric-label">Primary Stack</p>
                     <p class="metric-value">Java / Go / Kotlin</p>
                 </div>
-                <div class="metric" data-aos="fade-up" data-aos-delay="80">
+                <div class="metric" data-aos="card-rise" data-aos-delay="50">
                     <p class="metric-label">Experience</p>
                     <p class="metric-value">6 Years</p>
                 </div>
-                <div class="metric" data-aos="fade-up" data-aos-delay="120">
+                <div class="metric" data-aos="card-rise" data-aos-delay="100">
                     <p class="metric-label">Target Role</p>
                     <p class="metric-value">Senior Backend / Team Lead</p>
                 </div>
-                <div class="metric dark" data-aos="fade-up" data-aos-delay="160">
+                <div class="metric tone-inverse" data-aos="card-rise" data-aos-delay="150">
                     <p class="metric-label">Focus</p>
                     <p class="metric-value">Architecture / Delivery / Improvement</p>
                 </div>
@@ -537,12 +1001,12 @@
         </section>
 
         <section class="section">
-            <header class="section-header" data-aos="fade-up">
+            <header class="section-header" data-aos="section-rise">
                 <p class="section-label">Intro Blocks</p>
                 <h2 class="section-title">Profile / Personal Details / Contact</h2>
             </header>
             <div class="intro-grid">
-                <article class="info-card dark" data-aos="fade-up">
+                <article class="info-card tone-inverse" data-aos="card-rise">
                     <p class="card-label">Profile / 简介</p>
                     <h3 class="card-title">Who I Am</h3>
                     <p class="lead-text">
@@ -550,7 +1014,7 @@
                     </p>
                 </article>
 
-                <article class="info-card" data-aos="fade-up" data-aos-delay="40">
+                <article class="info-card" data-aos="card-rise" data-aos-delay="40">
                     <p class="card-label">Personal Details / 个人信息</p>
                     <h3 class="card-title">Core Facts</h3>
                     <div class="detail-list">
@@ -573,7 +1037,7 @@
                     </div>
                 </article>
 
-                <article class="info-card" data-aos="fade-up" data-aos-delay="80">
+                <article class="info-card" data-aos="card-rise" data-aos-delay="80">
                     <p class="card-label">Contact / 联系方式</p>
                     <h3 class="card-title">Reach Out</h3>
                     <div class="detail-list">
@@ -607,56 +1071,56 @@
         </section>
 
         <section class="section">
-            <header class="section-header" data-aos="fade-up">
+            <header class="section-header" data-aos="section-rise">
                 <p class="section-label">Skill Wall</p>
                 <h2 class="section-title">Skills / 技能</h2>
             </header>
-            <div class="skill-wall" data-aos="fade-up" data-aos-delay="40">
-                <span class="skill-tag">Java</span>
-                <span class="skill-tag">Kotlin</span>
-                <span class="skill-tag">Golang</span>
-                <span class="skill-tag">SpringFramework</span>
-                <span class="skill-tag">Maven / Gradle</span>
-                <span class="skill-tag">Mybatis</span>
-                <span class="skill-tag">Kratos</span>
-                <span class="skill-tag">Qmgo</span>
-                <span class="skill-tag">MySQL</span>
-                <span class="skill-tag">Redis</span>
-                <span class="skill-tag">MongoDB</span>
-                <span class="skill-tag">ClickHouse</span>
-                <span class="skill-tag">Metabase</span>
-                <span class="skill-tag">APISIX</span>
-                <span class="skill-tag">RocketMQ</span>
-                <span class="skill-tag">Pulsar</span>
-                <span class="skill-tag">Seata</span>
-                <span class="skill-tag">XxlJob</span>
-                <span class="skill-tag">Sentinel</span>
-                <span class="skill-tag">Kafka</span>
-                <span class="skill-tag">RPC</span>
-                <span class="skill-tag">Docker</span>
-                <span class="skill-tag">CI / CD</span>
+            <div class="skill-wall motion-sequence" data-aos="card-rise" data-aos-delay="40">
+                <span class="skill-tag motion-child">Java</span>
+                <span class="skill-tag motion-child">Kotlin</span>
+                <span class="skill-tag motion-child">Golang</span>
+                <span class="skill-tag motion-child">SpringFramework</span>
+                <span class="skill-tag motion-child">Maven / Gradle</span>
+                <span class="skill-tag motion-child">Mybatis</span>
+                <span class="skill-tag motion-child">Kratos</span>
+                <span class="skill-tag motion-child">Qmgo</span>
+                <span class="skill-tag motion-child">MySQL</span>
+                <span class="skill-tag motion-child">Redis</span>
+                <span class="skill-tag motion-child">MongoDB</span>
+                <span class="skill-tag motion-child">ClickHouse</span>
+                <span class="skill-tag motion-child">Metabase</span>
+                <span class="skill-tag motion-child">APISIX</span>
+                <span class="skill-tag motion-child">RocketMQ</span>
+                <span class="skill-tag motion-child">Pulsar</span>
+                <span class="skill-tag motion-child">Seata</span>
+                <span class="skill-tag motion-child">XxlJob</span>
+                <span class="skill-tag motion-child">Sentinel</span>
+                <span class="skill-tag motion-child">Kafka</span>
+                <span class="skill-tag motion-child">RPC</span>
+                <span class="skill-tag motion-child">Docker</span>
+                <span class="skill-tag motion-child">CI / CD</span>
             </div>
         </section>
 
         <section class="section">
-            <header class="section-header" data-aos="fade-up">
+            <header class="section-header" data-aos="section-rise">
                 <p class="section-label">Experience Stack</p>
                 <h2 class="section-title">Work Experience / 工作经历</h2>
             </header>
 
             <div class="experience-stack">
-                <div class="period-marker" data-aos="fade-up">
+                <div class="period-marker" data-aos="marker-slide">
                     <p class="period-caption">Current Marker</p>
                     <p class="period-value">至今</p>
                 </div>
 
-                <article class="experience-card dark" data-aos="fade-up">
-                    <div>
+                <article class="experience-card tone-inverse motion-sequence" data-aos="card-rise">
+                    <div class="experience-head motion-child">
                         <p class="experience-company">广州大事件科技网络有限公司「后端开发组长」</p>
                         <h3 class="experience-role">贪吃商城小程序 / 移动端 / 商家端</h3>
                     </div>
                     <div class="experience-body">
-                        <section class="block">
+                        <section class="block motion-child">
                             <p class="block-label">分布式微服务架构</p>
                             <p>
                                 SpringCloud / MybatisPlus / MySql(polarDB) / Redis / MongoDB / ClickHouse / ES /
@@ -664,7 +1128,7 @@
                                 Swagger / Kubernet / 分布式发号器 / Jenkins
                             </p>
                         </section>
-                        <section class="block">
+                        <section class="block motion-child">
                             <p class="block-label">项目概况</p>
                             <p>
                                 贪吃商城
@@ -672,7 +1136,7 @@
                                 是自研从 0 到 1，现注册会员 400W，月流水平均 2.5KW 的本地生活服务电商平台。依托微信十亿生态，及大事件流量优势，以技术为驱动力，帮助本地商家精准匹配消费群体，降低营销门槛，为本地商户打造一站式推广服务。从 0 到 1 的参与到项目开发中，在其中负责系统架构的讨论以及担任相关模块设计开发，并且参与需求评审参与需求讨论原型设计是否合理，并且在其中独立对发号器进行调研测试开发设计，负责多渠道数据的用户行为数据埋点与数据统计系统设计开发。协助组员工作分配，以及完成需求开发方案。
                             </p>
                         </section>
-                        <section class="block">
+                        <section class="block motion-child">
                             <p class="block-label">担任职责</p>
                             <ul>
                                 <li>用户中心 / 负责用户接入兼容多端(网页 / 微信 / 抖音 / 支付宝)中统一登录注册的 SAAS 用户层功能，和用户服务中心的设计与开发，确保高流量场景下用户的正常登录注册;用户等级功能模块开发，用户任务系统，行为事件系统。</li>
@@ -686,7 +1150,7 @@
                                 <li>CodeReview / 审核代码合并请求，指出其他同学在开发代码中和优化问题，对项目方案进行整体把关。</li>
                             </ul>
                         </section>
-                        <section class="block">
+                        <section class="block motion-child">
                             <p class="block-label">Technical Points</p>
                             <ul>
                                 <li>灵活使用「策略 + 工厂 + 模版」设计模式进行对用户统一登录注册功能和消息中心进行开发设计，实现多渠道登录注册业务和多渠道发送信息，大大降低代码复杂程度提高可读性和拓展性，一套接口，多处实现，方便后期拓展渠道与业务。</li>
@@ -698,7 +1162,7 @@
                                 <li>熟悉实用 Arthas 进行对线上服务进行诊断性能 / bug 排除，达到快速解决问题以及优化服务接口性能。</li>
                             </ul>
                         </section>
-                        <section class="block">
+                        <section class="block motion-child">
                             <p class="block-label">个人收获</p>
                             <p>
                                 提升了我对系统架构的大局观的思考和微服务分布式架构的更加深入的了解以及不同业务划分不同的服务。使我在现实商城中高并发高流量的场景中处理方案得到更多的实践，对场景有更完善的考虑与处理方案;提升了对 SAAS 多租户系统设计能力;提升会员系统的设计;提升了代码重构和设计模式的能力;在我主要负责的用户中心 / 消息中心中实践融合了多种设计模式架构，使代码可复用性 / 拓展性提升，以及在其中提高了对业务的设计能力。
@@ -707,21 +1171,21 @@
                     </div>
                 </article>
 
-                <article class="experience-card" data-aos="fade-up">
-                    <div>
+                <article class="experience-card motion-sequence" data-aos="card-rise">
+                    <div class="experience-head motion-child">
                         <p class="experience-company">广州大事件科技网络有限公司「后端开发工程师」</p>
                         <h3 class="experience-role">贪吃商城 Disco 社区项目</h3>
                     </div>
                     <div class="experience-body">
-                        <section class="block">
+                        <section class="block motion-child">
                             <p class="block-label">分布式微服务架构</p>
                             <p>Golang / Kratos / Protobuf / Kafka / Redis / MongoDB / prometheus / goscrew / OpenAPI / Swagger / Wire / Docker / XxlJob / APISIX</p>
                         </section>
-                        <section class="block">
+                        <section class="block motion-child">
                             <p class="block-label">项目概况</p>
                             <p>吃喝玩乐的社交平台，与贪吃商城相互结合，为其补齐社交部分，内设吃喝玩乐帖子发布以及评论，贪吃商场商品转卖以及拼单等功能。</p>
                         </section>
-                        <section class="block">
+                        <section class="block motion-child">
                             <p class="block-label">担任职责</p>
                             <ul>
                                 <li>项目架构设计以及把控，前期 Go 相关的架构 Kratos、Gin、go-micro、go-zero 等调研和选择，以及多次进行 GO 相关开发分析会议，并且技术文档沉淀。</li>
@@ -729,99 +1193,99 @@
                                 <li>推行内部开源 goscrew 螺丝钉开发，类似 Java 中的 hutool 轮子工具包。</li>
                             </ul>
                         </section>
-                        <section class="block">
+                        <section class="block motion-child">
                             <p class="block-label">个人收获</p>
                             <p>在个人时间中学习的 golang 得到实践，在公司中进行推行其开发的优点并落地，增加 go 分布式架构系统的开发经验，开发过程中学习并实践 DDD 领域模型开发，高内聚，低耦合到开发模式。</p>
                         </section>
                     </div>
                 </article>
 
-                <div class="period-marker" data-aos="fade-up">
+                <div class="period-marker" data-aos="marker-slide">
                     <p class="period-caption">Previous Marker</p>
                     <p class="period-value">十一月 2020</p>
                 </div>
 
-                <article class="experience-card dark" data-aos="fade-up">
-                    <div>
+                <article class="experience-card tone-inverse motion-sequence" data-aos="card-rise">
+                    <div class="experience-head motion-child">
                         <p class="experience-company">唐朝科技(广州)有限公司「后端开发工程师」</p>
                         <h3 class="experience-role">斑马同校小程序</h3>
                     </div>
                     <div class="experience-body">
-                        <section class="block">
+                        <section class="block motion-child">
                             <p class="block-label">技术架构</p>
                             <p>Spring / SpringMVC / SpringBoot / MybatisPlus / MySql / Maven / Swagger / Lombok / JsonWebToke(JWT) / Shiro</p>
                         </section>
-                        <section class="block">
+                        <section class="block motion-child">
                             <p class="block-label">项目概况</p>
                             <p>校园小程序，提供给学生发布代拿快递，代跑购物，代课信息和点外卖功能，并在斑马同校骑手端进行任务抢单和完成新订单，骑手钱包管理，还有校园合伙人功能，提供给合伙人管理该学校的基本权限和功能。</p>
                         </section>
-                        <section class="block">
+                        <section class="block motion-child">
                             <p class="block-label">担任职责</p>
                             <p>开发外卖模块的开发担任负责人，对接微信支付，还有微信小程序和公众号的授权，与推送信息，与处理新需求与解决并且优化代码中遗留的问题，并且用 Swagger 搭建 Api 文档提高后端与前端开发对接速度。后台审核外卖模块中的商家与商品模块，用户提现审核模块，给后台系统集成 Shiro 安全框架用于后台多用户权限管理功能。</p>
                         </section>
-                        <section class="block">
+                        <section class="block motion-child">
                             <p class="block-label">个人收获</p>
                             <p>熟练运用于对接微信接口，可快速开发与对接，还有对外卖类型的项目有更深层的考虑，从表设计到项目模块落地实现需要考虑的种种问题，学习到 Shiro 从 0 到 1 集成系统并且利用它开发权限管理系统有了自己的了解与认识，对 Shiro 的框架知识和源码的有了更近一步的了解。</p>
                         </section>
                     </div>
                 </article>
 
-                <article class="experience-card" data-aos="fade-up">
-                    <div>
+                <article class="experience-card motion-sequence" data-aos="card-rise">
+                    <div class="experience-head motion-child">
                         <p class="experience-company">唐朝科技(广州)有限公司「后端开发工程师」</p>
                         <h3 class="experience-role">睿妃医美公众号平台</h3>
                     </div>
                     <div class="experience-body">
-                        <section class="block">
+                        <section class="block motion-child">
                             <p class="block-label">技术架构</p>
                             <p>Spring / SpringMVC / SpringBoot / SpringSecurity / MybatisPlus / MySql / Redis / Maven / Swagger2 / Lombok / JsonWebToke(JWT) / Docker</p>
                         </section>
-                        <section class="block">
+                        <section class="block motion-child">
                             <p class="block-label">项目概况</p>
                             <p>医美共享队列金平台，消费返利平台。</p>
                         </section>
-                        <section class="block">
+                        <section class="block motion-child">
                             <p class="block-label">担任职责</p>
                             <p>项目原先是属于 PHP 开发语言，我负责主导整个项目转变重构成 Java 语言，利用自己编写的开源脚手架框架 IRON 有 maven 版本和 gradle 版本，原有数据库结构分析优化，业务逻辑重新分析优化，并且把项目进行了 Docker 容器化，使用 DockerFile 和 Git 实现 CI / CD(DevOps 思想)，持续构建交付，减少开发后要部署的操作，加快发开发速度，解决项目中共享金队列分佣奖励的繁琐点，使其按规定的用户奖励相应的金额等。</p>
                         </section>
-                        <section class="block">
+                        <section class="block motion-child">
                             <p class="block-label">个人收获</p>
                             <p>对 Docker 理解更深一步，熟系了 DockerFile 编写规则和编写基本的文件，但是 Docker 打包优化这块我还有待提高，比如基础镜像需要怎么选择要选着 alpine 版本等，构建后需要删除掉构建产生无需的文件减少 Docker 容器的体积。</p>
                         </section>
                     </div>
                 </article>
 
-                <div class="period-marker" data-aos="fade-up">
+                <div class="period-marker" data-aos="marker-slide">
                     <p class="period-caption">Earlier Marker</p>
                     <p class="period-value">八月 2019</p>
                 </div>
 
-                <article class="experience-card dark" data-aos="fade-up">
-                    <div>
+                <article class="experience-card tone-inverse motion-sequence" data-aos="card-rise">
+                    <div class="experience-head motion-child">
                         <p class="experience-company">广州市网地软件科技有限公司「后端开发工程师」</p>
                         <h3 class="experience-role">威时沛运货运(广州)有限公司易贸通系统</h3>
                     </div>
                     <div class="experience-body">
-                        <section class="block">
+                        <section class="block motion-child">
                             <p class="block-label">技术架构</p>
                             <p>Spring / SpringMVC / ibatis / JSP / oracle</p>
                         </section>
-                        <section class="block">
+                        <section class="block motion-child">
                             <p class="block-label">项目概况</p>
                             <p>配合威时沛运的仓储管理，商品保税，飞机退运等境外物流功能，从前端多元化客户应用，到后端云平台大数据计算，全方位覆盖国际贸易所有环节，自动适应客户个性化偏好，为客户智慧化匹配最优解决方案。</p>
                         </section>
-                        <section class="block">
+                        <section class="block motion-child">
                             <p class="block-label">担任职责</p>
                             <p>负责项目的新科宇航模块的费用分摊核算功能，更好的计算出货物在空运费，物流费，税费中分别是多少和不同本币和源币之间的汇率转换，还负责项目中的实际入仓记录模块的导出 Excel 功能和打印航空标签功能 / CD(DevOps 思想)，持续构建交付，减少开发后要部署的操作，加快发开发速度，解决项目中共享金队列分佣奖励的繁琐点，使其按规定的用户奖励相应的金额等。</p>
                         </section>
-                        <section class="block">
+                        <section class="block motion-child">
                             <p class="block-label">个人收获</p>
                             <p>对境外物流系统更加深入的了解，体会到了需求理解的重要性，不能盲目开始写代码，一定要弄清楚整个模块的流程之后再进行开发。</p>
                         </section>
                     </div>
                 </article>
 
-                <div class="period-marker" data-aos="fade-up">
+                <div class="period-marker" data-aos="marker-slide">
                     <p class="period-caption">Start Marker</p>
                     <p class="period-value">十二月 2017</p>
                 </div>
@@ -829,12 +1293,12 @@
         </section>
 
         <section class="section">
-            <header class="section-header" data-aos="fade-up">
+            <header class="section-header" data-aos="section-rise">
                 <p class="section-label">Editorial Links</p>
                 <h2 class="section-title">Articles / 文章</h2>
             </header>
             <div class="editorial-list">
-                <article class="editorial-item" data-aos="fade-up">
+                <article class="editorial-item" data-aos="card-rise">
                     <p class="list-kicker">Article 01</p>
                     <h3 class="list-title">
                         <a href="https://mp.weixin.qq.com/s?__biz=MzU1NzA0NDM2OA==&amp;mid=2247484393&amp;idx=1&amp;sn=86c95c8ce70f780dcb587b06974c64d0&amp;chksm=fc3a8416cb4d0d00c6d5dc36106237a0d4f3c25dbced63e0586d092f1a89488aeedb9b641f6b#rd"
@@ -842,7 +1306,7 @@
                     </h3>
                     <p class="list-meta">WeChat article link preserved from the original resume page.</p>
                 </article>
-                <article class="editorial-item" data-aos="fade-up" data-aos-delay="40">
+                <article class="editorial-item" data-aos="card-rise" data-aos-delay="40">
                     <p class="list-kicker">Article 02</p>
                     <h3 class="list-title">
                         <a href="https://mp.weixin.qq.com/s?__biz=MzU1NzA0NDM2OA==&amp;mid=2247484587&amp;idx=1&amp;sn=db1693f8b3edc9642ebe925640a5120d&amp;chksm=fc3a8354cb4d0a42b52099b336ac274941c8b277d2d809690a010856f7ff2f3cc31597def04a#rd"
@@ -850,7 +1314,7 @@
                     </h3>
                     <p class="list-meta">工程协作与分支规范相关文章。</p>
                 </article>
-                <article class="editorial-item" data-aos="fade-up" data-aos-delay="80">
+                <article class="editorial-item" data-aos="card-rise" data-aos-delay="80">
                     <p class="list-kicker">Article 03</p>
                     <h3 class="list-title">
                         <a href="https://mp.weixin.qq.com/s?__biz=MzU1NzA0NDM2OA==&amp;mid=2247484257&amp;idx=1&amp;sn=0495cb0ad344dd1e4376d98a9bac5f61&amp;chksm=fc3a849ecb4d0d886dbf02f249d1b5da38cf5eb13bb4a4e502011c053df8ad05b943f77df21d#rd"
@@ -858,7 +1322,7 @@
                     </h3>
                     <p class="list-meta">云开发与 MySQL 连接的实践文章。</p>
                 </article>
-                <article class="editorial-item" data-aos="fade-up" data-aos-delay="120">
+                <article class="editorial-item" data-aos="card-rise" data-aos-delay="120">
                     <p class="list-kicker">Article 04</p>
                     <h3 class="list-title">
                         <a href="https://mp.weixin.qq.com/s?__biz=MzU1NzA0NDM2OA==&amp;mid=2247484299&amp;idx=1&amp;sn=f0ba1618211477dcfc7b3b1b3a5601d9&amp;chksm=fc3a8474cb4d0d6287e65a9002187d0f4570fe3cc1111864ad89d1da76ffb58a91b9b5fbaffd#rd"
@@ -870,27 +1334,38 @@
         </section>
 
         <section class="section">
-            <header class="section-header" data-aos="fade-up">
+            <header class="section-header" data-aos="section-rise">
                 <p class="section-label">Open Source</p>
                 <h2 class="section-title">Open Sources / 开源项目</h2>
             </header>
-            <article class="editorial-item dark" data-aos="fade-up">
-                <p class="list-kicker">Featured Repository</p>
-                <h3 class="list-title">
-                    <a href="https://github.com/sav7ng/WeHalo" target="_blank" rel="noreferrer">WeHalo</a>
-                </h3>
-                <p class="list-meta">简约风的微信小程序版博客。</p>
-                <img src="https://img.shields.io/github/stars/sav7ng/wehalo"
-                    alt="https://img.shields.io/github/stars/sav7ng/wehalo">
-            </article>
+            <div class="editorial-list">
+                <article class="editorial-item tone-inverse" data-aos="card-rise">
+                    <p class="list-kicker">Featured Repository</p>
+                    <h3 class="list-title">
+                        <a href="https://github.com/sav7ng/WeHalo" target="_blank" rel="noreferrer">WeHalo</a>
+                    </h3>
+                    <p class="list-meta">简约风的微信小程序版博客。</p>
+                    <img src="https://img.shields.io/github/stars/sav7ng/wehalo"
+                        alt="WeHalo GitHub stars">
+                </article>
+                <article class="editorial-item" data-aos="card-rise" data-aos-delay="40">
+                    <p class="list-kicker">Featured Repository</p>
+                    <h3 class="list-title">
+                        <a href="https://github.com/sav7ng/AgentDroid" target="_blank" rel="noreferrer">AgentDroid</a>
+                    </h3>
+                    <p class="list-meta">AI移动设备自动化服务器。</p>
+                    <img src="https://img.shields.io/github/stars/sav7ng/AgentDroid"
+                        alt="AgentDroid GitHub stars">
+                </article>
+            </div>
         </section>
 
         <section class="section">
-            <header class="section-header" data-aos="fade-up">
+            <header class="section-header" data-aos="section-rise">
                 <p class="section-label">Final Note</p>
                 <h2 class="section-title">Thanks For Your / 致谢</h2>
             </header>
-            <div class="thanks-card" data-aos="fade-up">
+            <div class="thanks-card tone-inverse" data-aos="card-rise">
                 <p class="list-kicker">Closing Message</p>
                 <p class="thanks-message">感谢您花时间阅读我的简历，期待能有机会和您共事。</p>
             </div>
@@ -898,12 +1373,95 @@
     </main>
 
     <script>
-        AOS.init({
-            duration: 650,
-            easing: "ease-out",
-            once: true,
-            offset: 24
-        });
+        (function () {
+            var storageKey = "resume-theme-mode";
+            var root = document.documentElement;
+            var themeButtons = Array.prototype.slice.call(document.querySelectorAll("[data-theme-option]"));
+            var mediaQuery = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
+            var reducedMotionQuery = window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : null;
+
+            function normalizeMode(mode) {
+                return mode === "light" || mode === "dark" || mode === "system" ? mode : "system";
+            }
+
+            function resolveTheme(mode) {
+                if (mode === "system") {
+                    return mediaQuery && mediaQuery.matches ? "dark" : "light";
+                }
+
+                return mode;
+            }
+
+            function readStoredMode() {
+                try {
+                    return normalizeMode(localStorage.getItem(storageKey));
+                } catch (error) {
+                    return "system";
+                }
+            }
+
+            function syncControls(mode) {
+                themeButtons.forEach(function (button) {
+                    var isActive = button.dataset.themeOption === mode;
+                    button.setAttribute("aria-pressed", String(isActive));
+                });
+            }
+
+            function persistMode(mode) {
+                try {
+                    localStorage.setItem(storageKey, mode);
+                } catch (error) {
+                    return;
+                }
+            }
+
+            function applyTheme(mode, persist) {
+                var nextMode = normalizeMode(mode);
+                var nextTheme = resolveTheme(nextMode);
+
+                root.dataset.themeMode = nextMode;
+                root.dataset.theme = nextTheme;
+                root.style.colorScheme = nextTheme;
+                syncControls(nextMode);
+
+                if (persist) {
+                    persistMode(nextMode);
+                }
+            }
+
+            themeButtons.forEach(function (button) {
+                button.addEventListener("click", function () {
+                    applyTheme(button.dataset.themeOption, true);
+                });
+            });
+
+            if (mediaQuery) {
+                var handleSystemThemeChange = function () {
+                    if (normalizeMode(root.dataset.themeMode) === "system") {
+                        applyTheme("system", false);
+                    }
+                };
+
+                if (typeof mediaQuery.addEventListener === "function") {
+                    mediaQuery.addEventListener("change", handleSystemThemeChange);
+                } else if (typeof mediaQuery.addListener === "function") {
+                    mediaQuery.addListener(handleSystemThemeChange);
+                }
+            }
+
+            applyTheme(readStoredMode(), false);
+
+            if (!(reducedMotionQuery && reducedMotionQuery.matches)) {
+                AOS.init({
+                    duration: 560,
+                    easing: "cubic-bezier(0.16, 1, 0.3, 1)",
+                    once: true,
+                    mirror: false,
+                    offset: 18,
+                    anchorPlacement: "top-bottom"
+                });
+            }
+        }());
     </script>
 </body>
 
