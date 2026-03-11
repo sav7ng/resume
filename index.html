@@ -158,7 +158,8 @@
         }
 
         a:focus-visible,
-        .theme-switch-options button:focus-visible {
+        .theme-switch-options button:focus-visible,
+        .export-button:focus-visible {
             outline: 2px solid var(--focus-ring);
             outline-offset: 3px;
         }
@@ -204,6 +205,13 @@
             gap: 16px;
         }
 
+        .hero-actions {
+            display: grid;
+            gap: 10px;
+            margin-left: auto;
+            justify-items: end;
+        }
+
         .eyebrow,
         .section-label,
         .card-label,
@@ -213,7 +221,8 @@
         .period-caption,
         .list-kicker,
         .theme-switch-label,
-        .theme-switch-options button {
+        .theme-switch-options button,
+        .export-button {
             font-family: "Anton", Impact, sans-serif;
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -229,7 +238,6 @@
         .theme-switch {
             display: grid;
             gap: 8px;
-            margin-left: auto;
             justify-items: end;
         }
 
@@ -273,6 +281,39 @@
 
         .theme-switch-options button[aria-pressed="true"]:hover {
             background: var(--theme-switch-active-bg);
+        }
+
+        .export-button {
+            appearance: none;
+            border: 1px solid var(--surface-border);
+            background: var(--surface);
+            color: var(--text);
+            padding: 12px 16px 11px;
+            font-size: 11px;
+            line-height: 1;
+            cursor: pointer;
+            transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease, transform 180ms ease, opacity 180ms ease;
+        }
+
+        .export-button[disabled] {
+            cursor: progress;
+            opacity: 0.7;
+        }
+
+        html[data-printing="true"] body::before {
+            display: none;
+        }
+
+        html[data-printing="true"] .hero-actions {
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        html[data-printing="true"] [data-aos],
+        html[data-printing="true"] .motion-sequence .motion-child {
+            opacity: 1 !important;
+            transform: none !important;
+            transition: none !important;
         }
 
         [data-aos="hero-rise"],
@@ -822,9 +863,270 @@
             font-style: italic;
         }
 
+        @page {
+            size: A4;
+            margin: 12mm 10mm 14mm;
+        }
+
+        @media print {
+            html {
+                color-scheme: light;
+                --page-bg: #ffffff;
+                --page-atmosphere: transparent;
+                --page-atmosphere-secondary: transparent;
+                --surface: #f5f5f5;
+                --surface-elevated: #ededed;
+                --surface-border: #dddddd;
+                --surface-inverse: #0f0f0f;
+                --surface-inverse-border: transparent;
+                --text: #000000;
+                --text-secondary: #4f4f4f;
+                --text-tertiary: #727272;
+                --text-disabled: #9c9c9c;
+                --text-inverse: #ffffff;
+                --text-inverse-secondary: #d2d2d2;
+                --text-inverse-muted: #b5b5b5;
+                --divider: #dbdbdb;
+                --divider-inverse: rgba(255, 255, 255, 0.18);
+                --focus-ring: #000000;
+                --selection-bg: #000000;
+                --selection-text: #ffffff;
+                --portrait-frame-from: #ffffff;
+                --portrait-frame-to: #f3f3f3;
+                --portrait-image-bg: #efefef;
+                --theme-switch-bg: transparent;
+                --theme-switch-border: #dddddd;
+                --theme-switch-hover: #ececec;
+                --theme-switch-active-bg: #000000;
+                --theme-switch-active-text: #ffffff;
+                --period-accent: #000000;
+            }
+
+            * {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            html,
+            body {
+                background: #ffffff !important;
+            }
+
+            body {
+                min-height: 0;
+                color: #000000;
+                font-size: 12pt;
+            }
+
+            body::before,
+            .theme-switch,
+            .export-button {
+                display: none !important;
+            }
+
+            a,
+            .theme-switch-options button,
+            .export-button,
+            .portrait-shell,
+            .info-card,
+            .experience-card,
+            .editorial-item,
+            .thanks-card,
+            .metric,
+            .skill-tag,
+            .portrait-frame,
+            .portrait-badge,
+            [data-aos],
+            .motion-sequence .motion-child {
+                transition: none !important;
+                animation: none !important;
+                transform: none !important;
+            }
+
+            .page {
+                width: auto;
+                padding: 0;
+            }
+
+            .hero {
+                gap: 7mm;
+            }
+
+            .hero-grid {
+                grid-template-columns: minmax(0, 1.2fr) minmax(42mm, 58mm);
+                align-items: start;
+                gap: 8mm;
+            }
+
+            .hero-copy {
+                gap: 4mm;
+            }
+
+            .hero-topbar {
+                display: block;
+            }
+
+            .hero-name {
+                font-size: 42pt;
+            }
+
+            .hero-kicker {
+                font-size: 11pt;
+            }
+
+            .hero-tagline {
+                max-width: none;
+                font-size: 16pt;
+            }
+
+            .hero-summary {
+                max-width: none;
+                font-size: 12pt;
+                line-height: 1.42;
+            }
+
+            .portrait-shell,
+            .info-card,
+            .experience-card,
+            .editorial-item,
+            .thanks-card,
+            .metric {
+                padding: 4.2mm;
+            }
+
+            .portrait-shell {
+                gap: 3mm;
+            }
+
+            .portrait-frame {
+                padding: 3mm;
+            }
+
+            .portrait-badge {
+                left: 3mm;
+                bottom: 3mm;
+            }
+
+            .portrait-caption,
+            .list-meta {
+                font-size: 10pt;
+            }
+
+            .hero-metrics {
+                gap: 3mm;
+            }
+
+            .metric {
+                min-height: 0;
+                gap: 2mm;
+            }
+
+            .metric-value {
+                font-size: 22pt;
+            }
+
+            .section {
+                margin-top: 7mm;
+                gap: 3mm;
+            }
+
+            .section-title {
+                font-size: 23pt;
+            }
+
+            .intro-grid,
+            .experience-stack,
+            .editorial-list {
+                gap: 4mm;
+            }
+
+            .card-title,
+            .experience-role {
+                font-size: 20pt;
+            }
+
+            .lead-text,
+            .detail-desc,
+            .block p,
+            .block li {
+                font-size: 11.5pt;
+                line-height: 1.45;
+            }
+
+            .skill-wall {
+                gap: 2.5mm;
+            }
+
+            .skill-tag {
+                padding: 2.2mm 2.8mm;
+            }
+
+            .experience-card {
+                gap: 4mm;
+                break-inside: auto;
+                page-break-inside: auto;
+            }
+
+            .experience-body {
+                gap: 3mm;
+            }
+
+            .block {
+                gap: 2mm;
+            }
+
+            .block + .block {
+                padding-top: 3mm;
+            }
+
+            .block ul {
+                gap: 2mm;
+            }
+
+            .list-title,
+            .thanks-message {
+                font-size: 15pt;
+            }
+
+            .metric,
+            .info-card,
+            .editorial-item,
+            .thanks-card,
+            .period-marker,
+            .portrait-shell,
+            .portrait-frame,
+            .section-header,
+            .experience-head,
+            .block {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+
+            .section-header,
+            .experience-head,
+            .block-label,
+            .period-marker {
+                break-after: avoid;
+                page-break-after: avoid;
+            }
+
+            p,
+            li {
+                orphans: 3;
+                widows: 3;
+            }
+        }
+
         @media (hover: hover) and (pointer: fine) {
             .theme-switch-options button:hover {
                 transform: translate3d(0, -1px, 0);
+                transition-delay: 0ms;
+            }
+
+            .export-button:hover {
+                transform: translate3d(0, -1px, 0);
+                background: var(--surface-elevated);
+                border-color: var(--divider);
                 transition-delay: 0ms;
             }
 
@@ -883,15 +1185,24 @@
                 align-items: stretch;
             }
 
-            .theme-switch {
+            .hero-actions {
                 width: 100%;
                 margin-left: 0;
+                justify-items: stretch;
+            }
+
+            .theme-switch {
+                width: 100%;
                 justify-items: stretch;
             }
 
             .theme-switch-options {
                 display: grid;
                 grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+
+            .export-button {
+                width: 100%;
             }
 
             .hero-metrics {
@@ -932,6 +1243,7 @@
             body,
             a,
             .theme-switch-options button,
+            .export-button,
             .portrait-shell,
             .info-card,
             .experience-card,
@@ -954,13 +1266,16 @@
             <div class="hero-copy" data-aos="hero-rise">
                 <div class="hero-topbar">
                     <p class="eyebrow">Resume / Monochrome Editorial Profile</p>
-                    <div class="theme-switch">
-                        <p class="theme-switch-label">Theme</p>
-                        <div class="theme-switch-options" role="group" aria-label="Theme mode">
-                            <button type="button" data-theme-option="light" aria-pressed="false">Light</button>
-                            <button type="button" data-theme-option="dark" aria-pressed="false">Dark</button>
-                            <button type="button" data-theme-option="system" aria-pressed="false">System</button>
+                    <div class="hero-actions">
+                        <div class="theme-switch">
+                            <p class="theme-switch-label">Theme</p>
+                            <div class="theme-switch-options" role="group" aria-label="Theme mode">
+                                <button type="button" data-theme-option="light" aria-pressed="false">Light</button>
+                                <button type="button" data-theme-option="dark" aria-pressed="false">Dark</button>
+                                <button type="button" data-theme-option="system" aria-pressed="false">System</button>
+                            </div>
                         </div>
+                        <button class="export-button" type="button" data-export-pdf aria-label="Export resume as PDF">Export PDF</button>
                     </div>
                 </div>
                 <h1 class="hero-name">Saving</h1>
@@ -1345,8 +1660,13 @@
             var storageKey = "resume-theme-mode";
             var root = document.documentElement;
             var themeButtons = Array.prototype.slice.call(document.querySelectorAll("[data-theme-option]"));
+            var exportButton = document.querySelector("[data-export-pdf]");
             var mediaQuery = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
             var reducedMotionQuery = window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : null;
+            var printSnapshot = null;
+            var printRecoveryTimer = null;
+            var focusRecoveryTimer = null;
+            var isPreparingPrint = false;
 
             function normalizeMode(mode) {
                 return mode === "light" || mode === "dark" || mode === "system" ? mode : "system";
@@ -1397,11 +1717,169 @@
                 }
             }
 
+            function setExportButtonBusy(isBusy) {
+                if (!exportButton) {
+                    return;
+                }
+
+                exportButton.disabled = isBusy;
+                exportButton.setAttribute("aria-busy", String(isBusy));
+            }
+
+            function clearPrintRecoveryTimers() {
+                if (printRecoveryTimer) {
+                    window.clearTimeout(printRecoveryTimer);
+                    printRecoveryTimer = null;
+                }
+
+                if (focusRecoveryTimer) {
+                    window.clearTimeout(focusRecoveryTimer);
+                    focusRecoveryTimer = null;
+                }
+            }
+
+            function snapshotThemeState() {
+                var themeMode = normalizeMode(root.dataset.themeMode);
+                var theme = root.dataset.theme || resolveTheme(themeMode);
+
+                return {
+                    themeMode: themeMode,
+                    theme: theme,
+                    colorScheme: root.style.colorScheme || theme
+                };
+            }
+
+            function restoreAfterPrint() {
+                clearPrintRecoveryTimers();
+                root.removeAttribute("data-printing");
+
+                if (printSnapshot) {
+                    root.dataset.themeMode = printSnapshot.themeMode;
+                    root.dataset.theme = printSnapshot.theme;
+                    root.style.colorScheme = printSnapshot.colorScheme;
+                    syncControls(printSnapshot.themeMode);
+                }
+
+                printSnapshot = null;
+                isPreparingPrint = false;
+                setExportButtonBusy(false);
+            }
+
+            function waitForFonts() {
+                if (!document.fonts || !document.fonts.ready) {
+                    return Promise.resolve();
+                }
+
+                return document.fonts.ready.catch(function () {
+                    return undefined;
+                });
+            }
+
+            function waitForImage(image) {
+                return new Promise(function (resolve) {
+                    var timer = null;
+                    var settled = false;
+
+                    function finish() {
+                        if (settled) {
+                            return;
+                        }
+
+                        settled = true;
+
+                        if (timer) {
+                            window.clearTimeout(timer);
+                        }
+
+                        image.removeEventListener("load", finish);
+                        image.removeEventListener("error", finish);
+                        resolve();
+                    }
+
+                    if (image.complete) {
+                        resolve();
+                        return;
+                    }
+
+                    image.addEventListener("load", finish);
+                    image.addEventListener("error", finish);
+                    timer = window.setTimeout(finish, 4000);
+                });
+            }
+
+            function waitForImages() {
+                var images = Array.prototype.slice.call(document.images || []);
+                return Promise.all(images.map(waitForImage));
+            }
+
+            function waitForNextPaint() {
+                return new Promise(function (resolve) {
+                    window.requestAnimationFrame(function () {
+                        window.requestAnimationFrame(resolve);
+                    });
+                });
+            }
+
+            function enterPrintMode() {
+                printSnapshot = snapshotThemeState();
+                root.dataset.printing = "true";
+                root.dataset.theme = "light";
+                root.style.colorScheme = "light";
+            }
+
+            function armPrintRecovery() {
+                clearPrintRecoveryTimers();
+                printRecoveryTimer = window.setTimeout(restoreAfterPrint, 60000);
+            }
+
+            function handleWindowFocus() {
+                if (!printSnapshot) {
+                    return;
+                }
+
+                clearTimeout(focusRecoveryTimer);
+                focusRecoveryTimer = window.setTimeout(function () {
+                    if (printSnapshot) {
+                        restoreAfterPrint();
+                    }
+                }, 300);
+            }
+
+            function exportAsPdf() {
+                if (!exportButton || isPreparingPrint) {
+                    return;
+                }
+
+                if (typeof window.print !== "function") {
+                    return;
+                }
+
+                isPreparingPrint = true;
+                setExportButtonBusy(true);
+
+                Promise.all([waitForFonts(), waitForImages()])
+                    .then(function () {
+                        enterPrintMode();
+                        return waitForNextPaint();
+                    })
+                    .then(function () {
+                        armPrintRecovery();
+                        window.print();
+                    })
+                    .catch(function () {
+                        restoreAfterPrint();
+                    });
+            }
+
             themeButtons.forEach(function (button) {
                 button.addEventListener("click", function () {
                     applyTheme(button.dataset.themeOption, true);
                 });
             });
+
+            if (exportButton) {
+                exportButton.addEventListener("click", exportAsPdf);
+            }
 
             if (mediaQuery) {
                 var handleSystemThemeChange = function () {
@@ -1416,6 +1894,9 @@
                     mediaQuery.addListener(handleSystemThemeChange);
                 }
             }
+
+            window.addEventListener("afterprint", restoreAfterPrint);
+            window.addEventListener("focus", handleWindowFocus);
 
             applyTheme(readStoredMode(), false);
 

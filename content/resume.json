@@ -11,6 +11,10 @@
         "system": "System"
       }
     },
+    "exportPdf": {
+      "label": "Export PDF",
+      "ariaLabel": "Export resume as PDF"
+    },
     "sections": {
       "intro": {
         "label": "Intro Blocks",

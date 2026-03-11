@@ -86,6 +86,10 @@ function validateContent(content) {
         ensureString(content.page.themeSwitch.options[mode], `page.themeSwitch.options.${mode}`);
     });
 
+    ensurePlainObject(content.page.exportPdf, "page.exportPdf");
+    ensureString(content.page.exportPdf.label, "page.exportPdf.label");
+    ensureString(content.page.exportPdf.ariaLabel, "page.exportPdf.ariaLabel");
+
     ensurePlainObject(content.page.sections, "page.sections");
     ["intro", "skills", "experiences", "articles", "openSources", "thanks"].forEach((key) => {
         ensurePlainObject(content.page.sections[key], `page.sections.${key}`);
@@ -279,7 +283,11 @@ function renderThemeSwitch(themeSwitch) {
     ].join("\n");
 }
 
-function renderHero(hero, themeSwitch) {
+function renderExportButton(exportPdf) {
+    return `<button class="export-button" type="button" data-export-pdf aria-label="${escapeAttr(exportPdf.ariaLabel)}">${escapeHtml(exportPdf.label)}</button>`;
+}
+
+function renderHero(hero, themeSwitch, exportPdf) {
     const metrics = hero.metrics.map((metric, index) => {
         return [
             `<div class="metric${toneClass(metric.tone)}" data-aos="card-rise"${delayAttr(index * 50)}>`,
@@ -295,7 +303,10 @@ function renderHero(hero, themeSwitch) {
         '        <div class="hero-copy" data-aos="hero-rise">',
         '            <div class="hero-topbar">',
         `                <p class="eyebrow">${escapeHtml(hero.eyebrow)}</p>`,
-        indent(renderThemeSwitch(themeSwitch), 16),
+        '                <div class="hero-actions">',
+        indent(renderThemeSwitch(themeSwitch), 20),
+        `                    ${renderExportButton(exportPdf)}`,
+        "                </div>",
         "            </div>",
         `            <h1 class="hero-name">${escapeHtml(hero.name)}</h1>`,
         `            <p class="hero-kicker">${escapeHtml(hero.role)}</p>`,
@@ -466,7 +477,7 @@ function renderThanks(section, thanks) {
 function renderPage(content) {
     return [
         '<main class="page">',
-        indent(renderHero(content.hero, content.page.themeSwitch), 4),
+        indent(renderHero(content.hero, content.page.themeSwitch, content.page.exportPdf), 4),
         "",
         indent(renderIntro(content.page.sections.intro, content.introCards), 4),
         "",

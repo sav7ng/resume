@@ -26,6 +26,7 @@
 - `Anton` 负责大标题、标签、区块标题
 - `Crimson Text` 负责正文和说明性文本
 - 使用主题 token 管理浅色、深色和跟随系统模式
+- 页面内置 A4 打印样式，可通过按钮导出 PDF
 - 保留 `AOS` 作为轻量滚动入场动画
 - 内容结构由 JSON 驱动，模板继续承载视觉和交互层
 
@@ -84,6 +85,7 @@ about/
 当前 JSON schema 的核心约束：
 
 - `tone`: `default | inverse`
+- `page.exportPdf`: 导出按钮文案与无障碍标签
 - `introCards[].type`: `richText | detailList`
 - `experiences[].sections[].type`: `paragraph | list`
 - 链接、图片和 badge 都使用显式字段，不在 JSON 里直接写原始 HTML
@@ -109,6 +111,20 @@ http://localhost:8000
 ```
 
 也可以直接打开生成后的 [`index.html`](/Users/saving/Development/Code/about/index.html)，但更推荐通过本地服务器预览外部资源加载和链接行为。
+
+## 导出 PDF
+
+页面 Hero 区域带有 `Export PDF` 按钮，建议在桌面浏览器中使用：
+
+1. 先通过本地静态服务器打开页面，确保头像、字体和外部资源加载完成。
+2. 点击页面右上角 `Export PDF` 按钮。
+3. 浏览器会打开打印对话框，选择 `Save as PDF` 或同类选项即可导出。
+
+导出特性：
+
+- 默认按 `A4` 纸张优化
+- 无论当前浏览主题是什么，打印预览都会强制切到浅色打印版
+- 打印时会自动隐藏主题切换和导出按钮，并压缩分页间距以减少断裂
 
 ## 实现特点
 
