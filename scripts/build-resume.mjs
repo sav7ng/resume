@@ -89,6 +89,8 @@ function validateContent(content) {
     ensurePlainObject(content.page.exportPdf, "page.exportPdf");
     ensureString(content.page.exportPdf.label, "page.exportPdf.label");
     ensureString(content.page.exportPdf.ariaLabel, "page.exportPdf.ariaLabel");
+    ensureString(content.page.exportPdf.href, "page.exportPdf.href");
+    ensureString(content.page.exportPdf.downloadName, "page.exportPdf.downloadName");
 
     ensurePlainObject(content.page.sections, "page.sections");
     ["intro", "skills", "experiences", "articles", "openSources", "thanks"].forEach((key) => {
@@ -284,7 +286,7 @@ function renderThemeSwitch(themeSwitch) {
 }
 
 function renderExportButton(exportPdf) {
-    return `<button class="export-button" type="button" data-export-pdf aria-label="${escapeAttr(exportPdf.ariaLabel)}">${escapeHtml(exportPdf.label)}</button>`;
+    return `<a class="export-button" href="${escapeAttr(exportPdf.href)}" download="${escapeAttr(exportPdf.downloadName)}" aria-label="${escapeAttr(exportPdf.ariaLabel)}">${escapeHtml(exportPdf.label)}</a>`;
 }
 
 function renderHero(hero, themeSwitch, exportPdf) {

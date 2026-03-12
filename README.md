@@ -4,10 +4,11 @@
 
 项目现在采用轻量构建方案：
 
-- 内容维护入口是 [`content/resume.json`](/Users/saving/Development/Code/about/content/resume.json)
-- 页面模板入口是 [`src/index.template.html`](/Users/saving/Development/Code/about/src/index.template.html)
-- 构建脚本是 [`scripts/build-resume.mjs`](/Users/saving/Development/Code/about/scripts/build-resume.mjs)
-- 根目录 [`index.html`](/Users/saving/Development/Code/about/index.html) 是生成产物，通常不直接手改
+- 唯一可构建内容源是 [`content/resume.json`](/Users/saving/Development/Code/resume/content/resume.json)
+- 履历草稿 / 参考稿是 [`content/Saving.md`](/Users/saving/Development/Code/resume/content/Saving.md)
+- 页面模板入口是 [`src/index.template.html`](/Users/saving/Development/Code/resume/src/index.template.html)
+- 构建脚本是 [`scripts/build-resume.mjs`](/Users/saving/Development/Code/resume/scripts/build-resume.mjs)
+- 根目录 [`index.html`](/Users/saving/Development/Code/resume/index.html) 是生成产物，通常不直接手改
 
 ## 当前页面内容
 
@@ -26,17 +27,18 @@
 - `Anton` 负责大标题、标签、区块标题
 - `Crimson Text` 负责正文和说明性文本
 - 使用主题 token 管理浅色、深色和跟随系统模式
-- 页面内置 A4 打印样式，可通过按钮导出 PDF
+- 页面保留 A4 打印样式，按钮会直接下载预置 PDF
 - 保留 `AOS` 作为轻量滚动入场动画
 - 内容结构由 JSON 驱动，模板继续承载视觉和交互层
 
 ## 仓库结构
 
 ```text
-about/
+resume/
 ├── README.md
 ├── avatar.jpg
 ├── content/
+│   ├── Saving.md
 │   └── resume.json
 ├── scripts/
 │   └── build-resume.mjs
@@ -47,12 +49,13 @@ about/
 
 文件说明：
 
-- [`content/resume.json`](/Users/saving/Development/Code/about/content/resume.json)：唯一内容源，维护 Hero、技能、工作经历、文章和开源项目信息
-- [`src/index.template.html`](/Users/saving/Development/Code/about/src/index.template.html)：页面模板，保留样式、字体、主题脚本、AOS 逻辑和内容占位符
-- [`scripts/build-resume.mjs`](/Users/saving/Development/Code/about/scripts/build-resume.mjs)：无依赖构建脚本，读取 JSON 和模板后生成最终页面
-- [`index.html`](/Users/saving/Development/Code/about/index.html)：构建产物，用于直接部署和预览
-- [`avatar.jpg`](/Users/saving/Development/Code/about/avatar.jpg)：首屏头像资源
-- [`README.md`](/Users/saving/Development/Code/about/README.md)：项目说明
+- [`content/resume.json`](/Users/saving/Development/Code/resume/content/resume.json)：唯一可构建内容源，维护 Hero、技能、工作经历、文章和开源项目信息
+- [`content/Saving.md`](/Users/saving/Development/Code/resume/content/Saving.md)：最新履历草稿 / 参考稿，可先在这里整理长文案，再同步回 JSON
+- [`src/index.template.html`](/Users/saving/Development/Code/resume/src/index.template.html)：页面模板，保留样式、字体、主题脚本、AOS 逻辑和内容占位符
+- [`scripts/build-resume.mjs`](/Users/saving/Development/Code/resume/scripts/build-resume.mjs)：无依赖构建脚本，读取 JSON 和模板后生成最终页面
+- [`index.html`](/Users/saving/Development/Code/resume/index.html)：构建产物，用于直接部署和预览
+- [`avatar.jpg`](/Users/saving/Development/Code/resume/avatar.jpg)：首屏头像资源
+- [`README.md`](/Users/saving/Development/Code/resume/README.md)：项目说明
 
 ## 技术与依赖
 
@@ -77,15 +80,22 @@ about/
 
 常见维护入口：
 
-- 改简历文案：编辑 [`content/resume.json`](/Users/saving/Development/Code/about/content/resume.json)
-- 调整视觉样式：编辑 [`src/index.template.html`](/Users/saving/Development/Code/about/src/index.template.html) 中的 CSS token、布局和动效
-- 调整构建逻辑：编辑 [`scripts/build-resume.mjs`](/Users/saving/Development/Code/about/scripts/build-resume.mjs)
-- 替换头像：更新 [`avatar.jpg`](/Users/saving/Development/Code/about/avatar.jpg)
+- 改简历最终内容：编辑 [`content/resume.json`](/Users/saving/Development/Code/resume/content/resume.json)
+- 先整理长文案草稿：编辑 [`content/Saving.md`](/Users/saving/Development/Code/resume/content/Saving.md)
+- 调整视觉样式：编辑 [`src/index.template.html`](/Users/saving/Development/Code/resume/src/index.template.html) 中的 CSS token、布局和动效
+- 调整构建逻辑：编辑 [`scripts/build-resume.mjs`](/Users/saving/Development/Code/resume/scripts/build-resume.mjs)
+- 替换头像：更新 [`avatar.jpg`](/Users/saving/Development/Code/resume/avatar.jpg)
+
+推荐更新流程：
+
+1. 如需先打草稿，可先修改 [`content/Saving.md`](/Users/saving/Development/Code/resume/content/Saving.md)。
+2. 将最终要展示的内容同步到 [`content/resume.json`](/Users/saving/Development/Code/resume/content/resume.json)。
+3. 运行 `node scripts/build-resume.mjs` 重新生成 [`index.html`](/Users/saving/Development/Code/resume/index.html)。
 
 当前 JSON schema 的核心约束：
 
 - `tone`: `default | inverse`
-- `page.exportPdf`: 导出按钮文案与无障碍标签
+- `page.exportPdf`: 导出按钮文案、无障碍标签和静态 PDF 下载目标
 - `introCards[].type`: `richText | detailList`
 - `experiences[].sections[].type`: `paragraph | list`
 - 链接、图片和 badge 都使用显式字段，不在 JSON 里直接写原始 HTML
@@ -110,21 +120,21 @@ python3 -m http.server 8000
 http://localhost:8000
 ```
 
-也可以直接打开生成后的 [`index.html`](/Users/saving/Development/Code/about/index.html)，但更推荐通过本地服务器预览外部资源加载和链接行为。
+也可以直接打开生成后的 [`index.html`](/Users/saving/Development/Code/resume/index.html)，但更推荐通过本地服务器预览外部资源加载和链接行为。
 
 ## 导出 PDF
 
-页面 Hero 区域带有 `Export PDF` 按钮，建议在桌面浏览器中使用：
+页面 Hero 区域带有 `Export PDF` 按钮，建议通过本地静态服务器访问后使用：
 
-1. 先通过本地静态服务器打开页面，确保头像、字体和外部资源加载完成。
+1. 先通过本地静态服务器打开页面。
 2. 点击页面右上角 `Export PDF` 按钮。
-3. 浏览器会打开打印对话框，选择 `Save as PDF` 或同类选项即可导出。
+3. 页面会直接下载仓库中的 [`content/saving.pdf`](/Users/saving/Development/Code/resume/content/saving.pdf)。
 
 导出特性：
 
-- 默认按 `A4` 纸张优化
-- 无论当前浏览主题是什么，打印预览都会强制切到浅色打印版
-- 打印时会自动隐藏主题切换和导出按钮，并压缩分页间距以减少断裂
+- 默认下载文件名为 `saving.pdf`
+- 浏览器若忽略 `download` 属性，会按原生行为打开同一个 PDF 文件
+- 页面仍保留 `A4` 打印样式，供手动浏览器打印时使用
 
 ## 实现特点
 
@@ -145,4 +155,4 @@ http://localhost:8000
 
 ## 隐私提醒
 
-页面源码和 [`content/resume.json`](/Users/saving/Development/Code/about/content/resume.json) 包含真实个人履历信息和联系方式。若仓库公开，请确认这些内容都属于你愿意公开的信息。
+页面源码和 [`content/resume.json`](/Users/saving/Development/Code/resume/content/resume.json) 包含真实个人履历信息和联系方式。若仓库公开，请确认这些内容都属于你愿意公开的信息。

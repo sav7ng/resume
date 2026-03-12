@@ -284,6 +284,9 @@
         }
 
         .export-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             appearance: none;
             border: 1px solid var(--surface-border);
             background: var(--surface);
@@ -292,28 +295,8 @@
             font-size: 11px;
             line-height: 1;
             cursor: pointer;
-            transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease, transform 180ms ease, opacity 180ms ease;
-        }
-
-        .export-button[disabled] {
-            cursor: progress;
-            opacity: 0.7;
-        }
-
-        html[data-printing="true"] body::before {
-            display: none;
-        }
-
-        html[data-printing="true"] .hero-actions {
-            visibility: hidden;
-            pointer-events: none;
-        }
-
-        html[data-printing="true"] [data-aos],
-        html[data-printing="true"] .motion-sequence .motion-child {
-            opacity: 1 !important;
-            transform: none !important;
-            transition: none !important;
+            text-decoration: none;
+            transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease, transform 180ms ease;
         }
 
         [data-aos="hero-rise"],
@@ -1267,13 +1250,8 @@
             var storageKey = "resume-theme-mode";
             var root = document.documentElement;
             var themeButtons = Array.prototype.slice.call(document.querySelectorAll("[data-theme-option]"));
-            var exportButton = document.querySelector("[data-export-pdf]");
             var mediaQuery = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
             var reducedMotionQuery = window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : null;
-            var printSnapshot = null;
-            var printRecoveryTimer = null;
-            var focusRecoveryTimer = null;
-            var isPreparingPrint = false;
 
             function normalizeMode(mode) {
                 return mode === "light" || mode === "dark" || mode === "system" ? mode : "system";
@@ -1324,169 +1302,11 @@
                 }
             }
 
-            function setExportButtonBusy(isBusy) {
-                if (!exportButton) {
-                    return;
-                }
-
-                exportButton.disabled = isBusy;
-                exportButton.setAttribute("aria-busy", String(isBusy));
-            }
-
-            function clearPrintRecoveryTimers() {
-                if (printRecoveryTimer) {
-                    window.clearTimeout(printRecoveryTimer);
-                    printRecoveryTimer = null;
-                }
-
-                if (focusRecoveryTimer) {
-                    window.clearTimeout(focusRecoveryTimer);
-                    focusRecoveryTimer = null;
-                }
-            }
-
-            function snapshotThemeState() {
-                var themeMode = normalizeMode(root.dataset.themeMode);
-                var theme = root.dataset.theme || resolveTheme(themeMode);
-
-                return {
-                    themeMode: themeMode,
-                    theme: theme,
-                    colorScheme: root.style.colorScheme || theme
-                };
-            }
-
-            function restoreAfterPrint() {
-                clearPrintRecoveryTimers();
-                root.removeAttribute("data-printing");
-
-                if (printSnapshot) {
-                    root.dataset.themeMode = printSnapshot.themeMode;
-                    root.dataset.theme = printSnapshot.theme;
-                    root.style.colorScheme = printSnapshot.colorScheme;
-                    syncControls(printSnapshot.themeMode);
-                }
-
-                printSnapshot = null;
-                isPreparingPrint = false;
-                setExportButtonBusy(false);
-            }
-
-            function waitForFonts() {
-                if (!document.fonts || !document.fonts.ready) {
-                    return Promise.resolve();
-                }
-
-                return document.fonts.ready.catch(function () {
-                    return undefined;
-                });
-            }
-
-            function waitForImage(image) {
-                return new Promise(function (resolve) {
-                    var timer = null;
-                    var settled = false;
-
-                    function finish() {
-                        if (settled) {
-                            return;
-                        }
-
-                        settled = true;
-
-                        if (timer) {
-                            window.clearTimeout(timer);
-                        }
-
-                        image.removeEventListener("load", finish);
-                        image.removeEventListener("error", finish);
-                        resolve();
-                    }
-
-                    if (image.complete) {
-                        resolve();
-                        return;
-                    }
-
-                    image.addEventListener("load", finish);
-                    image.addEventListener("error", finish);
-                    timer = window.setTimeout(finish, 4000);
-                });
-            }
-
-            function waitForImages() {
-                var images = Array.prototype.slice.call(document.images || []);
-                return Promise.all(images.map(waitForImage));
-            }
-
-            function waitForNextPaint() {
-                return new Promise(function (resolve) {
-                    window.requestAnimationFrame(function () {
-                        window.requestAnimationFrame(resolve);
-                    });
-                });
-            }
-
-            function enterPrintMode() {
-                printSnapshot = snapshotThemeState();
-                root.dataset.printing = "true";
-                root.dataset.theme = "light";
-                root.style.colorScheme = "light";
-            }
-
-            function armPrintRecovery() {
-                clearPrintRecoveryTimers();
-                printRecoveryTimer = window.setTimeout(restoreAfterPrint, 60000);
-            }
-
-            function handleWindowFocus() {
-                if (!printSnapshot) {
-                    return;
-                }
-
-                clearTimeout(focusRecoveryTimer);
-                focusRecoveryTimer = window.setTimeout(function () {
-                    if (printSnapshot) {
-                        restoreAfterPrint();
-                    }
-                }, 300);
-            }
-
-            function exportAsPdf() {
-                if (!exportButton || isPreparingPrint) {
-                    return;
-                }
-
-                if (typeof window.print !== "function") {
-                    return;
-                }
-
-                isPreparingPrint = true;
-                setExportButtonBusy(true);
-
-                Promise.all([waitForFonts(), waitForImages()])
-                    .then(function () {
-                        enterPrintMode();
-                        return waitForNextPaint();
-                    })
-                    .then(function () {
-                        armPrintRecovery();
-                        window.print();
-                    })
-                    .catch(function () {
-                        restoreAfterPrint();
-                    });
-            }
-
             themeButtons.forEach(function (button) {
                 button.addEventListener("click", function () {
                     applyTheme(button.dataset.themeOption, true);
                 });
             });
-
-            if (exportButton) {
-                exportButton.addEventListener("click", exportAsPdf);
-            }
 
             if (mediaQuery) {
                 var handleSystemThemeChange = function () {
@@ -1501,9 +1321,6 @@
                     mediaQuery.addListener(handleSystemThemeChange);
                 }
             }
-
-            window.addEventListener("afterprint", restoreAfterPrint);
-            window.addEventListener("focus", handleWindowFocus);
 
             applyTheme(readStoredMode(), false);
 

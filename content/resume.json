@@ -13,7 +13,9 @@
     },
     "exportPdf": {
       "label": "Export PDF",
-      "ariaLabel": "Export resume as PDF"
+      "ariaLabel": "Export resume as PDF",
+      "href": "./content/saving.pdf",
+      "downloadName": "saving.pdf"
     },
     "sections": {
       "intro": {
@@ -47,7 +49,7 @@
     "name": "Saving",
     "role": "Senior Backend Developer / Team Lead",
     "tagline": "Trying to do better.",
-    "summary": "一位高级后端开发人员，在 Java，Golang 和 Kotlin 方面共拥有 6 年的经验。提供高效和高质量的计划。一个热爱运动，追求改进和完美的创造者。",
+    "summary": "一位高级后端开发人员，在 Java，Golang 和 Kotlin 方面共拥有 8 年的经验。提供高效和高质量的计划。一个热爱运动，追求改进和完美的创造者。",
     "portrait": {
       "src": "./avatar.jpg",
       "alt": "Saving 头像",
@@ -63,7 +65,7 @@
       {
         "tone": "default",
         "label": "Experience",
-        "value": "6 Years"
+        "value": "8 Years"
       },
       {
         "tone": "default",
@@ -83,7 +85,7 @@
       "label": "Profile / 简介",
       "title": "Who I Am",
       "type": "richText",
-      "content": "一位高级后端开发人员，在 Java，Golang 和 Kotlin 方面共拥有 6 年的经验。提供高效和高质量的计划。一个热爱运动，追求改进和完美的创造者。"
+      "content": "一位高级后端开发人员，在 Java，Golang 和 Kotlin 方面共拥有 8 年的经验。提供高效和高质量的计划。一个热爱运动，追求改进和完美的创造者。"
     },
     {
       "tone": "default",
@@ -170,6 +172,113 @@
       "marker": {
         "caption": "Current Marker",
         "value": "至今"
+      },
+      "tone": "inverse",
+      "company": "广州速启科技有限责任公司「高级后端开发工程师」",
+      "role": "CPC 云手机 AI Agent 编排平台 ▪ 云手机自动化 ▪ OpenAPI / MCP 能力开放",
+      "sections": [
+        {
+          "label": "分布式微服务架构",
+          "type": "paragraph",
+          "content": "Java 17 / Spring Boot 3 / Spring Cloud / Spring AI / OpenAI / MCP / OpenFeign / Nacos / Redis / MySQL / JPA / MyBatis-Plus / Kafka / XXL-JOB / WebFlux / SSE / Spring Security / Swagger / Prometheus"
+        },
+        {
+          "label": "项目概况",
+          "type": "paragraph",
+          "content": "CPC 云手机 AI 编排服务是微服务体系中的独立 AI 能力模块，主要面向云手机自动化与智能任务执行场景。项目核心是将自然语言指令解析为结构化任务，并根据任务类型自动路由到 Agent 执行器或脚本执行服务，完成任务创建、状态流转、执行派发、结果回调、会话沉淀的完整闭环。同时对外提供 HTTP OpenAPI 与 MCP Tool 调用能力，支撑设备管理、设备控制、AI 任务执行与结果获取等业务场景。本人主要参与该项目核心链路的设计与开发，推动 AI 能力与既有微服务、设备能力、异步调度体系的深度融合，提升平台在智能自动化场景下的可复用性与业务落地能力。"
+        },
+        {
+          "label": "担任职责",
+          "type": "list",
+          "content": [
+            "AI 任务解析中心 / 负责基于 Spring AI + OpenAI 实现自然语言任务结构化解析，将用户输入转为任务类型、执行时间、策略、目标应用、动作内容等字段，并结合租户应用库动态注入 Prompt 上下文，提升 AI 指令识别的业务准确性。",
+            "Agent / Script 任务编排 / 负责设计统一任务调度链路，完成任务落库、状态流转、立即执行、定时执行、策略分发等能力，支持根据任务策略自动派发至外部 Agent 执行器或脚本服务。",
+            "云手机开放接口 / 负责设计并开发云手机设备管理接口，包括设备列表、设备详情、实时状态、电源控制、应用启动、ADB 连接信息获取等能力，支撑外部平台和内部系统统一接入设备控制能力。",
+            "MCP 能力开放 / 负责将 AI 任务能力封装为 MCP Tool，对外以 JSON-RPC 风格暴露任务创建、结果获取等接口，支持智能体工具调用与平台化接入。",
+            "回调闭环与会话沉淀 / 负责处理 Agent 执行回调与脚本任务回调，更新任务状态、转发业务通知，并将执行结果同步写入会话历史，支持多轮上下文追踪与结果复盘。",
+            "定时任务调度 / 负责基于 XXL-JOB 实现到期任务扫描与自动派发，补齐 AI 能力在延迟执行、预约执行等业务场景下的落地能力。",
+            "租户应用脚本库 / 负责租户级应用信息管理与快捷命令能力建设，支持通过应用配置快速创建并下发自动化任务，增强 AI 与具体业务应用之间的绑定关系。",
+            "OpenAPI 鉴权治理 / 负责开放接口鉴权方案设计与开发，基于 Redis Token 校验与线程上下文用户态传递实现设备类接口安全访问控制。"
+          ]
+        },
+        {
+          "label": "Technical Points",
+          "type": "list",
+          "content": [
+            "基于 Spring AI + BeanOutputConverter 将大模型输出直接转换为结构化任务对象，降低自然语言解析对大量手写规则的依赖，提升 AI 指令到业务任务的落地效率。",
+            "将租户应用库信息动态注入 Prompt 上下文，使模型能够结合实际业务应用完成任务识别与 agent / script 策略路由，而不是停留在通用问答层面。",
+            "设计统一异步任务编排链路，打通“任务创建 -> 状态持久化 -> 执行派发 -> 回调处理 -> 通知转发 -> 会话沉淀”完整闭环，增强任务场景下的可观测性与可追踪性。",
+            "基于 MCP Server + HTTP OpenAPI 双协议暴露能力，使服务既可被传统业务系统调用，也能被支持 Tool Calling 的智能体直接接入，提升平台通用性与扩展性。",
+            "利用 Redis Cache + MySQL / JPA 实现会话与消息持久化机制，对用户消息、回调结果、流式脚本生成结果进行统一沉淀，支撑多轮上下文连续追踪。",
+            "基于 XXL-JOB 实现定时任务扫描与派发机制，使 AI 指令具备预约执行、延迟执行和自动触发能力。",
+            "结合 Kafka / OTA 指令链路 / OpenFeign 与云手机能力集成，实现设备指令发送、执行协同与外部服务联动，推动 AI 自动化能力真正落到设备执行层。",
+            "通过 OpenAPI 鉴权拦截器结合 Redis 用户态数据完成统一鉴权，避免开放设备接口被未授权访问，提升接口安全性与可控性。"
+          ]
+        },
+        {
+          "label": "个人收获",
+          "type": "paragraph",
+          "content": "通过该项目，我对 AI 大模型在企业级业务系统中的工程化落地有了更深入的理解，不再局限于调用模型并返回结果，而是进一步掌握了从 Prompt 设计、结构化任务解析、异步任务编排、执行回调闭环到能力平台化开放的完整实现思路。项目过程中，我提升了在 AI 工程化、微服务协同、云手机自动化、多租户业务抽象、接口安全治理以及上下文会话设计等方面的实战能力，也让我对如何将大模型能力真正转化为稳定、可执行、可追踪的业务能力有了更成熟的认识。"
+        }
+      ]
+    },
+    {
+      "tone": "default",
+      "company": "广州速启科技有限责任公司「高级后端开发工程师」",
+      "role": "CPC 3.0 多租户云机管理平台 / 云手机 SaaS 平台",
+      "sections": [
+        {
+          "label": "分布式微服务架构",
+          "type": "paragraph",
+          "content": "Spring Boot 2.6 / Spring Cloud 2021 / Java 17 / Nacos / OpenFeign / MyBatis-Plus / MySQL / Redis / Redisson / MongoDB / ShardingSphere / Kafka / XXL-Job / Prometheus / Netty / MQTT / WebSocket / Dubbo(部分模块) / Swagger"
+        },
+        {
+          "label": "项目概况",
+          "type": "paragraph",
+          "content": "CPC 3.0 是一套围绕云机 / 云手机资源管理、租户隔离、设备路由、用户接入、订单计费和 SaaS 配置构建的多模块后端平台。整体仓库由 lib 公共能力层、worker 业务微服务层、master 平台管理入口、mopenapi 多开放接口层以及 gateway 工具服务组成，覆盖管理后台、客户端 API、开放平台、worker 集群协同、设备接入、异步任务、监控统计和第三方云厂商对接等场景。平台核心业务围绕租户中心、用户中心、订单与计费、设备与云机中心、网关与路由、SaaS 定制配置、开放平台能力、IoT / Netty 通信链路、消息与短信、监控指标与任务调度展开，具备较强的多模块协同和分布式架构特征。"
+        },
+        {
+          "label": "担任职责",
+          "type": "list",
+          "content": [
+            "平台架构治理 / 参与 CPC 3.0 多模块微服务平台的架构拆分与服务边界设计，围绕 lib 公共能力、worker 业务中心、portalapi 平台入口、mopenapi 开放能力和工具服务形成统一的分层协作模式，沉淀可复用的通用组件和服务模板。",
+            "租户与用户中心 / 负责或参与多租户能力建设，围绕租户配置、用户信息、登录记录、验证码、用户反馈、租户与设备绑定等能力进行设计与实现，支撑 SaaS 场景下多租户隔离和业务配置扩展。",
+            "订单与计费链路 / 参与订单、商品、支付回调、套餐和计费相关服务建设，打通订单中心、租户系统和上层业务模块之间的协同链路，支撑平台资源订购、续费、套餐配置和业务计费场景。",
+            "设备与云机中心 / 负责或参与云机设备、资源池、共享存储、应用上下架、批量换机、重置、Root、截图、文件上传、设备定位修改等能力建设，覆盖云机生命周期管理和批量运维操作场景。",
+            "网关与路由体系 / 参与 cpc-center-gateway、mopenapi 和 worker 路由关系的设计与实现，围绕租户到 worker、设备到 worker 的域名路由、请求转发、接口签名和跨 worker 数据同步能力建设开放平台调用链路。",
+            "开放平台与客户端接口 / 参与 clientapi、boxapi、backendapi、openapi、mopenapi 等 API 服务建设，对外提供客户端、盒子端、平台端和开放接口能力，支撑多端接入与服务复用。",
+            "IoT 与设备通信 / 参与 kite-netty、kite-proxy、kite-manager、kite-monitor、iotapi 等服务协同建设，支撑设备接入、代理转发、集群管理、MQTT / WebSocket / Netty 通信、运行监控和设备状态采集等场景。",
+            "任务调度与异步链路 / 参与 Kafka 消息消费、定时任务、批处理任务和跨模块异步通知能力建设，将资源分配、应用上下架、设备回收、消息通知、数据同步等流程解耦为可追踪、可重试的任务链路。",
+            "第三方生态对接 / 参与 Huawei、Tencent、Volcengine、Baidu、Ali、Firebase、Migu、Line、蜂助手(FHelper) 等第三方云厂商或生态能力的接入，支撑多云资源管理、设备同步、账号对接、回调通知和扩展能力集成。",
+            "监控与数据能力 / 参与 Prometheus 指标采集、运行状态统计、资源池统计、云机服务状态记录、埋点日志和业务数据接口建设，支撑平台可观测性与数据分析场景。"
+          ]
+        },
+        {
+          "label": "Technical Points",
+          "type": "list",
+          "content": [
+            "基于 Spring Boot 2.6 + Spring Cloud 2021 + Nacos + OpenFeign 构建多模块微服务体系，将管理后台、客户端 API、开放平台、任务中心、网关中心、设备中心和数据中心按职责拆分，降低单体耦合度，提升跨团队协作和独立迭代能力。",
+            "在仓库层面形成统一的 api / biz / dao / service 分层规范，并通过 lib / cpc-core 中的 starter 模块沉淀 Redis、MyBatis、Kafka、MongoDB、Prometheus、XXL-Job、ShardingSphere、Feign、锁、认证等公共能力，提升重复业务场景的复用效率。",
+            "利用 Redis + Redisson 实现分布式锁、状态控制和并发保护，在设备分配、换机、共享、回调、回收、备份恢复等涉及同一用户设备或资源池的流程中减少并发覆盖和脏写风险。",
+            "借助 mopenapi 路由表 + worker 域名映射 + 跨 worker 同步接口构建设备与租户的分布式路由能力，使开放平台请求能够根据租户、设备、区域和 worker 关系进行动态转发，支撑多 worker 集群下的业务调度与扩展。",
+            "使用 Kafka + XXL-Job 处理设备分配、回收、应用上下架、日志采集、统计任务、通知任务等异步流程，通过任务化和消息化方式降低核心链路阻塞，提升复杂业务流程的可拆解性与可恢复性。",
+            "结合 MongoDB + ShardingSphere + MyBatis-Plus 处理结构化与非结构化数据场景，在租户配置、日志记录、统计数据、设备关系、业务主表等不同类型数据间实现较灵活的数据组织方式。",
+            "在设备侧通过 Netty / MQTT / WebSocket 支撑 IoT 与云机通信链路，配合 kite-* 系列服务完成设备接入、代理转发、集群管理、状态采集、指令调度和监控统计，形成从设备接入到服务治理的一体化能力。",
+            "通过 Prometheus 指标监控 + 业务统计 REST 接口建立平台可观测性能力，对设备数、服务状态、资源池、采集日志、云机流媒体状态等指标进行采集和暴露，支持后续监控告警与分析场景。",
+            "基于开放平台 + 多云厂商适配形成对 Huawei、Tencent、Volcengine、Baidu、Ali、Firebase、Migu、Line、FHelper 等生态能力的扩展接口，提升平台对不同设备供应商、短信 / 消息、云资源和外部系统的兼容性。"
+          ]
+        },
+        {
+          "label": "个人收获",
+          "type": "paragraph",
+          "content": "通过参与 CPC 3.0 这类多租户云机平台的建设，进一步加深了我对微服务架构拆分、公共能力沉淀、跨模块协同和复杂业务边界划分的理解；在租户、设备、路由、开放平台、任务调度和监控链路等场景中，提升了我对分布式系统设计、并发控制、异步任务编排、跨 worker 数据同步和平台型后端建设的整体把控能力。同时也强化了我在多云厂商接入、IoT / Netty 通信链路、SaaS 配置扩展、接口复用和可观测性建设方面的实践经验，使我在面对复杂平台型项目时，能够更系统地从架构、业务、稳定性和可扩展性角度进行思考与落地。"
+        }
+      ]
+    },
+    {
+      "marker": {
+        "caption": "Previous Marker",
+        "value": "七月 2024"
       },
       "tone": "inverse",
       "company": "广州大事件科技网络有限公司「后端开发组长」",
