@@ -1264,7 +1264,7 @@
                 <h1 class="hero-name">Saving</h1>
                 <p class="hero-kicker">Senior Backend Developer / Team Lead</p>
                 <p class="hero-tagline">Trying to do better.</p>
-                <p class="hero-summary">一位高级后端开发人员，在 Java，Golang 和 Kotlin 方面共拥有 8 年的经验。提供高效和高质量的计划。一个热爱运动，追求改进和完美的创造者。</p>
+                <p class="hero-summary">8 年后端开发经验，熟悉 Java、Golang、Kotlin，擅长高性能、高可用系统的设计与实现。具备良好的 AI 协同开发能力，熟练使用 Codex、Cursor、Claude Code 等工具，并掌握多种提效技巧，可在需求分析、代码编写、重构优化、测试调试等环节实现高效协同，持续提升研发效率与代码质量。热爱运动，崇尚自我精进，追求专业能力与作品质量的持续进化。</p>
             </div>
             <aside class="portrait-shell" data-aos="card-rise" data-aos-delay="80">
                 <div class="portrait-frame">
@@ -1303,7 +1303,7 @@
             <article class="info-card tone-inverse" data-aos="card-rise">
                 <p class="card-label">Profile / 简介</p>
                 <h3 class="card-title">Who I Am</h3>
-                <p class="lead-text">一位高级后端开发人员，在 Java，Golang 和 Kotlin 方面共拥有 8 年的经验。提供高效和高质量的计划。一个热爱运动，追求改进和完美的创造者。</p>
+                <p class="lead-text">8 年后端开发经验，熟悉 Java、Golang、Kotlin，擅长高性能、高可用系统的设计与实现。具备良好的 AI 协同开发能力，熟练使用 Codex、Cursor、Claude Code 等工具，并掌握多种提效技巧，可在需求分析、代码编写、重构优化、测试调试等环节实现高效协同，持续提升研发效率与代码质量。热爱运动，崇尚自我精进，追求专业能力与作品质量的持续进化。</p>
             </article>
             <article class="info-card" data-aos="card-rise" data-aos-delay="40">
                 <p class="card-label">Personal Details / 个人信息</p>
@@ -1362,6 +1362,9 @@
             <h2 class="section-title">Skills / 技能</h2>
         </header>
         <div class="skill-wall motion-sequence" data-aos="card-rise" data-aos-delay="40">
+            <span class="skill-tag motion-child">Cursor</span>
+            <span class="skill-tag motion-child">Codex</span>
+            <span class="skill-tag motion-child">ClaudeCode</span>
             <span class="skill-tag motion-child">Java</span>
             <span class="skill-tag motion-child">Kotlin</span>
             <span class="skill-tag motion-child">Golang</span>
@@ -1399,6 +1402,51 @@
                 <p class="period-value">至今</p>
             </div>
             <article class="experience-card tone-inverse motion-sequence" data-aos="card-rise">
+                <div class="experience-head motion-child">
+                    <p class="experience-company">广州速启科技有限责任公司「高级后端开发工程师」</p>
+                    <h3 class="experience-role">CloudPhone OpenClaw Plugin ▪ 云手机 AI 自动化 ▪ Agent 工具能力开放</h3>
+                </div>
+                <div class="experience-body">
+                    <section class="block motion-child">
+                        <p class="block-label">OpenClaw 插件架构</p>
+                        <p>TypeScript 5.4+ / Node.js (ES2020) / OpenClaw Plugin API / MCP (Model Context Protocol) / Fetch API / AbortController / Crypto (MD5) / GitHub Actions CI/CD / npm Registry</p>
+                    </section>
+                    <section class="block motion-child">
+                        <p class="block-label">项目概况</p>
+                        <p>CloudPhone 是基于 OpenClaw 插件体系开发的云手机 AI Agent 能力开放插件，为 AI Agent 提供云手机设备管理与 UI 自动化操控能力。项目核心是将云手机 OpenAPI 封装为 14 个标准化的 `cloudphone_*` Agent 工具，涵盖用户信息获取、设备列表与详情查询、电源控制、ADB 连接、坐标点击/长按/滑动、文本输入与清除、系统按键、截图/UI树快照、图片渲染等完整能力。同时内置 `basic-skill` Skill 教学模块，引导 Agent 按照&#39;观察 → 行动 → 验证 → 再观察&#39;的短闭环稳定执行多步 UI 自动化任务。插件通过 npm 包 `@whateverai/cloudphone` 发布，支持 OpenClaw Gateway 一键安装与配置，Agent 即装即用。</p>
+                    </section>
+                    <section class="block motion-child">
+                        <p class="block-label">担任职责</p>
+                        <ul>
+                            <li>Agent 工具体系设计 / 负责设计并实现 14 个 `cloudphone_*` 工具定义，包括工具名、描述、JSON Schema 参数校验与执行函数，遵循 MCP 内容项规范（text / image），统一 Agent 工具调用与响应格式</li>
+                            <li>OpenAPI 请求抽象层 / 负责封装统一的 `apiRequest` 请求函数，内置超时控制（AbortController）、鉴权头注入（Authorization ApiKey）、URL 拼接与归一化、业务状态码判定（success / code 多格式兼容）、错误信息提取等能力，屏蔽底层 HTTP 细节</li>
+                            <li>设备管理能力 / 负责实现用户信息获取、设备列表分页与筛选、设备详情、电源控制（开机/关机/重启）、ADB/SSH 连接信息获取等 5 个设备管理工具，支撑 Agent 完成设备选择与状态确认</li>
+                            <li>UI 交互操控能力 / 负责实现坐标点击、长按、滑动、文本输入、文本清除、系统按键（BACK/HOME/ENTER/RECENT/POWER）等 6 个 UI 交互工具，使 Agent 具备完整的云手机屏幕操控能力</li>
+                            <li>状态观测与截图渲染 / 负责实现截图/UI树快照获取、页面等待条件（element_appear/element_disappear/page_stable）、截图 URL 渲染为可展示图片等 3 个状态观测工具，其中图片渲染采用远程拉取 → MD5 哈希去重 → 本地缓存 → MCP image 内容项 + MEDIA 兼容回退的完整链路</li>
+                            <li>内置 Skill 设计 / 负责设计并编写 `basic-skill` Skill 教学文档，定义标准工作流（select_device → confirm_online → observe → act → verify → observe_again）、恢复策略、能力边界声明与常见问题排查指南，提升 Agent 在多步 UI 自动化场景下的执行稳定性</li>
+                            <li>插件注册与生命周期 / 负责实现插件入口（register 函数），完成运行时配置解析、工具批量注册、执行结果规范化、异常兜底处理与结构化日志输出，确保插件在 OpenClaw Gateway 中稳定加载运行</li>
+                            <li>CI/CD 与发布 / 负责基于 GitHub Actions 实现自动化构建与 npm 发布流水线，main 分支 push 触发构建，`v*` 标签触发公开发布到 npm Registry</li>
+                        </ul>
+                    </section>
+                    <section class="block motion-child">
+                        <p class="block-label">Technical Points</p>
+                        <ul>
+                            <li>开发过程中结合 Cursor AI 编程助手辅助提效，在工具定义模板生成、请求抽象层搭建、Skill 文档编写及 CI/CD 配置等环节借助 AI 加速迭代，有效提升编码效率与交付节奏</li>
+                            <li>基于 OpenClaw Plugin API 实现 14 个标准化 Agent 工具，严格遵循 `name / description / parameters(JSON Schema) / execute` 四元组定义，工具返回值统一采用 MCP 内容项规范（text / image），Agent 即装即用</li>
+                            <li>封装统一 apiRequest 抽象层，内置 AbortController 超时中断、Authorization 鉴权头注入、多格式业务状态码兼容判定与结构化错误提取，所有工具共享同一请求链路</li>
+                            <li>截图渲染工具实现远程图片拉取 → MD5 哈希去重 → 本地缓存 → MIME 双重推断（Content-Type 优先 + URL 扩展名兜底）→ MCP image + MEDIA 兼容回退的完整图片处理链路</li>
+                            <li>设计 basic-skill 内置 Skill，定义&#39;观察 → 行动 → 验证 → 再观察&#39;标准工作流与分层恢复策略（BACK → HOME → 截图 → 重启），在不增加新工具的前提下提升 Agent 多步 UI 自动化执行稳定性</li>
+                            <li>基于 GitHub Actions 实现两阶段 CI/CD（build → publish），`v*` 标签推送自动构建并发布到公共 npm Registry，实现版本化自动发布</li>
+                        </ul>
+                    </section>
+                    <section class="block motion-child">
+                        <p class="block-label">个人收获</p>
+                        <p>通过该项目，我深入理解了 AI Agent 工具化开放的工程实践，从&#39;如何将后端 API 能力标准化封装为 Agent 可调用工具&#39;到&#39;如何通过 Skill 引导 Agent 稳定执行多步自动化任务&#39;，掌握了 MCP 协议内容项规范、工具参数 JSON Schema 设计、以及 Agent 行为引导（Skill）与底层能力（Plugin）的职责分离思想。同时通过实际开发 OpenClaw Plugin 并完成 npm 公开发布，熟练掌握了 OpenClaw 插件体系的完整开发流程，包括插件注册生命周期、配置 Schema 声明、Skill 编写规范与 Gateway 集成调试，具备了独立开发与发布 OpenClaw 插件的能力。项目过程中也提升了在 TypeScript 工程化、API 请求抽象、图片处理链路设计、CI/CD 自动化发布以及 AI Agent 生态能力建设等方面的实战经验。</p>
+                    </section>
+                </div>
+            </article>
+
+            <article class="experience-card motion-sequence" data-aos="card-rise">
                 <div class="experience-head motion-child">
                     <p class="experience-company">广州速启科技有限责任公司「高级后端开发工程师」</p>
                     <h3 class="experience-role">CPC 云手机 AI Agent 编排平台 ▪ 云手机自动化 ▪ OpenAPI / MCP 能力开放</h3>
