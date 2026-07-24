@@ -1,7 +1,30 @@
 {
   "page": {
     "lang": "zh-CN",
-    "title": "CV",
+    "title": "Saving · Senior Backend Developer / Team Lead",
+    "description": "Saving 的个人简历：8 年后端开发经验，专注高性能、高可用系统、分布式架构与 AI 协同研发。",
+    "navigation": [
+      {
+        "label": "Profile",
+        "target": "profile"
+      },
+      {
+        "label": "Skills",
+        "target": "skills"
+      },
+      {
+        "label": "Experience",
+        "target": "experience"
+      },
+      {
+        "label": "Writing",
+        "target": "writing"
+      },
+      {
+        "label": "Open Source",
+        "target": "open-source"
+      }
+    ],
     "themeSwitch": {
       "label": "Theme",
       "ariaLabel": "Theme mode",
@@ -17,28 +40,38 @@
       "href": "./content/saving.pdf",
       "downloadName": "saving.pdf"
     },
+    "experienceDisclosure": {
+      "expand": "展开完整经历 / Show details",
+      "collapse": "收起经历 / Hide details"
+    },
     "sections": {
       "intro": {
+        "id": "profile",
         "label": "Intro Blocks",
         "title": "Profile / Personal Details / Contact"
       },
       "skills": {
+        "id": "skills",
         "label": "Skill Wall",
         "title": "Skills / 技能"
       },
       "experiences": {
+        "id": "experience",
         "label": "Experience Stack",
         "title": "Work Experience / 工作经历"
       },
       "articles": {
+        "id": "writing",
         "label": "Editorial Links",
         "title": "Articles / 文章"
       },
       "openSources": {
+        "id": "open-source",
         "label": "Open Source",
         "title": "Open Sources / 开源项目"
       },
       "thanks": {
+        "id": "thanks",
         "label": "Final Note",
         "title": "Thanks For Your / 致谢"
       }
@@ -180,6 +213,7 @@
       "tone": "inverse",
       "company": "广州速启科技有限责任公司「高级后端开发工程师」",
       "role": "CloudPhone OpenClaw Plugin ▪ 云手机 AI 自动化 ▪ Agent 工具能力开放",
+      "previewSectionCount": 2,
       "sections": [
         {
           "label": "OpenClaw 插件架构",
@@ -228,6 +262,7 @@
       "tone": "default",
       "company": "广州速启科技有限责任公司「高级后端开发工程师」",
       "role": "CPC 云手机 AI Agent 编排平台 ▪ 云手机自动化 ▪ OpenAPI / MCP 能力开放",
+      "previewSectionCount": 2,
       "sections": [
         {
           "label": "分布式微服务架构",
@@ -278,6 +313,7 @@
       "tone": "default",
       "company": "广州速启科技有限责任公司「高级后端开发工程师」",
       "role": "CPC 3.0 多租户云机管理平台 / 云手机 SaaS 平台",
+      "previewSectionCount": 2,
       "sections": [
         {
           "label": "分布式微服务架构",
@@ -335,6 +371,7 @@
       "tone": "inverse",
       "company": "广州大事件科技网络有限公司「后端开发组长」",
       "role": "贪吃商城小程序 / 移动端 / 商家端",
+      "previewSectionCount": 2,
       "sections": [
         {
           "label": "分布式微服务架构",
@@ -392,6 +429,7 @@
       "tone": "default",
       "company": "广州大事件科技网络有限公司「后端开发工程师」",
       "role": "贪吃商城 Disco 社区项目",
+      "previewSectionCount": 2,
       "sections": [
         {
           "label": "分布式微服务架构",
@@ -427,6 +465,7 @@
       "tone": "inverse",
       "company": "唐朝科技(广州)有限公司「后端开发工程师」",
       "role": "斑马同校小程序",
+      "previewSectionCount": 2,
       "sections": [
         {
           "label": "技术架构",
@@ -454,6 +493,7 @@
       "tone": "default",
       "company": "唐朝科技(广州)有限公司「后端开发工程师」",
       "role": "睿妃医美公众号平台",
+      "previewSectionCount": 2,
       "sections": [
         {
           "label": "技术架构",
@@ -485,6 +525,7 @@
       "tone": "inverse",
       "company": "广州市网地软件科技有限公司「后端开发工程师」",
       "role": "威时沛运货运(广州)有限公司易贸通系统",
+      "previewSectionCount": 2,
       "sections": [
         {
           "label": "技术架构",

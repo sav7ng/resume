@@ -1,45 +1,35 @@
 # Saving Resume
 
-一个单页静态个人简历站，采用移动优先的 monochrome editorial 视觉风格：强排版对比、海报式标题、长段落阅读布局，以及带主题切换和 AOS 入场节奏的单页履历展示。
+一个原生 HTML/CSS/JavaScript 实现的单页个人简历站。页面借鉴
+[chanhdai.com](https://chanhdai.com/) 的工程感视觉语言，并按招聘方与技术面试官的阅读习惯重新设计：
+窄内容中轴、全屏工程网格、细线分区、紧凑资料行，以及克制的滚动动效。
 
-项目现在采用轻量构建方案：
+项目不迁移前端框架，也不复制参考站的品牌素材、文案或身份信息。内容由 JSON 驱动，构建后输出可直接部署的静态页面。
 
-- 唯一可构建内容源是 [`content/resume.json`](/Users/saving/Development/Code/resume/content/resume.json)
-- 履历草稿 / 参考稿是 [`content/Saving.md`](/Users/saving/Development/Code/resume/content/Saving.md)
-- 页面模板入口是 [`src/index.template.html`](/Users/saving/Development/Code/resume/src/index.template.html)
-- 构建脚本是 [`scripts/build-resume.mjs`](/Users/saving/Development/Code/resume/scripts/build-resume.mjs)
-- 根目录 [`index.html`](/Users/saving/Development/Code/resume/index.html) 是生成产物，通常不直接手改
+## 视觉与交互
 
-## 当前页面内容
+- 最大宽度约 `760px` 的中央资料轨道，配合全屏横线、左右边线和斜线纹理分隔带
+- `Geist` / `Geist Mono` 字体，中文回退到 `PingFang SC` 和系统无衬线字体
+- 约 `49px` 高的粘性导航，提供区块锚点、PDF 下载和紧凑主题控件
+- `Light / Dark / System` 三种主题模式，并保留用户选择
+- 扁平列表、细边框资料行和小型技术标签，便于快速扫描履历
+- 工作经历默认展示技术架构与项目概况，展开后阅读完整职责、技术要点和个人收获
+- 保留 [AOS](https://michalsnik.github.io/aos/) 作为轻量入场动效，位移与时长经过收敛
+- 浏览器打印时使用浅色 A4 样式，并自动展开完整经历
 
-页面围绕个人履历展示展开，包含这些主要区块：
-
-- Hero 首屏：姓名、职业定位、slogan、摘要、头像和关键指标
-- `Profile / Personal Details / Contact`
-- `Skills / 技能`
-- `Work Experience / 工作经历`
-- `Articles / 文章`
-- `Open Sources / 开源项目`
-- `Thanks For Your / 致谢`
-
-当前风格重点：
-
-- `Anton` 负责大标题、标签、区块标题
-- `Crimson Text` 负责正文和说明性文本
-- 使用主题 token 管理浅色、深色和跟随系统模式
-- 页面保留 A4 打印样式，按钮会直接下载预置 PDF
-- 保留 `AOS` 作为轻量滚动入场动画
-- 内容结构由 JSON 驱动，模板继续承载视觉和交互层
+设计灵感来自 [chanhdai.com](https://chanhdai.com/)；其
+[官方源码](https://github.com/ncdai/chanhdai.com) 采用 MIT 许可证。
 
 ## 仓库结构
 
 ```text
-resume/
+about/
 ├── README.md
 ├── avatar.jpg
 ├── content/
-│   ├── Saving.md
-│   └── resume.json
+│   ├── saving.md
+│   ├── resume.json
+│   └── saving.pdf
 ├── scripts/
 │   └── build-resume.mjs
 ├── src/
@@ -47,112 +37,82 @@ resume/
 └── index.html
 ```
 
-文件说明：
+- [`content/resume.json`](/Users/saving/Development/Code/about/content/resume.json)：唯一可构建内容源
+- [`content/saving.md`](/Users/saving/Development/Code/about/content/saving.md)：履历草稿与长文案参考
+- [`content/saving.pdf`](/Users/saving/Development/Code/about/content/saving.pdf)：页面下载的静态 PDF
+- [`src/index.template.html`](/Users/saving/Development/Code/about/src/index.template.html)：视觉、主题、动效和交互模板
+- [`scripts/build-resume.mjs`](/Users/saving/Development/Code/about/scripts/build-resume.mjs)：无依赖静态构建脚本
+- [`index.html`](/Users/saving/Development/Code/about/index.html)：构建生成产物，通常不要直接修改
 
-- [`content/resume.json`](/Users/saving/Development/Code/resume/content/resume.json)：唯一可构建内容源，维护 Hero、技能、工作经历、文章和开源项目信息
-- [`content/Saving.md`](/Users/saving/Development/Code/resume/content/Saving.md)：最新履历草稿 / 参考稿，可先在这里整理长文案，再同步回 JSON
-- [`src/index.template.html`](/Users/saving/Development/Code/resume/src/index.template.html)：页面模板，保留样式、字体、主题脚本、AOS 逻辑和内容占位符
-- [`scripts/build-resume.mjs`](/Users/saving/Development/Code/resume/scripts/build-resume.mjs)：无依赖构建脚本，读取 JSON 和模板后生成最终页面
-- [`index.html`](/Users/saving/Development/Code/resume/index.html)：构建产物，用于直接部署和预览
-- [`avatar.jpg`](/Users/saving/Development/Code/resume/avatar.jpg)：首屏头像资源
-- [`README.md`](/Users/saving/Development/Code/resume/README.md)：项目说明
+## 内容配置
 
-## 技术与依赖
+常规履历更新只需编辑
+[`content/resume.json`](/Users/saving/Development/Code/about/content/resume.json)，再重新构建。
+页面、链接、图片和标签均使用显式字段，不在 JSON 中写原始 HTML。
 
-当前项目依赖非常少，主要是：
+与页面结构相关的主要字段：
 
-- 原生 `HTML`
-- 原生 `CSS`
-- 少量原生 `JavaScript`
-- `Node.js` 用于本地构建生成静态页面
-- [Tailwind CSS CDN](https://cdn.tailwindcss.com) 作为布局辅助
-- [AOS](https://michalsnik.github.io/aos/) 作为滚动入场动画
-- [Google Fonts](https://fonts.google.com/) 提供 `Anton` 和 `Crimson Text`
+- `page.navigation[]`：导航项，包含 `label` 与区块 `target`
+- `page.sections.*.id`：区块锚点，使用 `profile`、`skills`、`experience`、`writing`、`open-source`、`thanks`
+- `page.experienceDisclosure`：经历展开与收起文案
+- `page.exportPdf.href` / `downloadName`：静态 PDF 地址与下载文件名
+- `experiences[].previewSectionCount`：默认预览的 section 数量；当前为 `2`，且不能超过该经历的 section 总数
+- `experiences[].sections[].type`：经历内容类型，支持 `paragraph` 与 `list`
 
-说明：
-
-- 不需要 `npm install`
-- 不引入前端框架、模板引擎或额外构建依赖
-- 页面依赖外部 CDN 和字体服务，离线环境下显示会退化
-- 内容渲染不依赖浏览器端 `fetch` 或运行时拼装
-
-## 内容维护方式
-
-常见维护入口：
-
-- 改简历最终内容：编辑 [`content/resume.json`](/Users/saving/Development/Code/resume/content/resume.json)
-- 先整理长文案草稿：编辑 [`content/Saving.md`](/Users/saving/Development/Code/resume/content/Saving.md)
-- 调整视觉样式：编辑 [`src/index.template.html`](/Users/saving/Development/Code/resume/src/index.template.html) 中的 CSS token、布局和动效
-- 调整构建逻辑：编辑 [`scripts/build-resume.mjs`](/Users/saving/Development/Code/resume/scripts/build-resume.mjs)
-- 替换头像：更新 [`avatar.jpg`](/Users/saving/Development/Code/resume/avatar.jpg)
-
-推荐更新流程：
-
-1. 如需先打草稿，可先修改 [`content/Saving.md`](/Users/saving/Development/Code/resume/content/Saving.md)。
-2. 将最终要展示的内容同步到 [`content/resume.json`](/Users/saving/Development/Code/resume/content/resume.json)。
-3. 运行 `node scripts/build-resume.mjs` 重新生成 [`index.html`](/Users/saving/Development/Code/resume/index.html)。
-
-当前 JSON schema 的核心约束：
-
-- `tone`: `default | inverse`
-- `page.exportPdf`: 导出按钮文案、无障碍标签和静态 PDF 下载目标
-- `introCards[].type`: `richText | detailList`
-- `experiences[].sections[].type`: `paragraph | list`
-- 链接、图片和 badge 都使用显式字段，不在 JSON 里直接写原始 HTML
+调整视觉时编辑
+[`src/index.template.html`](/Users/saving/Development/Code/about/src/index.template.html)；调整渲染或校验逻辑时编辑
+[`scripts/build-resume.mjs`](/Users/saving/Development/Code/about/scripts/build-resume.mjs)。
 
 ## 构建与预览
 
-先生成根目录页面：
+项目无需 `npm install`。在仓库根目录执行：
 
 ```bash
 node scripts/build-resume.mjs
 ```
 
-然后启动静态文件服务器：
+该命令读取模板与 JSON，并重新生成根目录
+[`index.html`](/Users/saving/Development/Code/about/index.html)。建议不要直接编辑生成文件。
+
+启动本地静态服务器：
 
 ```bash
 python3 -m http.server 8000
 ```
 
-访问：
+然后访问 [http://localhost:8000](http://localhost:8000)。也可以直接打开生成后的 `index.html`，但通过静态服务器更适合检查字体、外部资源和下载链接。
 
-```text
-http://localhost:8000
-```
+推荐更新流程：
 
-也可以直接打开生成后的 [`index.html`](/Users/saving/Development/Code/resume/index.html)，但更推荐通过本地服务器预览外部资源加载和链接行为。
+1. 在 `content/saving.md` 中整理草稿（可选）。
+2. 将最终内容维护到 `content/resume.json`。
+3. 运行 `node scripts/build-resume.mjs`。
+4. 启动静态服务器，在桌面端、平板和手机宽度下检查页面。
 
-## 导出 PDF
+## PDF 与打印
 
-页面 Hero 区域带有 `Export PDF` 按钮，建议通过本地静态服务器访问后使用：
+页头的 PDF 入口直接下载
+[`content/saving.pdf`](/Users/saving/Development/Code/about/content/saving.pdf)，默认文件名由
+`page.exportPdf.downloadName` 配置。若浏览器忽略 `download` 属性，则按浏览器原生行为打开同一文件。
 
-1. 先通过本地静态服务器打开页面。
-2. 点击页面右上角 `Export PDF` 按钮。
-3. 页面会直接下载仓库中的 [`content/saving.pdf`](/Users/saving/Development/Code/resume/content/saving.pdf)。
+网页同时保留手动打印支持：打印时隐藏粘性页头和装饰背景、强制浅色，并展开全部工作经历。
 
-导出特性：
+## 可访问性
 
-- 默认下载文件名为 `saving.pdf`
-- 浏览器若忽略 `download` 属性，会按原生行为打开同一个 PDF 文件
-- 页面仍保留 `A4` 打印样式，供手动浏览器打印时使用
+- 提供 skip-link、语义化 `header` / `nav` / `main` / `footer` 结构
+- 导航、主题按钮、PDF 链接和经历展开控件均支持键盘操作
+- 交互元素具有清晰的 `focus-visible` 状态
+- 支持 `prefers-reduced-motion`，减少或关闭非必要位移与过渡
+- 使用描述性页面元信息、主题色和内联 favicon
 
-## 实现特点
+## 部署
 
-- 内容与模板分层：文案维护和视觉实现职责清晰
-- 静态直出：构建后得到完整 HTML，部署简单
-- 移动优先：桌面端延续窄栏 editorial 布局，不扩展为复杂双栏应用界面
-- 风格统一：头像、信息卡、经历卡、列表项和主题切换都使用同一套视觉规则
-- 可维护性更高：后续新增文章、工作经历或开源项目时，只需要扩展 JSON
+构建结果是完整静态 HTML，可部署到 GitHub Pages、Vercel、Netlify、Nginx、对象存储或其他静态托管服务。
 
-## 适合的部署方式
-
-这是一个纯静态页面，适合直接部署到：
-
-- GitHub Pages
-- Vercel 静态站点
-- Netlify
-- 任意 Nginx / OSS / 对象存储静态托管
+页面字体与 AOS 通过外部服务加载；离线环境下字体会回退，动效资源不可用时不影响履历正文阅读。
 
 ## 隐私提醒
 
-页面源码和 [`content/resume.json`](/Users/saving/Development/Code/resume/content/resume.json) 包含真实个人履历信息和联系方式。若仓库公开，请确认这些内容都属于你愿意公开的信息。
+页面源码和
+[`content/resume.json`](/Users/saving/Development/Code/about/content/resume.json)
+包含真实个人履历信息和联系方式。若仓库公开，请确认这些内容都属于你愿意公开的信息。
