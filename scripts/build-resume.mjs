@@ -363,36 +363,120 @@ function renderSiteHeader(page) {
     ].join("\n");
 }
 
+// 等距积木视觉：真·30° 等距投影（dx : dy = √3 : 1），复刻自 chanhdai.com 的
+// isometric mark 技法 —— 斜纹填充 + 贯穿虚线 + 鼠标跟随描边 + 点按下沉。
+// 参考站原件拼的是 “CD” 缩写，这里改为一组抽象积木，不复制其身份标识。
+const ISO = {
+    viewBox: { w: 620, h: 300 },
+    origin: { x: 310, y: 168 },
+    dx: 62,
+    dy: 36,
+    unit: 34
+};
+
+// 抽象“方块城”布局：3×3 网格，高低错落。[网格 x, 网格 y, 高度层数]
+const ISO_CUBES = [
+    [-1, -1, 1], [0, -1, 2], [1, -1, 1],
+    [-1, 0, 2], [0, 0, 3], [1, 0, 1],
+    [-1, 1, 1], [0, 1, 1], [1, 1, 2]
+];
+
+function isoRound(value) {
+    return Math.round(value * 10) / 10;
+}
+
+function isoPolygon(points) {
+    return "M" + points
+        .map((point) => `${isoRound(point[0])} ${isoRound(point[1])}`)
+        .join("L") + "Z";
+}
+
+// 把网格坐标 + 高度展开成一个立方体的三个可见面（顶/左/右）。
+function isoCube(gx, gy, heightUnits) {
+    const { origin, dx, dy, unit } = ISO;
+    const sx = origin.x + (gx - gy) * dx;
+    const sy = origin.y + (gx + gy) * dy;
+    const h = heightUnits * unit;
+
+    const top = [[sx, sy - h - dy], [sx + dx, sy - h], [sx, sy - h + dy], [sx - dx, sy - h]];
+    const left = [[sx - dx, sy - h], [sx, sy - h + dy], [sx, sy + dy], [sx - dx, sy]];
+    const right = [[sx, sy - h + dy], [sx + dx, sy - h], [sx + dx, sy], [sx, sy + dy]];
+
+    return {
+        depth: gx + gy,
+        top: isoPolygon(top),
+        left: isoPolygon(left),
+        right: isoPolygon(right)
+    };
+}
+
+// 背景贯穿虚线：沿两条等距轴斜切整个画面，藏在积木之后。
+function isoBackgroundLines() {
+    const { viewBox, dx, dy } = ISO;
+    const slope = dy / dx;
+    const span = viewBox.w + viewBox.h;
+    const lines = [];
+
+    for (let offset = -viewBox.h; offset <= viewBox.w + viewBox.h; offset += 132) {
+        // 向下的轴（东南）
+        lines.push(`M${isoRound(offset - span)} ${isoRound(-slope * span)}L${isoRound(offset + span)} ${isoRound(slope * span)}`);
+        // 向上的轴（东北）
+        lines.push(`M${isoRound(offset - span)} ${isoRound(viewBox.h + slope * span)}L${isoRound(offset + span)} ${isoRound(viewBox.h - slope * span)}`);
+    }
+
+    return lines;
+}
+
 function renderHeroDiagram() {
+    const cubes = ISO_CUBES
+        .map(([gx, gy, h]) => isoCube(gx, gy, h))
+        // 画家算法：从后往前绘制，保证前排积木正确遮挡后排
+        .sort((a, b) => a.depth - b.depth);
+
+    const base = cubes
+        .map((cube) => `        <path d="${cube.top}"/><path d="${cube.left}"/><path d="${cube.right}"/>`)
+        .join("\n");
+    const tops = cubes.map((cube) => `        <path d="${cube.top}"/>`).join("\n");
+    const sides = cubes
+        .map((cube) => `        <path d="${cube.left}"/><path d="${cube.right}"/>`)
+        .join("\n");
+    const edges = cubes
+        .map((cube) => `        <path d="${cube.top}"/><path d="${cube.left}"/><path d="${cube.right}"/>`)
+        .join("\n");
+    const bgLines = isoBackgroundLines()
+        .map((line) => `        <path d="${line}"/>`)
+        .join("\n");
+
     return [
-        '<svg class="hero-diagram distributed-system-diagram" viewBox="0 0 760 260" aria-hidden="true" focusable="false">',
-        '    <g class="diagram-path">',
-        '        <path d="M72 122H196L302 58H458L564 122H688"/>',
-        '        <path d="M72 178H196L302 232H458L564 178H688"/>',
-        '        <path d="M196 122V178M302 58V232M458 58V232M564 122V178"/>',
-        '        <path d="M196 122L302 178L458 122L564 178"/>',
+        `<svg class="hero-diagram iso-mark" viewBox="0 0 ${ISO.viewBox.w} ${ISO.viewBox.h}" aria-hidden="true" focusable="false">`,
+        "    <defs>",
+        '        <pattern id="iso-stripe" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">',
+        '            <path d="M-1 1l2 -2M0 10l10 -10M9 11l2 -2" stroke="var(--iso-pattern)" stroke-width="1"/>',
+        "        </pattern>",
+        `        <radialGradient id="iso-glow" cx="${ISO.viewBox.w / 2}" cy="${ISO.viewBox.h / 2}" r="200" gradientUnits="userSpaceOnUse">`,
+        '            <stop class="iso-glow-near" stop-color="oklch(0.37 0 0)"/>',
+        '            <stop class="iso-glow-far" offset="1" stop-color="oklch(0.7 0 0)" stop-opacity="0"/>',
+        "        </radialGradient>",
+        "    </defs>",
+        '    <g class="iso-lines">',
+        bgLines,
         "    </g>",
-        '    <g class="diagram-face">',
-        '        <path d="M162 100L196 82L230 100L196 118Z"/>',
-        '        <path d="M530 156L564 138L598 156L564 174Z"/>',
-        '        <path d="M268 156L302 138L336 156L302 174Z"/>',
-        '        <path d="M424 100L458 82L492 100L458 118Z"/>',
-        "    </g>",
-        '    <g class="diagram-node">',
-        '        <circle cx="72" cy="122" r="13"/><circle cx="72" cy="178" r="13"/>',
-        '        <circle cx="196" cy="122" r="17"/><circle cx="196" cy="178" r="17"/>',
-        '        <circle cx="302" cy="58" r="13"/><circle cx="302" cy="178" r="21"/><circle cx="302" cy="232" r="13"/>',
-        '        <circle cx="458" cy="58" r="13"/><circle cx="458" cy="122" r="21"/><circle cx="458" cy="232" r="13"/>',
-        '        <circle cx="564" cy="122" r="17"/><circle cx="564" cy="178" r="17"/>',
-        '        <circle cx="688" cy="122" r="13"/><circle cx="688" cy="178" r="13"/>',
-        "    </g>",
-        '    <g class="diagram-core">',
-        '        <circle cx="72" cy="122" r="4"/><circle cx="72" cy="178" r="4"/>',
-        '        <circle cx="196" cy="122" r="5"/><circle cx="196" cy="178" r="5"/>',
-        '        <circle cx="302" cy="58" r="4"/><circle cx="302" cy="178" r="6"/><circle cx="302" cy="232" r="4"/>',
-        '        <circle cx="458" cy="58" r="4"/><circle cx="458" cy="122" r="6"/><circle cx="458" cy="232" r="4"/>',
-        '        <circle cx="564" cy="122" r="5"/><circle cx="564" cy="178" r="5"/>',
-        '        <circle cx="688" cy="122" r="4"/><circle cx="688" cy="178" r="4"/>',
+        '    <g class="iso-blocks">',
+        '        <g class="iso-base">',
+        base,
+        "        </g>",
+        '        <g class="iso-tops">',
+        tops,
+        "        </g>",
+        '        <g class="iso-sides">',
+        sides,
+        "        </g>",
+        '        <g class="iso-edges">',
+        edges,
+        "        </g>",
+        '        <g class="iso-edges iso-edges-glow">',
+        edges,
+        "        </g>",
         "    </g>",
         "</svg>"
     ].join("\n");

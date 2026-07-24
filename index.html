@@ -61,12 +61,14 @@
             --focus: oklch(0.141 0.005 285.823);
             --selection: oklch(0.141 0.005 285.823);
             --selection-foreground: oklch(0.985 0 0);
-            --diagram-line: color-mix(in oklab, var(--foreground) 22%, transparent);
             --diagram-soft: color-mix(in oklab, var(--foreground) 8%, transparent);
             --header-background: color-mix(in oklab, var(--background) 88%, transparent);
-            --content-width: 760px;
+            --content-width: 768px;
             --header-height: 50px;
             --rail-padding: clamp(18px, 4vw, 32px);
+            --hairline: 1px;
+            --pattern-foreground: color-mix(in oklab, var(--border) 72%, transparent);
+            --separator-height: 32px;
             --font-sans: "Geist", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
             --font-mono: "Geist Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
             --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -85,7 +87,6 @@
             --focus: oklch(0.985 0 0);
             --selection: oklch(0.985 0 0);
             --selection-foreground: oklch(0.141 0.005 285.823);
-            --diagram-line: color-mix(in oklab, var(--foreground) 20%, transparent);
             --diagram-soft: color-mix(in oklab, var(--foreground) 7%, transparent);
             --header-background: color-mix(in oklab, var(--background) 88%, transparent);
         }
@@ -110,11 +111,38 @@
             background: var(--background);
             color: var(--foreground);
             font-family: var(--font-sans);
-            font-size: 14px;
-            line-height: 1.5;
+            font-size: 15px;
+            line-height: 1.6;
             -webkit-font-smoothing: antialiased;
+            font-synthesis-weight: none;
             text-rendering: optimizeLegibility;
             transition: background-color 180ms ease, color 180ms ease;
+        }
+
+        /* 高分屏使用半像素细线，让工程图纸的线条更锐利 */
+        @media (min-resolution: 2dppx) {
+            :root {
+                --hairline: 0.5px;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            border-radius: 5px;
+            background: var(--border);
+        }
+
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: var(--border) transparent;
         }
 
         body::before {
@@ -201,7 +229,7 @@
             left: 8px;
             z-index: 100;
             padding: 8px 12px;
-            border: 1px solid var(--border);
+            border: var(--hairline) solid var(--border);
             background: var(--background);
             color: var(--foreground);
             font-family: var(--font-mono);
@@ -219,7 +247,7 @@
             top: 0;
             z-index: 50;
             height: var(--header-height);
-            border-bottom: 1px solid var(--line);
+            border-bottom: var(--hairline) solid var(--line);
             background: var(--header-background);
             backdrop-filter: blur(16px) saturate(140%);
         }
@@ -232,7 +260,7 @@
             align-items: center;
             gap: 14px;
             padding: 0 10px;
-            border-inline: 1px solid var(--line);
+            border-inline: var(--hairline) solid var(--line);
         }
 
         .site-mark {
@@ -300,7 +328,7 @@
             align-items: center;
             gap: 7px;
             padding-left: 8px;
-            border-left: 1px solid var(--line);
+            border-left: var(--hairline) solid var(--line);
         }
 
         .theme-switch {
@@ -323,7 +351,7 @@
             grid-template-columns: repeat(3, 28px);
             gap: 2px;
             padding: 2px;
-            border: 1px solid var(--border);
+            border: var(--hairline) solid var(--border);
             border-radius: 8px;
             background: var(--surface);
         }
@@ -380,7 +408,7 @@
             justify-content: center;
             height: 30px;
             padding: 0 9px;
-            border: 1px solid var(--border);
+            border: var(--hairline) solid var(--border);
             border-radius: 7px;
             background: var(--surface);
             color: var(--foreground);
@@ -414,8 +442,41 @@
             position: relative;
             width: min(calc(100% - 16px), var(--content-width));
             margin-inline: auto;
-            border-inline: 1px solid var(--line);
-            background: color-mix(in oklab, var(--background) 94%, transparent);
+            border-inline: var(--hairline) solid var(--line);
+        }
+
+        /*
+         * 全屏贯穿线：从视口左缘延伸到右缘的 1px 细线，穿过内容轨道两侧的留白。
+         * 这是参考站工程图纸语言的核心 —— 内容轨道保持透明，线才能真正贯穿。
+         */
+        .screen-line-top::before,
+        .screen-line-bottom::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            z-index: 0;
+            width: 100vw;
+            height: 1px;
+            transform: translateX(-50%);
+            background: var(--line);
+            pointer-events: none;
+        }
+
+        .screen-line-top::before {
+            top: 0;
+        }
+
+        .screen-line-bottom::after {
+            bottom: 0;
+        }
+
+        /* 虚线变体用于区块内部的次级分隔，弱于实线一档 */
+        .screen-dashed-line-top::before,
+        .screen-dashed-line-bottom::after {
+            background:
+                linear-gradient(to right, var(--line) 4px, transparent 2px)
+                repeat-x;
+            background-size: 6px 1px;
         }
 
         .hero {
@@ -426,7 +487,7 @@
             position: relative;
             min-height: 310px;
             overflow: hidden;
-            border-bottom: 1px solid var(--line);
+            border-bottom: var(--hairline) solid var(--line);
             background-image:
                 linear-gradient(to right, var(--diagram-soft) 1px, transparent 1px),
                 linear-gradient(to bottom, var(--diagram-soft) 1px, transparent 1px),
@@ -449,65 +510,98 @@
 
         .hero-diagram {
             position: absolute;
-            inset: clamp(22px, 4vw, 44px) clamp(20px, 5vw, 60px) 18px;
-            width: calc(100% - clamp(40px, 10vw, 120px));
-            height: calc(100% - clamp(40px, 8vw, 86px));
-            color: var(--diagram-line);
+            inset: clamp(14px, 3vw, 28px) clamp(16px, 4vw, 48px) 12px;
+            width: calc(100% - clamp(32px, 8vw, 96px));
+            height: calc(100% - clamp(26px, 6vw, 56px));
         }
 
-        .hero-diagram > svg,
-        .distributed-system-diagram {
+        .hero-diagram > svg {
             width: 100%;
             height: 100%;
             overflow: visible;
         }
 
-        .hero-diagram .diagram-node {
-            fill: var(--background);
-            stroke: currentColor;
-            stroke-width: 1.25;
+        /*
+         * 等距积木标志（复刻 chanhdai.com 的 isometric mark 技法）。
+         * 颜色 token 全部派生自 --foreground / --background，自动适配明暗主题。
+         */
+        .iso-mark {
+            --iso-stroke: color-mix(in oklab, var(--foreground) 26%, var(--background));
+            --iso-pattern: color-mix(in oklab, var(--foreground) 13%, var(--background));
+            --iso-top: color-mix(in oklab, var(--foreground) 5%, var(--background));
+            --iso-line: color-mix(in oklab, var(--foreground) 12%, var(--background));
+            cursor: pointer;
+            touch-action: manipulation;
         }
 
-        .hero-diagram .diagram-face {
-            fill: var(--diagram-soft);
-            stroke: currentColor;
-            stroke-width: 1.25;
-        }
-
-        .hero-diagram .diagram-path {
+        /* 背景贯穿虚线，藏在积木之后 */
+        .iso-mark .iso-lines {
             fill: none;
-            stroke: currentColor;
-            stroke-width: 1.25;
-            stroke-dasharray: 5 6;
+            stroke: var(--iso-line);
+            stroke-width: 1;
+            stroke-dasharray: 4 3;
         }
 
-        .hero-diagram .diagram-core {
-            fill: var(--foreground);
+        /* 点按下沉：整组积木随 spring 曲线向下压 */
+        .iso-mark .iso-blocks {
+            transition: transform var(--duration) var(--ease-out);
         }
 
-        .diagram-grid,
-        .diagram-links {
-            fill: none;
-            stroke: currentColor;
-            stroke-width: 1.2;
+        .iso-mark .iso-blocks.is-pressed {
+            transform: translateY(11px);
         }
 
-        .diagram-grid {
-            opacity: 0.38;
-            stroke-dasharray: 3 6;
-        }
-
-        .diagram-nodes {
+        /* 不透明底面，遮住背后的网格与虚线 */
+        .iso-mark .iso-base path {
             fill: var(--background);
-            stroke: currentColor;
-            stroke-width: 1.3;
+            stroke: none;
         }
 
-        .diagram-labels {
-            fill: var(--muted-foreground);
-            font-family: var(--font-mono);
-            font-size: 10px;
-            letter-spacing: 0.08em;
+        /* 顶面浅色实填，侧面斜纹填充 */
+        .iso-mark .iso-tops path {
+            fill: var(--iso-top);
+            stroke: none;
+        }
+
+        .iso-mark .iso-sides path {
+            fill: url(#iso-stripe);
+            stroke: none;
+        }
+
+        /* 立方体棱线：先铺基础描边，再叠一层鼠标跟随的渐变描边 */
+        .iso-mark .iso-edges path {
+            fill: none;
+            stroke: var(--iso-stroke);
+            stroke-width: 1;
+            stroke-linejoin: round;
+        }
+
+        .iso-mark .iso-edges-glow path {
+            stroke: url(#iso-glow);
+        }
+
+        .iso-mark .iso-glow-near {
+            stop-color: oklch(0.42 0 0);
+        }
+
+        html[data-theme="dark"] .iso-mark .iso-glow-near {
+            stop-color: oklch(0.985 0 0);
+        }
+
+        html[data-theme="dark"] .iso-mark .iso-glow-far {
+            stop-color: oklch(0.7 0 0);
+        }
+
+        @media (min-resolution: 2dppx) {
+            .iso-mark .iso-edges path {
+                stroke-width: 0.75;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .iso-mark .iso-blocks {
+                transition: none;
+            }
         }
 
         .hero-identity,
@@ -521,7 +615,22 @@
             min-height: 102px;
             padding: 0 var(--rail-padding) 18px;
             margin-top: -58px;
-            border-bottom: 1px solid var(--line);
+        }
+
+        /* hero 内部的分区线同样贯穿全屏，保持与下方区块一致的图纸感 */
+        .hero-identity::before,
+        .hero-summary-block::before,
+        .hero-metrics::before {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            z-index: 0;
+            width: 100vw;
+            height: 1px;
+            transform: translateX(-50%);
+            background: var(--line);
+            pointer-events: none;
         }
 
         .portrait-shell,
@@ -540,7 +649,7 @@
             width: 124px;
             aspect-ratio: 1;
             padding: 5px;
-            border: 1px solid var(--line);
+            border: var(--hairline) solid var(--line);
             border-radius: 50%;
             background: var(--background);
         }
@@ -603,10 +712,10 @@
         .hero-summary-block,
         .hero-intro,
         .hero-summary-row {
+            position: relative;
             display: grid;
             gap: 13px;
             padding: 24px var(--rail-padding) 26px;
-            border-bottom: 1px solid var(--line);
         }
 
         .hero-tagline {
@@ -626,6 +735,7 @@
         }
 
         .hero-metrics {
+            position: relative;
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
             margin: 0;
@@ -639,12 +749,12 @@
             align-items: start;
             gap: 14px;
             padding: 16px var(--rail-padding);
-            border-bottom: 1px solid var(--line);
+            border-bottom: var(--hairline) solid var(--line);
             background: transparent;
         }
 
         .metric:nth-child(odd) {
-            border-right: 1px solid var(--line);
+            border-right: var(--hairline) solid var(--line);
         }
 
         .metric-label,
@@ -681,36 +791,69 @@
             margin-top: 32px;
         }
 
+        /*
+         * 区块之间的斜纹分隔带：315° 斜线、10px 网格，与参考站同一套纹理参数。
+         * 自身上下边即两条全屏贯穿线，因此区块顶部不再另画线。
+         */
         .section::before,
         .resume-section::before {
             content: "";
             position: absolute;
-            z-index: -1;
-            top: -32px;
+            z-index: 0;
+            top: calc(var(--separator-height) * -1);
             left: 50%;
             width: 100vw;
-            height: 32px;
+            height: var(--separator-height);
             transform: translateX(-50%);
             border-block: 1px solid var(--line);
-            background:
-                repeating-linear-gradient(
-                    135deg,
-                    transparent 0 5px,
-                    var(--diagram-soft) 5px 6px
-                ),
-                var(--background);
+            background: repeating-linear-gradient(
+                315deg,
+                var(--pattern-foreground) 0,
+                var(--pattern-foreground) 1px,
+                transparent 0,
+                transparent 50%
+            );
+            background-size: 10px 10px;
+        }
+
+        /* 区块底部收一条贯穿线，与顶部的分隔带上下呼应 */
+        .section::after,
+        .resume-section::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            z-index: 0;
+            width: 100vw;
+            height: 1px;
+            transform: translateX(-50%);
+            background: var(--line);
+            pointer-events: none;
         }
 
         .section-header {
+            position: relative;
             display: grid;
             gap: 5px;
             padding: 20px var(--rail-padding) 18px;
-            border-bottom: 1px solid var(--line);
+        }
+
+        .section-header::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            z-index: 0;
+            width: 100vw;
+            height: 1px;
+            transform: translateX(-50%);
+            background: var(--line);
+            pointer-events: none;
         }
 
         .section-title {
             margin: 0;
-            font-size: clamp(1.35rem, 4vw, 1.75rem);
+            font-size: clamp(1.5rem, 4vw, 1.875rem);
             font-weight: 500;
             line-height: 1.15;
             letter-spacing: -0.035em;
@@ -728,7 +871,7 @@
             display: grid;
             gap: 13px;
             padding: 20px var(--rail-padding);
-            border-bottom: 1px solid var(--line);
+            border-bottom: var(--hairline) solid var(--line);
             background: transparent;
             transition: background-color 160ms ease;
         }
@@ -766,7 +909,7 @@
             grid-template-columns: minmax(110px, 0.36fr) minmax(0, 1fr);
             gap: 16px;
             padding: 10px 0;
-            border-top: 1px solid var(--line);
+            border-top: var(--hairline) solid var(--line);
         }
 
         .detail-desc {
@@ -788,7 +931,7 @@
             flex-wrap: wrap;
             gap: 7px;
             padding: 20px var(--rail-padding) 24px;
-            border-bottom: 1px solid var(--line);
+            border-bottom: var(--hairline) solid var(--line);
         }
 
         .skill-list {
@@ -796,7 +939,7 @@
             grid-template-columns: repeat(3, minmax(0, 1fr));
             margin: 0;
             padding: 0;
-            border-bottom: 1px solid var(--line);
+            border-bottom: var(--hairline) solid var(--line);
             list-style: none;
             counter-reset: skill-index;
         }
@@ -809,8 +952,8 @@
             align-items: center;
             gap: 9px;
             padding: 7px 12px;
-            border-right: 1px solid var(--line);
-            border-bottom: 1px solid var(--line);
+            border-right: var(--hairline) solid var(--line);
+            border-bottom: var(--hairline) solid var(--line);
             border-top: 0;
             border-left: 0;
             border-radius: 0;
@@ -859,7 +1002,7 @@
             align-items: center;
             min-height: 27px;
             padding: 4px 8px;
-            border: 1px solid var(--border);
+            border: var(--hairline) solid var(--border);
             border-radius: 6px;
             background: var(--surface);
             color: var(--muted-foreground);
@@ -880,7 +1023,7 @@
             gap: 16px;
             align-items: baseline;
             padding: 14px var(--rail-padding);
-            border-bottom: 1px solid var(--line);
+            border-bottom: var(--hairline) solid var(--line);
             background:
                 repeating-linear-gradient(
                     135deg,
@@ -899,7 +1042,7 @@
         .experience-card,
         .experience-item {
             display: grid;
-            border-bottom: 1px solid var(--line);
+            border-bottom: var(--hairline) solid var(--line);
             background: transparent;
             transition: background-color 160ms ease;
         }
@@ -940,7 +1083,7 @@
             display: grid;
             gap: 8px;
             padding: 14px var(--rail-padding);
-            border-top: 1px solid var(--line);
+            border-top: var(--hairline) solid var(--line);
         }
 
         .block p,
@@ -975,7 +1118,7 @@
         }
 
         .experience-details {
-            border-top: 1px solid var(--line);
+            border-top: var(--hairline) solid var(--line);
         }
 
         .experience-details summary {
@@ -1007,7 +1150,7 @@
             place-items: center;
             width: 22px;
             height: 22px;
-            border: 1px solid var(--border);
+            border: var(--hairline) solid var(--border);
             border-radius: 6px;
             color: var(--foreground);
             font-size: 14px;
@@ -1025,7 +1168,7 @@
             place-items: center;
             width: 22px;
             height: 22px;
-            border: 1px solid var(--border);
+            border: var(--hairline) solid var(--border);
             border-radius: 6px;
             color: var(--foreground);
             font-size: 14px;
@@ -1065,7 +1208,7 @@
             gap: 16px;
             align-items: start;
             padding: 18px var(--rail-padding);
-            border-bottom: 1px solid var(--line);
+            border-bottom: var(--hairline) solid var(--line);
             background: transparent;
             transition: background-color 160ms ease;
         }
@@ -1127,7 +1270,7 @@
             display: grid;
             gap: 10px;
             padding: 22px var(--rail-padding) 28px;
-            border-bottom: 1px solid var(--line);
+            border-bottom: var(--hairline) solid var(--line);
         }
 
         .thanks-message {
@@ -1141,7 +1284,7 @@
 
         .site-footer {
             margin-top: 32px;
-            border-top: 1px solid var(--line);
+            border-top: var(--hairline) solid var(--line);
         }
 
         .site-footer-inner {
@@ -1410,7 +1553,7 @@
             }
 
             .skill-list .skill-row:nth-child(3n) {
-                border-right: 1px solid var(--line);
+                border-right: var(--hairline) solid var(--line);
             }
 
             .skill-list .skill-row:nth-child(2n) {
@@ -1435,7 +1578,6 @@
                 --border: #d4d4d8;
                 --line: #e4e4e7;
                 --focus: #111111;
-                --diagram-line: #d4d4d8;
                 --diagram-soft: #eeeeef;
             }
 
@@ -1460,9 +1602,24 @@
             .site-header,
             .skip-link,
             .section::before,
+            .section::after,
             .resume-section::before,
+            .resume-section::after,
+            .section-header::after,
+            .hero-identity::before,
+            .hero-summary-block::before,
+            .hero-metrics::before,
+            .screen-line-top::before,
+            .screen-line-bottom::after,
             .site-footer {
                 display: none !important;
+            }
+
+            /* 打印时贯穿线退化为普通分隔边，避免 100vw 溢出纸张 */
+            .section-header,
+            .hero-identity,
+            .hero-summary-block {
+                border-bottom: var(--hairline) solid var(--line);
             }
 
             .rail,
@@ -1479,7 +1636,7 @@
             .section,
             .resume-section {
                 margin-top: 6mm;
-                border-top: 1px solid var(--line);
+                border-top: var(--hairline) solid var(--line);
             }
 
             .hero-visual {
@@ -1619,34 +1776,94 @@
 <main class="page" id="main-content" tabindex="-1">
     <section class="hero rail-section" aria-labelledby="hero-title">
         <div class="hero-visual" data-aos="hero-rise">
-            <svg class="hero-diagram distributed-system-diagram" viewBox="0 0 760 260" aria-hidden="true" focusable="false">
-                <g class="diagram-path">
-                    <path d="M72 122H196L302 58H458L564 122H688"/>
-                    <path d="M72 178H196L302 232H458L564 178H688"/>
-                    <path d="M196 122V178M302 58V232M458 58V232M564 122V178"/>
-                    <path d="M196 122L302 178L458 122L564 178"/>
+            <svg class="hero-diagram iso-mark" viewBox="0 0 620 300" aria-hidden="true" focusable="false">
+                <defs>
+                    <pattern id="iso-stripe" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+                        <path d="M-1 1l2 -2M0 10l10 -10M9 11l2 -2" stroke="var(--iso-pattern)" stroke-width="1"/>
+                    </pattern>
+                    <radialGradient id="iso-glow" cx="310" cy="150" r="200" gradientUnits="userSpaceOnUse">
+                        <stop class="iso-glow-near" stop-color="oklch(0.37 0 0)"/>
+                        <stop class="iso-glow-far" offset="1" stop-color="oklch(0.7 0 0)" stop-opacity="0"/>
+                    </radialGradient>
+                </defs>
+                <g class="iso-lines">
+                    <path d="M-1220 -534.2L620 534.2"/>
+                    <path d="M-1220 834.2L620 -234.2"/>
+                    <path d="M-1088 -534.2L752 534.2"/>
+                    <path d="M-1088 834.2L752 -234.2"/>
+                    <path d="M-956 -534.2L884 534.2"/>
+                    <path d="M-956 834.2L884 -234.2"/>
+                    <path d="M-824 -534.2L1016 534.2"/>
+                    <path d="M-824 834.2L1016 -234.2"/>
+                    <path d="M-692 -534.2L1148 534.2"/>
+                    <path d="M-692 834.2L1148 -234.2"/>
+                    <path d="M-560 -534.2L1280 534.2"/>
+                    <path d="M-560 834.2L1280 -234.2"/>
+                    <path d="M-428 -534.2L1412 534.2"/>
+                    <path d="M-428 834.2L1412 -234.2"/>
+                    <path d="M-296 -534.2L1544 534.2"/>
+                    <path d="M-296 834.2L1544 -234.2"/>
+                    <path d="M-164 -534.2L1676 534.2"/>
+                    <path d="M-164 834.2L1676 -234.2"/>
+                    <path d="M-32 -534.2L1808 534.2"/>
+                    <path d="M-32 834.2L1808 -234.2"/>
                 </g>
-                <g class="diagram-face">
-                    <path d="M162 100L196 82L230 100L196 118Z"/>
-                    <path d="M530 156L564 138L598 156L564 174Z"/>
-                    <path d="M268 156L302 138L336 156L302 174Z"/>
-                    <path d="M424 100L458 82L492 100L458 118Z"/>
-                </g>
-                <g class="diagram-node">
-                    <circle cx="72" cy="122" r="13"/><circle cx="72" cy="178" r="13"/>
-                    <circle cx="196" cy="122" r="17"/><circle cx="196" cy="178" r="17"/>
-                    <circle cx="302" cy="58" r="13"/><circle cx="302" cy="178" r="21"/><circle cx="302" cy="232" r="13"/>
-                    <circle cx="458" cy="58" r="13"/><circle cx="458" cy="122" r="21"/><circle cx="458" cy="232" r="13"/>
-                    <circle cx="564" cy="122" r="17"/><circle cx="564" cy="178" r="17"/>
-                    <circle cx="688" cy="122" r="13"/><circle cx="688" cy="178" r="13"/>
-                </g>
-                <g class="diagram-core">
-                    <circle cx="72" cy="122" r="4"/><circle cx="72" cy="178" r="4"/>
-                    <circle cx="196" cy="122" r="5"/><circle cx="196" cy="178" r="5"/>
-                    <circle cx="302" cy="58" r="4"/><circle cx="302" cy="178" r="6"/><circle cx="302" cy="232" r="4"/>
-                    <circle cx="458" cy="58" r="4"/><circle cx="458" cy="122" r="6"/><circle cx="458" cy="232" r="4"/>
-                    <circle cx="564" cy="122" r="5"/><circle cx="564" cy="178" r="5"/>
-                    <circle cx="688" cy="122" r="4"/><circle cx="688" cy="178" r="4"/>
+                <g class="iso-blocks">
+                    <g class="iso-base">
+                    <path d="M310 26L372 62L310 98L248 62Z"/><path d="M248 62L310 98L310 132L248 96Z"/><path d="M310 98L372 62L372 96L310 132Z"/>
+                    <path d="M372 28L434 64L372 100L310 64Z"/><path d="M310 64L372 100L372 168L310 132Z"/><path d="M372 100L434 64L434 132L372 168Z"/>
+                    <path d="M248 28L310 64L248 100L186 64Z"/><path d="M186 64L248 100L248 168L186 132Z"/><path d="M248 100L310 64L310 132L248 168Z"/>
+                    <path d="M434 98L496 134L434 170L372 134Z"/><path d="M372 134L434 170L434 204L372 168Z"/><path d="M434 170L496 134L496 168L434 204Z"/>
+                    <path d="M310 30L372 66L310 102L248 66Z"/><path d="M248 66L310 102L310 204L248 168Z"/><path d="M310 102L372 66L372 168L310 204Z"/>
+                    <path d="M186 98L248 134L186 170L124 134Z"/><path d="M124 134L186 170L186 204L124 168Z"/><path d="M186 170L248 134L248 168L186 204Z"/>
+                    <path d="M372 134L434 170L372 206L310 170Z"/><path d="M310 170L372 206L372 240L310 204Z"/><path d="M372 206L434 170L434 204L372 240Z"/>
+                    <path d="M248 134L310 170L248 206L186 170Z"/><path d="M186 170L248 206L248 240L186 204Z"/><path d="M248 206L310 170L310 204L248 240Z"/>
+                    <path d="M310 136L372 172L310 208L248 172Z"/><path d="M248 172L310 208L310 276L248 240Z"/><path d="M310 208L372 172L372 240L310 276Z"/>
+                    </g>
+                    <g class="iso-tops">
+                    <path d="M310 26L372 62L310 98L248 62Z"/>
+                    <path d="M372 28L434 64L372 100L310 64Z"/>
+                    <path d="M248 28L310 64L248 100L186 64Z"/>
+                    <path d="M434 98L496 134L434 170L372 134Z"/>
+                    <path d="M310 30L372 66L310 102L248 66Z"/>
+                    <path d="M186 98L248 134L186 170L124 134Z"/>
+                    <path d="M372 134L434 170L372 206L310 170Z"/>
+                    <path d="M248 134L310 170L248 206L186 170Z"/>
+                    <path d="M310 136L372 172L310 208L248 172Z"/>
+                    </g>
+                    <g class="iso-sides">
+                    <path d="M248 62L310 98L310 132L248 96Z"/><path d="M310 98L372 62L372 96L310 132Z"/>
+                    <path d="M310 64L372 100L372 168L310 132Z"/><path d="M372 100L434 64L434 132L372 168Z"/>
+                    <path d="M186 64L248 100L248 168L186 132Z"/><path d="M248 100L310 64L310 132L248 168Z"/>
+                    <path d="M372 134L434 170L434 204L372 168Z"/><path d="M434 170L496 134L496 168L434 204Z"/>
+                    <path d="M248 66L310 102L310 204L248 168Z"/><path d="M310 102L372 66L372 168L310 204Z"/>
+                    <path d="M124 134L186 170L186 204L124 168Z"/><path d="M186 170L248 134L248 168L186 204Z"/>
+                    <path d="M310 170L372 206L372 240L310 204Z"/><path d="M372 206L434 170L434 204L372 240Z"/>
+                    <path d="M186 170L248 206L248 240L186 204Z"/><path d="M248 206L310 170L310 204L248 240Z"/>
+                    <path d="M248 172L310 208L310 276L248 240Z"/><path d="M310 208L372 172L372 240L310 276Z"/>
+                    </g>
+                    <g class="iso-edges">
+                    <path d="M310 26L372 62L310 98L248 62Z"/><path d="M248 62L310 98L310 132L248 96Z"/><path d="M310 98L372 62L372 96L310 132Z"/>
+                    <path d="M372 28L434 64L372 100L310 64Z"/><path d="M310 64L372 100L372 168L310 132Z"/><path d="M372 100L434 64L434 132L372 168Z"/>
+                    <path d="M248 28L310 64L248 100L186 64Z"/><path d="M186 64L248 100L248 168L186 132Z"/><path d="M248 100L310 64L310 132L248 168Z"/>
+                    <path d="M434 98L496 134L434 170L372 134Z"/><path d="M372 134L434 170L434 204L372 168Z"/><path d="M434 170L496 134L496 168L434 204Z"/>
+                    <path d="M310 30L372 66L310 102L248 66Z"/><path d="M248 66L310 102L310 204L248 168Z"/><path d="M310 102L372 66L372 168L310 204Z"/>
+                    <path d="M186 98L248 134L186 170L124 134Z"/><path d="M124 134L186 170L186 204L124 168Z"/><path d="M186 170L248 134L248 168L186 204Z"/>
+                    <path d="M372 134L434 170L372 206L310 170Z"/><path d="M310 170L372 206L372 240L310 204Z"/><path d="M372 206L434 170L434 204L372 240Z"/>
+                    <path d="M248 134L310 170L248 206L186 170Z"/><path d="M186 170L248 206L248 240L186 204Z"/><path d="M248 206L310 170L310 204L248 240Z"/>
+                    <path d="M310 136L372 172L310 208L248 172Z"/><path d="M248 172L310 208L310 276L248 240Z"/><path d="M310 208L372 172L372 240L310 276Z"/>
+                    </g>
+                    <g class="iso-edges iso-edges-glow">
+                    <path d="M310 26L372 62L310 98L248 62Z"/><path d="M248 62L310 98L310 132L248 96Z"/><path d="M310 98L372 62L372 96L310 132Z"/>
+                    <path d="M372 28L434 64L372 100L310 64Z"/><path d="M310 64L372 100L372 168L310 132Z"/><path d="M372 100L434 64L434 132L372 168Z"/>
+                    <path d="M248 28L310 64L248 100L186 64Z"/><path d="M186 64L248 100L248 168L186 132Z"/><path d="M248 100L310 64L310 132L248 168Z"/>
+                    <path d="M434 98L496 134L434 170L372 134Z"/><path d="M372 134L434 170L434 204L372 168Z"/><path d="M434 170L496 134L496 168L434 204Z"/>
+                    <path d="M310 30L372 66L310 102L248 66Z"/><path d="M248 66L310 102L310 204L248 168Z"/><path d="M310 102L372 66L372 168L310 204Z"/>
+                    <path d="M186 98L248 134L186 170L124 134Z"/><path d="M124 134L186 170L186 204L124 168Z"/><path d="M186 170L248 134L248 168L186 204Z"/>
+                    <path d="M372 134L434 170L372 206L310 170Z"/><path d="M310 170L372 206L372 240L310 204Z"/><path d="M372 206L434 170L434 204L372 240Z"/>
+                    <path d="M248 134L310 170L248 206L186 170Z"/><path d="M186 170L248 206L248 240L186 204Z"/><path d="M248 206L310 170L310 204L248 240Z"/>
+                    <path d="M310 136L372 172L310 208L248 172Z"/><path d="M248 172L310 208L310 276L248 240Z"/><path d="M310 208L372 172L372 240L310 276Z"/>
+                    </g>
                 </g>
             </svg>
         </div>
@@ -2426,11 +2643,71 @@
                 }
             }
 
+            function setupIsometricMark() {
+                var svg = document.querySelector(".iso-mark");
+                if (!svg) {
+                    return;
+                }
+
+                var blocks = svg.querySelector(".iso-blocks");
+                var reduceMotion = reducedMotionQuery && reducedMotionQuery.matches;
+
+                // 点按下沉：spring 感由 CSS transition 承担，这里只切换状态类
+                if (blocks && !reduceMotion) {
+                    var press = function () { blocks.classList.add("is-pressed"); };
+                    var release = function () { blocks.classList.remove("is-pressed"); };
+                    svg.addEventListener("pointerdown", press);
+                    svg.addEventListener("pointerup", release);
+                    svg.addEventListener("pointerleave", release);
+                    svg.addEventListener("pointercancel", release);
+                }
+
+                // 鼠标跟随的径向渐变描边：仅在支持 hover 的设备上启用
+                var glow = svg.querySelector("#iso-glow");
+                var canHover = window.matchMedia ? window.matchMedia("(hover: hover)").matches : true;
+                if (!glow || reduceMotion || !canHover) {
+                    return;
+                }
+
+                var view = svg.viewBox.baseVal;
+                var targetX = view.width / 2;
+                var targetY = view.height / 2;
+                var currentX = targetX;
+                var currentY = targetY;
+                var frame = null;
+
+                function step() {
+                    currentX += (targetX - currentX) * 0.14;
+                    currentY += (targetY - currentY) * 0.14;
+                    glow.setAttribute("cx", currentX.toFixed(1));
+                    glow.setAttribute("cy", currentY.toFixed(1));
+
+                    if (Math.abs(targetX - currentX) > 0.4 || Math.abs(targetY - currentY) > 0.4) {
+                        frame = window.requestAnimationFrame(step);
+                    } else {
+                        frame = null;
+                    }
+                }
+
+                window.addEventListener("pointermove", function (event) {
+                    var rect = svg.getBoundingClientRect();
+                    if (!rect.width || !rect.height) {
+                        return;
+                    }
+                    targetX = ((event.clientX - rect.left) / rect.width) * view.width;
+                    targetY = ((event.clientY - rect.top) / rect.height) * view.height;
+                    if (frame === null) {
+                        frame = window.requestAnimationFrame(step);
+                    }
+                }, { passive: true });
+            }
+
             window.addEventListener("beforeprint", openDetailsForPrint);
             window.addEventListener("afterprint", restoreDetailsAfterPrint);
 
             applyTheme(readStoredMode(), false);
             setupActiveNavigation();
+            setupIsometricMark();
 
             if (!(reducedMotionQuery && reducedMotionQuery.matches) && window.AOS) {
                 AOS.init({
