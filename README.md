@@ -77,6 +77,43 @@ pnpm build
 
 环境变量参考 [`.env.example`](.env.example)，本地开发全部可留空（GitHub 贡献图默认走公开 API）。
 
+## 部署
+
+站点是**纯静态导出**（`output: "export"`），`pnpm build` 把完整站点写进 `out/`，没有任何服务端运行时。GitHub 贡献图与页头 star 数在构建时抓取并烘焙进 HTML。
+
+两个环境变量控制构建产物：
+
+| 变量                    | 说明                                                            |
+| ----------------------- | --------------------------------------------------------------- |
+| `NEXT_PUBLIC_APP_URL`   | 站点规范地址，用于 canonical、sitemap、OG                       |
+| `NEXT_PUBLIC_BASE_PATH` | 子路径前缀。根路径部署留空；GitHub Pages 项目站点填 `/<仓库名>` |
+
+### GitHub Pages
+
+[`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml) 已配好，push 到 `main` 自动部署，另有每日定时重建（保持贡献图最新）。
+
+仓库 **Settings → Pages → Source** 选 **GitHub Actions** 即可，无需其他配置——`basePath` 由 workflow 从仓库名自动推导。
+
+若改用自定义域名（或把仓库改名为 `sav7ng.github.io`），站点将位于根路径，需把 workflow 里的 `NEXT_PUBLIC_BASE_PATH` 改成空字符串、`NEXT_PUBLIC_APP_URL` 改成你的域名。
+
+### 自己的服务器（Caddy）
+
+服务端装好 Caddy 后，把 [`deploy/Caddyfile`](deploy/Caddyfile) 装到 `/etc/caddy/Caddyfile`（替换里面的域名）：
+
+```bash
+sudo caddy validate --config /etc/caddy/Caddyfile && sudo systemctl reload caddy
+```
+
+本地一条命令构建并同步：
+
+```bash
+DEPLOY_HOST=root@你的服务器IP ./deploy/deploy.sh
+```
+
+把 `DEPLOY_HOST` / `DEPLOY_PATH` / `SITE_URL` 写进 `deploy/.env`（已 gitignore）就不用每次输入。脚本用 `rsync --delete` 同步，所以 `DEPLOY_PATH` 要指向站点独占的目录。
+
+贡献图不会自己更新——重跑一次 `deploy.sh` 即可，或在服务器上挂个每日 cron。
+
 ## 许可
 
 MIT，见 [LICENSE](LICENSE)。项目衍生自 [ncdai/chanhdai.com](https://github.com/ncdai/chanhdai.com)，原始版权声明一并保留。

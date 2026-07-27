@@ -1,3 +1,4 @@
+import { withBasePath } from "@/lib/base-path"
 import type { User } from "@/features/portfolio/types/user"
 
 export const USER: User = {
@@ -33,14 +34,16 @@ export const USER: User = {
 - 开源作品：[WeHalo](https://github.com/sav7ng/WeHalo)（简约风微信小程序博客）、[AgentDroid](https://github.com/sav7ng/AgentDroid)（AI 移动设备自动化服务器）。
 - 热爱运动，注重自我精进，追求专业能力与作品质量的持续进化。
 `,
-  avatar: "/images/avatar.jpg",
+  avatar: withBasePath("/images/avatar.jpg"),
   avatarVariants: {
-    lightOff: "/images/avatar.jpg",
-    lightOn: "/images/avatar.jpg",
-    darkOff: "/images/avatar.jpg",
-    darkOn: "/images/avatar.jpg",
+    lightOff: withBasePath("/images/avatar.jpg"),
+    lightOn: withBasePath("/images/avatar.jpg"),
+    darkOff: withBasePath("/images/avatar.jpg"),
+    darkOn: withBasePath("/images/avatar.jpg"),
   },
-  ogImage: "/images/avatar.jpg",
+  // Resolved against `metadataBase` (SITE_INFO.url), which already carries the
+  // subpath when the site is served from one — no withBasePath here.
+  ogImage: "/og-image.png",
   namePronunciationUrl: "",
   timeZone: "Asia/Shanghai",
   keywords: [

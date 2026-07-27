@@ -42,4 +42,6 @@ yarn-error.log*
 next-env.d.ts
 
 # ncdai
-.ncdai
+
+# 部署密钥与主机配置（本地私有）
+deploy/.env

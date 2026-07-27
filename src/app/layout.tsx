@@ -8,6 +8,7 @@ import type { WebSite, WithContext } from "schema-dts"
 
 import { JSON_LD_ID, personJsonLd } from "@/config/json-ld"
 import { META_THEME_COLORS, SITE_INFO } from "@/config/site"
+import { withBasePath } from "@/lib/base-path"
 import { fontVariables } from "@/lib/fonts"
 import { JsonLdScript } from "@/lib/json-ld"
 import { Providers } from "@/components/providers"
@@ -79,13 +80,13 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: "/favicon.svg",
+        url: withBasePath("/favicon.svg"),
         sizes: "any",
         type: "image/svg+xml",
         media: "(prefers-color-scheme: light)",
       },
       {
-        url: "/favicon-dark.svg",
+        url: withBasePath("/favicon-dark.svg"),
         sizes: "any",
         type: "image/svg+xml",
         media: "(prefers-color-scheme: dark)",

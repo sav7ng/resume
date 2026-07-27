@@ -12,7 +12,7 @@ import { Timeline } from "@/features/portfolio/components/timeline"
 const title = "Timeline"
 const description = "A life in milestones."
 
-const ogImage = `/og/simple?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}`
+const ogImage = "/og-image.png"
 
 export const metadata: Metadata = {
   title,

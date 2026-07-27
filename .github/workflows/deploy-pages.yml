@@ -1,0 +1,77 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  # The GitHub contribution graph and star count are baked in at build time,
+  # so rebuild daily to keep them fresh. 21:00 UTC = 05:00 Asia/Shanghai.
+  schedule:
+    - cron: "0 21 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Let a running deploy finish rather than cancelling it half-published.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      # Project site served from https://<owner>.github.io/<repo>, so the app
+      # needs a base path.
+      #
+      # Using a custom domain (or a <owner>.github.io repo) instead? The site
+      # is then served from the root — set NEXT_PUBLIC_BASE_PATH to "" and
+      # NEXT_PUBLIC_APP_URL to your domain.
+      NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
+      NEXT_PUBLIC_APP_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+      GITHUB_CONTRIBUTIONS_API_URL: https://github-contributions-api.jogruber.de
+      # Lifts the anonymous GitHub API rate limit for the header star count.
+      # Automatically provided by Actions — nothing to configure.
+      GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.5.3
+
+      - name: Install Node
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build static export
+        run: pnpm build
+
+      # Without this, GitHub Pages runs the output through Jekyll, which drops
+      # every path starting with an underscore — including all of /_next.
+      - name: Disable Jekyll
+        run: touch out/.nojekyll
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

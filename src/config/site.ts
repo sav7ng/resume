@@ -1,6 +1,7 @@
 import type { Route } from "next"
 
 import type { NavItem } from "@/types/nav"
+import { withBasePath } from "@/lib/base-path"
 import { SOCIAL } from "@/features/portfolio/data/social-links"
 import { USER } from "@/features/portfolio/data/user"
 
@@ -52,7 +53,7 @@ export const UPSTREAM = {
 }
 
 /** Static resume download, served from `public/`. */
-export const RESUME_PDF_URL = "/saving.pdf"
+export const RESUME_PDF_URL = withBasePath("/saving.pdf")
 
 export const UTM_PARAMS = {
   utm_source: "sav7ng.github.io",
