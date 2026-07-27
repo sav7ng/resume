@@ -1,6 +1,6 @@
 # **「Saving」**
 
-***Trying to do better***
+**_Trying to do better_**
 
 ---
 
@@ -12,7 +12,7 @@
 
 - 姓名: 吴煌全「Saving」**/** 男 **/** 1997
 - 专业: 软件技术
-- 毕业院校: 广州城建职业学院 
+- 毕业院校: 广州城建职业学院
 - 期望职位: 高级后端开发 **/** **TeamLeader**
 
 # **CONTACT / 联系方式**
@@ -28,11 +28,11 @@
 ```
 Opensepc Cursor Codex ClaudeCode
 
-Java Kotlin Golang SpringFramework Maven/Gradle 
+Java Kotlin Golang SpringFramework Maven/Gradle
 
-Mybatis Kratos Qmgo MySQL Redis 
+Mybatis Kratos Qmgo MySQL Redis
 
-MongoDB ClickHouse Metabase APISIX RocketMQ 
+MongoDB ClickHouse Metabase APISIX RocketMQ
 
 Pulsar Seata XxlJob Sentinel Kafka
 
@@ -48,62 +48,70 @@ RPC Docker CI/CD
 ### CloudPhone OpenClaw Plugin ▪ 云手机 AI 自动化 ▪ Agent 工具能力开放
 
 - OpenClaw 插件架构
-> TypeScript 5.4+ / Node.js (ES2020) / OpenClaw Plugin API / MCP (Model Context Protocol) / Fetch API / AbortController / Crypto (MD5) / GitHub Actions CI/CD / npm Registry
+
+  > TypeScript 5.4+ / Node.js (ES2020) / OpenClaw Plugin API / MCP (Model Context Protocol) / Fetch API / AbortController / Crypto (MD5) / GitHub Actions CI/CD / npm Registry
 
 - 项目概况
-> CloudPhone 是基于 OpenClaw 插件体系开发的云手机 AI Agent 能力开放插件，为 AI Agent 提供云手机设备管理与 UI 自动化操控能力。项目核心是将云手机 OpenAPI 封装为 14 个标准化的 `cloudphone_*` Agent 工具，涵盖用户信息获取、设备列表与详情查询、电源控制、ADB 连接、坐标点击/长按/滑动、文本输入与清除、系统按键、截图/UI树快照、图片渲染等完整能力。同时内置 `basic-skill` Skill 教学模块，引导 Agent 按照"观察 → 行动 → 验证 → 再观察"的短闭环稳定执行多步 UI 自动化任务。插件通过 npm 包 `@whateverai/cloudphone` 发布，支持 OpenClaw Gateway 一键安装与配置，Agent 即装即用。
+
+  > CloudPhone 是基于 OpenClaw 插件体系开发的云手机 AI Agent 能力开放插件，为 AI Agent 提供云手机设备管理与 UI 自动化操控能力。项目核心是将云手机 OpenAPI 封装为 14 个标准化的 `cloudphone_*` Agent 工具，涵盖用户信息获取、设备列表与详情查询、电源控制、ADB 连接、坐标点击/长按/滑动、文本输入与清除、系统按键、截图/UI树快照、图片渲染等完整能力。同时内置 `basic-skill` Skill 教学模块，引导 Agent 按照"观察 → 行动 → 验证 → 再观察"的短闭环稳定执行多步 UI 自动化任务。插件通过 npm 包 `@whateverai/cloudphone` 发布，支持 OpenClaw Gateway 一键安装与配置，Agent 即装即用。
 
 - 担任职责
-> - Agent 工具体系设计 / 负责设计并实现 14 个 `cloudphone_*` 工具定义，包括工具名、描述、JSON Schema 参数校验与执行函数，遵循 MCP 内容项规范（text / image），统一 Agent 工具调用与响应格式
-> - OpenAPI 请求抽象层 / 负责封装统一的 `apiRequest` 请求函数，内置超时控制（AbortController）、鉴权头注入（Authorization ApiKey）、URL 拼接与归一化、业务状态码判定（success / code 多格式兼容）、错误信息提取等能力，屏蔽底层 HTTP 细节
-> - 设备管理能力 / 负责实现用户信息获取、设备列表分页与筛选、设备详情、电源控制（开机/关机/重启）、ADB/SSH 连接信息获取等 5 个设备管理工具，支撑 Agent 完成设备选择与状态确认
-> - UI 交互操控能力 / 负责实现坐标点击、长按、滑动、文本输入、文本清除、系统按键（BACK/HOME/ENTER/RECENT/POWER）等 6 个 UI 交互工具，使 Agent 具备完整的云手机屏幕操控能力
-> - 状态观测与截图渲染 / 负责实现截图/UI树快照获取、页面等待条件（element_appear/element_disappear/page_stable）、截图 URL 渲染为可展示图片等 3 个状态观测工具，其中图片渲染采用远程拉取 → MD5 哈希去重 → 本地缓存 → MCP image 内容项 + MEDIA 兼容回退的完整链路
-> - 内置 Skill 设计 / 负责设计并编写 `basic-skill` Skill 教学文档，定义标准工作流（select_device → confirm_online → observe → act → verify → observe_again）、恢复策略、能力边界声明与常见问题排查指南，提升 Agent 在多步 UI 自动化场景下的执行稳定性
-> - 插件注册与生命周期 / 负责实现插件入口（register 函数），完成运行时配置解析、工具批量注册、执行结果规范化、异常兜底处理与结构化日志输出，确保插件在 OpenClaw Gateway 中稳定加载运行
-> - CI/CD 与发布 / 负责基于 GitHub Actions 实现自动化构建与 npm 发布流水线，main 分支 push 触发构建，`v*` 标签触发公开发布到 npm Registry
+
+  > - Agent 工具体系设计 / 负责设计并实现 14 个 `cloudphone_*` 工具定义，包括工具名、描述、JSON Schema 参数校验与执行函数，遵循 MCP 内容项规范（text / image），统一 Agent 工具调用与响应格式
+  > - OpenAPI 请求抽象层 / 负责封装统一的 `apiRequest` 请求函数，内置超时控制（AbortController）、鉴权头注入（Authorization ApiKey）、URL 拼接与归一化、业务状态码判定（success / code 多格式兼容）、错误信息提取等能力，屏蔽底层 HTTP 细节
+  > - 设备管理能力 / 负责实现用户信息获取、设备列表分页与筛选、设备详情、电源控制（开机/关机/重启）、ADB/SSH 连接信息获取等 5 个设备管理工具，支撑 Agent 完成设备选择与状态确认
+  > - UI 交互操控能力 / 负责实现坐标点击、长按、滑动、文本输入、文本清除、系统按键（BACK/HOME/ENTER/RECENT/POWER）等 6 个 UI 交互工具，使 Agent 具备完整的云手机屏幕操控能力
+  > - 状态观测与截图渲染 / 负责实现截图/UI树快照获取、页面等待条件（element_appear/element_disappear/page_stable）、截图 URL 渲染为可展示图片等 3 个状态观测工具，其中图片渲染采用远程拉取 → MD5 哈希去重 → 本地缓存 → MCP image 内容项 + MEDIA 兼容回退的完整链路
+  > - 内置 Skill 设计 / 负责设计并编写 `basic-skill` Skill 教学文档，定义标准工作流（select_device → confirm_online → observe → act → verify → observe_again）、恢复策略、能力边界声明与常见问题排查指南，提升 Agent 在多步 UI 自动化场景下的执行稳定性
+  > - 插件注册与生命周期 / 负责实现插件入口（register 函数），完成运行时配置解析、工具批量注册、执行结果规范化、异常兜底处理与结构化日志输出，确保插件在 OpenClaw Gateway 中稳定加载运行
+  > - CI/CD 与发布 / 负责基于 GitHub Actions 实现自动化构建与 npm 发布流水线，main 分支 push 触发构建，`v*` 标签触发公开发布到 npm Registry
 
 - TECHNICAL POINTS
-> - 开发过程中结合 Cursor AI 编程助手辅助提效，在工具定义模板生成、请求抽象层搭建、Skill 文档编写及 CI/CD 配置等环节借助 AI 加速迭代，有效提升编码效率与交付节奏
-> - 基于 OpenClaw Plugin API 实现 14 个标准化 Agent 工具，严格遵循 `name / description / parameters(JSON Schema) / execute` 四元组定义，工具返回值统一采用 MCP 内容项规范（text / image），Agent 即装即用
-> - 封装统一 apiRequest 抽象层，内置 AbortController 超时中断、Authorization 鉴权头注入、多格式业务状态码兼容判定与结构化错误提取，所有工具共享同一请求链路
-> - 截图渲染工具实现远程图片拉取 → MD5 哈希去重 → 本地缓存 → MIME 双重推断（Content-Type 优先 + URL 扩展名兜底）→ MCP image + MEDIA 兼容回退的完整图片处理链路
-> - 设计 basic-skill 内置 Skill，定义"观察 → 行动 → 验证 → 再观察"标准工作流与分层恢复策略（BACK → HOME → 截图 → 重启），在不增加新工具的前提下提升 Agent 多步 UI 自动化执行稳定性
-> - 基于 GitHub Actions 实现两阶段 CI/CD（build → publish），`v*` 标签推送自动构建并发布到公共 npm Registry，实现版本化自动发布
+
+  > - 开发过程中结合 Cursor AI 编程助手辅助提效，在工具定义模板生成、请求抽象层搭建、Skill 文档编写及 CI/CD 配置等环节借助 AI 加速迭代，有效提升编码效率与交付节奏
+  > - 基于 OpenClaw Plugin API 实现 14 个标准化 Agent 工具，严格遵循 `name / description / parameters(JSON Schema) / execute` 四元组定义，工具返回值统一采用 MCP 内容项规范（text / image），Agent 即装即用
+  > - 封装统一 apiRequest 抽象层，内置 AbortController 超时中断、Authorization 鉴权头注入、多格式业务状态码兼容判定与结构化错误提取，所有工具共享同一请求链路
+  > - 截图渲染工具实现远程图片拉取 → MD5 哈希去重 → 本地缓存 → MIME 双重推断（Content-Type 优先 + URL 扩展名兜底）→ MCP image + MEDIA 兼容回退的完整图片处理链路
+  > - 设计 basic-skill 内置 Skill，定义"观察 → 行动 → 验证 → 再观察"标准工作流与分层恢复策略（BACK → HOME → 截图 → 重启），在不增加新工具的前提下提升 Agent 多步 UI 自动化执行稳定性
+  > - 基于 GitHub Actions 实现两阶段 CI/CD（build → publish），`v*` 标签推送自动构建并发布到公共 npm Registry，实现版本化自动发布
 
 - 个人收获
-> 通过该项目，我深入理解了 AI Agent 工具化开放的工程实践，从"如何将后端 API 能力标准化封装为 Agent 可调用工具"到"如何通过 Skill 引导 Agent 稳定执行多步自动化任务"，掌握了 MCP 协议内容项规范、工具参数 JSON Schema 设计、以及 Agent 行为引导（Skill）与底层能力（Plugin）的职责分离思想。同时通过实际开发 OpenClaw Plugin 并完成 npm 公开发布，熟练掌握了 OpenClaw 插件体系的完整开发流程，包括插件注册生命周期、配置 Schema 声明、Skill 编写规范与 Gateway 集成调试，具备了独立开发与发布 OpenClaw 插件的能力。项目过程中也提升了在 TypeScript 工程化、API 请求抽象、图片处理链路设计、CI/CD 自动化发布以及 AI Agent 生态能力建设等方面的实战经验。
+  > 通过该项目，我深入理解了 AI Agent 工具化开放的工程实践，从"如何将后端 API 能力标准化封装为 Agent 可调用工具"到"如何通过 Skill 引导 Agent 稳定执行多步自动化任务"，掌握了 MCP 协议内容项规范、工具参数 JSON Schema 设计、以及 Agent 行为引导（Skill）与底层能力（Plugin）的职责分离思想。同时通过实际开发 OpenClaw Plugin 并完成 npm 公开发布，熟练掌握了 OpenClaw 插件体系的完整开发流程，包括插件注册生命周期、配置 Schema 声明、Skill 编写规范与 Gateway 集成调试，具备了独立开发与发布 OpenClaw 插件的能力。项目过程中也提升了在 TypeScript 工程化、API 请求抽象、图片处理链路设计、CI/CD 自动化发布以及 AI Agent 生态能力建设等方面的实战经验。
 
 ### **CPC 云手机 AI Agent 编排平台 ▪ 云手机自动化 ▪ OpenAPI / MCP 能力开放**
 
 - **分布式微服务架构**
-> **Java 17 / Spring Boot 3 / Spring Cloud / Spring AI / OpenAI / MCP / OpenFeign / Nacos / Redis / MySQL / JPA / MyBatis-Plus / Kafka / XXL-JOB / WebFlux / SSE / Spring Security / Swagger / Prometheus**
+
+  > **Java 17 / Spring Boot 3 / Spring Cloud / Spring AI / OpenAI / MCP / OpenFeign / Nacos / Redis / MySQL / JPA / MyBatis-Plus / Kafka / XXL-JOB / WebFlux / SSE / Spring Security / Swagger / Prometheus**
 
 - **项目概况**
-> CPC 云手机 AI 编排服务是微服务体系中的独立 AI 能力模块，主要面向云手机自动化与智能任务执行场景。项目核心是将自然语言指令解析为结构化任务，并根据任务类型自动路由到 Agent 执行器或脚本执行服务，完成任务创建、状态流转、执行派发、结果回调、会话沉淀的完整闭环。同时对外提供 HTTP OpenAPI 与 MCP Tool 调用能力，支撑设备管理、设备控制、AI 任务执行与结果获取等业务场景。本人主要参与该项目核心链路的设计与开发，推动 AI 能力与既有微服务、设备能力、异步调度体系的深度融合，提升平台在智能自动化场景下的可复用性与业务落地能力。
+
+  > CPC 云手机 AI 编排服务是微服务体系中的独立 AI 能力模块，主要面向云手机自动化与智能任务执行场景。项目核心是将自然语言指令解析为结构化任务，并根据任务类型自动路由到 Agent 执行器或脚本执行服务，完成任务创建、状态流转、执行派发、结果回调、会话沉淀的完整闭环。同时对外提供 HTTP OpenAPI 与 MCP Tool 调用能力，支撑设备管理、设备控制、AI 任务执行与结果获取等业务场景。本人主要参与该项目核心链路的设计与开发，推动 AI 能力与既有微服务、设备能力、异步调度体系的深度融合，提升平台在智能自动化场景下的可复用性与业务落地能力。
 
 - **担任职责**
-> - **AI任务解析中心 / ** 负责基于 **Spring AI + OpenAI** 实现自然语言任务结构化解析，将用户输入转为任务类型、执行时间、策略、目标应用、动作内容等字段，并结合租户应用库动态注入 Prompt 上下文，提升 AI 指令识别的业务准确性  
-> - **Agent/Script任务编排 / ** 负责设计统一任务调度链路，完成任务落库、状态流转、立即执行、定时执行、策略分发等能力，支持根据任务策略自动派发至外部 Agent 执行器或脚本服务  
-> - **云手机开放接口 / ** 负责设计并开发云手机设备管理接口，包括设备列表、设备详情、实时状态、电源控制、应用启动、ADB 连接信息获取等能力，支撑外部平台和内部系统统一接入设备控制能力  
-> - **MCP能力开放 / ** 负责将 AI 任务能力封装为 MCP Tool，对外以 JSON-RPC 风格暴露任务创建、结果获取等接口，支持智能体工具调用与平台化接入  
-> - **回调闭环与会话沉淀 / ** 负责处理 Agent 执行回调与脚本任务回调，更新任务状态、转发业务通知，并将执行结果同步写入会话历史，支持多轮上下文追踪与结果复盘  
-> - **定时任务调度 / ** 负责基于 **XXL-JOB** 实现到期任务扫描与自动派发，补齐 AI 能力在延迟执行、预约执行等业务场景下的落地能力  
-> - **租户应用脚本库 / ** 负责租户级应用信息管理与快捷命令能力建设，支持通过应用配置快速创建并下发自动化任务，增强 AI 与具体业务应用之间的绑定关系  
-> - **OpenAPI鉴权治理 / ** 负责开放接口鉴权方案设计与开发，基于 Redis Token 校验与线程上下文用户态传递实现设备类接口安全访问控制
+
+  > - **AI任务解析中心 / ** 负责基于 **Spring AI + OpenAI** 实现自然语言任务结构化解析，将用户输入转为任务类型、执行时间、策略、目标应用、动作内容等字段，并结合租户应用库动态注入 Prompt 上下文，提升 AI 指令识别的业务准确性
+  > - **Agent/Script任务编排 / ** 负责设计统一任务调度链路，完成任务落库、状态流转、立即执行、定时执行、策略分发等能力，支持根据任务策略自动派发至外部 Agent 执行器或脚本服务
+  > - **云手机开放接口 / ** 负责设计并开发云手机设备管理接口，包括设备列表、设备详情、实时状态、电源控制、应用启动、ADB 连接信息获取等能力，支撑外部平台和内部系统统一接入设备控制能力
+  > - **MCP能力开放 / ** 负责将 AI 任务能力封装为 MCP Tool，对外以 JSON-RPC 风格暴露任务创建、结果获取等接口，支持智能体工具调用与平台化接入
+  > - **回调闭环与会话沉淀 / ** 负责处理 Agent 执行回调与脚本任务回调，更新任务状态、转发业务通知，并将执行结果同步写入会话历史，支持多轮上下文追踪与结果复盘
+  > - **定时任务调度 / ** 负责基于 **XXL-JOB** 实现到期任务扫描与自动派发，补齐 AI 能力在延迟执行、预约执行等业务场景下的落地能力
+  > - **租户应用脚本库 / ** 负责租户级应用信息管理与快捷命令能力建设，支持通过应用配置快速创建并下发自动化任务，增强 AI 与具体业务应用之间的绑定关系
+  > - **OpenAPI鉴权治理 / ** 负责开放接口鉴权方案设计与开发，基于 Redis Token 校验与线程上下文用户态传递实现设备类接口安全访问控制
 
 - **TECHNICAL POINTS**
-> - 基于 **Spring AI + BeanOutputConverter** 将大模型输出直接转换为结构化任务对象，降低自然语言解析对大量手写规则的依赖，提升 AI 指令到业务任务的落地效率  
-> - 将租户应用库信息动态注入 Prompt 上下文，使模型能够结合实际业务应用完成任务识别与 `agent/script` 策略路由，而不是停留在通用问答层面  
-> - 设计统一异步任务编排链路，打通“任务创建 -> 状态持久化 -> 执行派发 -> 回调处理 -> 通知转发 -> 会话沉淀”完整闭环，增强任务场景下的可观测性与可追踪性  
-> - 基于 **MCP Server + HTTP OpenAPI** 双协议暴露能力，使服务既可被传统业务系统调用，也能被支持 Tool Calling 的智能体直接接入，提升平台通用性与扩展性  
-> - 利用 **Redis Cache + MySQL/JPA** 实现会话与消息持久化机制，对用户消息、回调结果、流式脚本生成结果进行统一沉淀，支撑多轮上下文连续追踪  
-> - 基于 **XXL-JOB** 实现定时任务扫描与派发机制，使 AI 指令具备预约执行、延迟执行和自动触发能力  
-> - 结合 **Kafka / OTA 指令链路 / OpenFeign** 与云手机能力集成，实现设备指令发送、执行协同与外部服务联动，推动 AI 自动化能力真正落到设备执行层  
-> - 通过 OpenAPI 鉴权拦截器结合 Redis 用户态数据完成统一鉴权，避免开放设备接口被未授权访问，提升接口安全性与可控性
+
+  > - 基于 **Spring AI + BeanOutputConverter** 将大模型输出直接转换为结构化任务对象，降低自然语言解析对大量手写规则的依赖，提升 AI 指令到业务任务的落地效率
+  > - 将租户应用库信息动态注入 Prompt 上下文，使模型能够结合实际业务应用完成任务识别与 `agent/script` 策略路由，而不是停留在通用问答层面
+  > - 设计统一异步任务编排链路，打通“任务创建 -> 状态持久化 -> 执行派发 -> 回调处理 -> 通知转发 -> 会话沉淀”完整闭环，增强任务场景下的可观测性与可追踪性
+  > - 基于 **MCP Server + HTTP OpenAPI** 双协议暴露能力，使服务既可被传统业务系统调用，也能被支持 Tool Calling 的智能体直接接入，提升平台通用性与扩展性
+  > - 利用 **Redis Cache + MySQL/JPA** 实现会话与消息持久化机制，对用户消息、回调结果、流式脚本生成结果进行统一沉淀，支撑多轮上下文连续追踪
+  > - 基于 **XXL-JOB** 实现定时任务扫描与派发机制，使 AI 指令具备预约执行、延迟执行和自动触发能力
+  > - 结合 **Kafka / OTA 指令链路 / OpenFeign** 与云手机能力集成，实现设备指令发送、执行协同与外部服务联动，推动 AI 自动化能力真正落到设备执行层
+  > - 通过 OpenAPI 鉴权拦截器结合 Redis 用户态数据完成统一鉴权，避免开放设备接口被未授权访问，提升接口安全性与可控性
 
 - **个人收获**
-> 通过该项目，我对 AI 大模型在企业级业务系统中的工程化落地有了更深入的理解，不再局限于“调用模型并返回结果”，而是进一步掌握了从 Prompt 设计、结构化任务解析、异步任务编排、执行回调闭环到能力平台化开放的完整实现思路。项目过程中，我提升了在 AI 工程化、微服务协同、云手机自动化、多租户业务抽象、接口安全治理以及上下文会话设计等方面的实战能力，也让我对“如何将大模型能力真正转化为稳定、可执行、可追踪的业务能力”有了更成熟的认识。
+  > 通过该项目，我对 AI 大模型在企业级业务系统中的工程化落地有了更深入的理解，不再局限于“调用模型并返回结果”，而是进一步掌握了从 Prompt 设计、结构化任务解析、异步任务编排、执行回调闭环到能力平台化开放的完整实现思路。项目过程中，我提升了在 AI 工程化、微服务协同、云手机自动化、多租户业务抽象、接口安全治理以及上下文会话设计等方面的实战能力，也让我对“如何将大模型能力真正转化为稳定、可执行、可追踪的业务能力”有了更成熟的认识。
 
 ### **CPC 3.0 多租户云机管理平台 / 云手机 SaaS 平台**
 
@@ -206,33 +214,33 @@ RPC Docker CI/CD
 
 ### **斑马同校小程序**
 
-- **技术架构** 
+- **技术架构**
 
 > Spring / SpringMVC / SpringBoot / MybatisPlus / MySql / Maven / Swagger / Lombok / JsonWebToke(JWT) / Shiro
 
-- **项目概况** 
+- **项目概况**
 
 > 校园小程序，提供给学生发布代拿快递，代跑购物，代课信息和点外卖功能，并在斑马同校骑手端进行任务抢单和完成新订单，骑手钱包管理，还有校园合伙人功能，提供给合伙人管理该学校的基本权限和功能。
 
-- **担任职责** 
+- **担任职责**
 
 > 开发外卖模块的开发担任负责人，对接微信支付，还有微信小程序和公众号的授权，与推送信息，与处理新需求与解决并且优化代码中遗留的问题，并且用Swagger搭建Api文档提高后端与前端开发对接速度。后台审核外卖模块中的商家与商品模块，用户提现审核模块，给后台系统集成Shiro安全框架用于后台多用户权限管理功能。
 
-- **个人收获** 
+- **个人收获**
 
 > 熟练运用于对接微信接口，可快速开发与对接，还有对外卖类型的项目有更深层的考虑，从表设计到项目模块落地实现需要考虑的种种问题，学习到Shiro从0到1集成系统并且利用它开发权限管理系统有了自己的了解与认识，对Shiro的框架知识和源码的有了更近一步的了解。
 
 ### **睿妃医美公众号平台**
 
-- **技术架构** 
+- **技术架构**
 
 > Spring / SpringMVC / SpringBoot / SpringSecurity / MybatisPlus / MySql / Redis / Maven / Swagger2 / Lombok / JsonWebToke(JWT) / Docker
 
-- **项目概况** 
+- **项目概况**
 
 > 医美共享队列金平台，消费返利平台
 
-- **担任职责** 
+- **担任职责**
 
 > 项目原先是属于PHP开发语言，我负责主导整个项目转变重构成Java语言，利用自己编写的开源脚手架框架[**IRON**](https://github.com/sav7ng/iron)有maven版本和gradle版本，原有数据库结构分析优化，业务逻辑重新分析优化，并且把项目进行了Docker容器化，使用DockerFile和Git实现CI/CD（DevOps思想），持续构建交付，减少开发后要部署的操作，加快发开发速度，解决项目中共享金队列分佣奖励的繁琐点，使其按规定的用户奖励相应的金额等。
 

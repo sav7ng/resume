@@ -1,0 +1,19 @@
+{
+  "short_name": "Saving",
+  "name": "Saving — 高级后端开发工程师",
+  "description": "8 年后端开发经验，专注高性能、高可用系统与分布式架构。",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any"
+    }
+  ],
+  "id": "/?utm_source=pwa",
+  "start_url": "/?utm_source=pwa",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#09090b",
+  "background_color": "#ffffff"
+}

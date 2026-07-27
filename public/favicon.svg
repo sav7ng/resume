@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="10" fill="#09090b"/>
+  <g transform="translate(12 12) scale(0.125)" fill="#ffffff">
+    <path d="M0 0h320v64H0z"/>
+    <path d="M0 64h64v64H0z"/>
+    <path d="M0 128h320v64H0z"/>
+    <path d="M256 192h64v64h-64z"/>
+    <path d="M0 256h320v64H0z"/>
+  </g>
+</svg>
