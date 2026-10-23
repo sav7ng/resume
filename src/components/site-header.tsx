@@ -28,6 +28,10 @@ export function SiteHeader() {
             className="flex items-center gap-2 pl-1"
             href="/"
             aria-label="Home"
+            // The home payload carries a year of contribution data, so this
+            // link sits in every viewport and prefetches 180 kB — on the home
+            // page itself, a duplicate of what the HTML already inlines.
+            prefetch={false}
           >
             <SavingMark className="h-6 shrink-0" />
             <SavingWordmark className="max-sm:sr-only" />
