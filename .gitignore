@@ -45,3 +45,6 @@ next-env.d.ts
 
 # 部署密钥与主机配置（本地私有）
 deploy/.env
+
+# Caddy 部署包中的站点产物（由 pnpm bundle 生成）
+caddy/site/

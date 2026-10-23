@@ -22,6 +22,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Build output staged for the Caddy deployment bundle.
+    "caddy/site/**",
   ]),
 ])
 

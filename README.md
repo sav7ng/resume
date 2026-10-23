@@ -98,21 +98,24 @@ pnpm build
 
 ### 自己的服务器（Caddy）
 
-服务端装好 Caddy 后，把 [`deploy/Caddyfile`](deploy/Caddyfile) 装到 `/etc/caddy/Caddyfile`（替换里面的域名）：
+[`caddy/`](caddy/) 是一个自包含的部署包，整个文件夹传上去就能用：
 
 ```bash
-sudo caddy validate --config /etc/caddy/Caddyfile && sudo systemctl reload caddy
+pnpm bundle
+scp -r caddy root@你的服务器IP:~/
+ssh root@你的服务器IP "cd ~/caddy && chmod +x install.sh && sudo ./install.sh"
 ```
 
-本地一条命令构建并同步：
+`install.sh` 会把站点装到 `/var/www/resume`、安装 Caddy 配置（先备份旧的）、校验并重载服务。默认监听 `:80`，用 `http://服务器IP` 直接访问。
+
+有域名后：
 
 ```bash
-DEPLOY_HOST=root@你的服务器IP ./deploy/deploy.sh
+SITE_URL=https://你的域名 pnpm bundle   # 本地重新打包，写入正确的 canonical / OG 地址
+sudo DOMAIN=你的域名 ./install.sh        # 服务器上带域名安装，Caddy 自动签 HTTPS
 ```
 
-把 `DEPLOY_HOST` / `DEPLOY_PATH` / `SITE_URL` 写进 `deploy/.env`（已 gitignore）就不用每次输入。脚本用 `rsync --delete` 同步，所以 `DEPLOY_PATH` 要指向站点独占的目录。
-
-贡献图不会自己更新——重跑一次 `deploy.sh` 即可，或在服务器上挂个每日 cron。
+详见 [`caddy/README.md`](caddy/README.md)。贡献图不会自己更新——重新 `pnpm bundle` 并上传即可。
 
 ## 许可
 

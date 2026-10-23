@@ -1,0 +1,52 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Saving 简历站 · Caddy 配置
+#
+# 默认监听 :80，上传后用 http://服务器IP 就能直接访问。
+#
+# 有域名了怎么办：把下面的 `:80` 换成你的域名，例如
+#
+#     resume.example.com {
+#
+# 然后 reload。Caddy 会自动申请并续期 HTTPS 证书（前提：域名 A 记录已指向
+# 这台服务器，且 80 / 443 端口对外开放）。
+#
+# 换域名后记得在本地用新域名重新构建一次，否则页面里的 canonical / sitemap /
+# 分享图地址还是旧的：
+#
+#     SITE_URL=https://resume.example.com pnpm bundle
+# ─────────────────────────────────────────────────────────────────────────────
+
+:80 {
+	root * /var/www/resume
+	encode zstd gzip
+	file_server
+
+	# 带哈希的构建产物，同名文件内容永不变，可以长期缓存
+	@immutable path /_next/static/*
+	header @immutable Cache-Control "public, max-age=31536000, immutable"
+
+	# HTML 每次都回源校验，保证重新部署后立刻生效
+	@html {
+		path *.html /
+		path */
+	}
+	header @html Cache-Control "public, max-age=0, must-revalidate"
+
+	# 图片 / PDF 缓存一天
+	@assets path *.png *.jpg *.svg *.pdf *.webmanifest
+	header @assets Cache-Control "public, max-age=86400"
+
+	header {
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+		-Server
+	}
+
+	handle_errors {
+		@404 expression {err.status_code} == 404
+		handle @404 {
+			rewrite * /404.html
+			file_server
+		}
+	}
+}
