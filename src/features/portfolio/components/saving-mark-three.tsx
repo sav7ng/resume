@@ -108,8 +108,29 @@ export function SavingMarkThree() {
         geometries.push(geometry)
         sculpture.add(new THREE.LineSegments(geometry, material))
       }
-      sculpture.rotation.set(0.68, -0.45, -0.48)
+      const rest = { x: 0.68, y: -0.45, z: -0.48 }
+      sculpture.rotation.set(rest.x, rest.y, rest.z)
       scene.add(sculpture)
+
+      // Two detuned sines with random phases drift the pose without repeating.
+      const drift = (amplitude: number) => {
+        const slow = 0.085 + Math.random() * 0.07
+        const fast = slow * (1.7 + Math.random() * 0.7)
+        const slowPhase = Math.random() * Math.PI * 2
+        const fastPhase = Math.random() * Math.PI * 2
+        return (at: number) =>
+          amplitude *
+          (Math.sin(at * slow + slowPhase) * 0.68 +
+            Math.sin(at * fast + fastPhase) * 0.32)
+      }
+      // The drift swings around its own centre, not the resting pose: pulling y
+      // back towards zero keeps both ends of a wide sweep off the edge-on angle
+      // that would collapse the S into a sliver. x stays shallowest so the top
+      // of the travel never reads as a flat plan view.
+      const sway = { x: 0.68, y: -0.2, z: -0.48 }
+      const driftX = drift(0.22)
+      const driftY = drift(0.8)
+      const driftZ = drift(0.22)
 
       let frame = 0
       let visible = false
@@ -125,17 +146,17 @@ export function SavingMarkThree() {
         const dt = previous ? Math.min((now - previous) / 1000, 0.05) : 0
         previous = now
         if (!reduced.matches) time += dt
-        const blend = reduced.matches ? 1 : 1 - Math.exp(-dt * 5)
-        sculpture.rotation.x +=
-          (0.68 +
-            (reduced.matches ? 0 : pointerY * 0.16) -
-            sculpture.rotation.x) *
-          blend
-        sculpture.rotation.y +=
-          (-0.45 +
-            (reduced.matches ? 0 : pointerX * 0.3) -
-            sculpture.rotation.y) *
-          blend
+        const blend = reduced.matches ? 1 : 1 - Math.exp(-dt * 3.2)
+        const target = reduced.matches
+          ? rest
+          : {
+              x: sway.x + driftX(time) + pointerY * 0.11,
+              y: sway.y + driftY(time) + pointerX * 0.18,
+              z: sway.z + driftZ(time),
+            }
+        sculpture.rotation.x += (target.x - sculpture.rotation.x) * blend
+        sculpture.rotation.y += (target.y - sculpture.rotation.y) * blend
+        sculpture.rotation.z += (target.z - sculpture.rotation.z) * blend
         sculpture.position.y = reduced.matches
           ? 0
           : Math.sin(time * 0.75) * 0.085
