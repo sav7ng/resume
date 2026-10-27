@@ -83,7 +83,7 @@ export const TIMELINE_MILESTONES: TimelineMilestone[] = [
     year: 2026,
     content: `CloudPhone 插件以 \`@whateverai/cloudphone\` 发布至 npm，Agent 即装即用。
 
-5 月加入海南火狐云网络科技，投入 FIRESHIELD 火盾云手机封控系统的研发。
+5 月加入海南火狐云网络科技，投入 FIRESHIELD 火盾云手机AI智能封控系统的研发。
 
 开源 [AgentDroid](https://github.com/sav7ng/AgentDroid)，持续探索 AI 协同研发与 Agent 能力开放。`,
   },

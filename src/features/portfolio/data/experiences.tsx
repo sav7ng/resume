@@ -25,7 +25,7 @@ export const EXPERIENCES: Experience[] = [
     positions: [
       {
         id: "firehu-fireshield",
-        title: "FIRESHIELD 火盾云手机封控系统",
+        title: "FIRESHIELD 火盾云手机AI智能封控系统",
         employmentType: "高级后端开发工程师",
         icon: <ShieldIcon />,
         employmentPeriod: { start: "05.2026" },

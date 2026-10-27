@@ -19,12 +19,12 @@ const OUTLINE = [
 ]
 
 /** Half the extruded thickness: the contours sit at ±DEPTH. */
-const DEPTH = 0.35
+const DEPTH = 0.44
 /** World units visible above and below the centre, as an orthographic view. */
-const HALF_HEIGHT = 3.65
+const HALF_HEIGHT = 3.12
 const MAX_PIXEL_RATIO = 1.75
 
-type Layer = { opacity: number; points: number[] }
+type Layer = { opacity: number; lineWidth: number; points: number[] }
 
 /**
  * Flat [x, y, z, x, y, z, …] runs of independent segments, in the order they
@@ -50,7 +50,7 @@ function buildLayers(): Layer[] {
     ribs.push(...at(0, -DEPTH), ...at(0, DEPTH))
     // Clip diagonal strokes to each side panel, including both end corners.
     const slant = 0.38
-    for (let start = -slant; start < length; start += 0.16) {
+    for (let start = -slant; start < length; start += 0.22) {
       const lo = Math.max(0, -start / slant)
       const hi = Math.min(1, (length - start) / slant)
       if (lo >= hi) continue
@@ -62,10 +62,10 @@ function buildLayers(): Layer[] {
   })
 
   return [
-    { opacity: 0.18, points: loop(-DEPTH) },
-    { opacity: 0.6, points: loop(DEPTH) },
-    { opacity: 0.18, points: ribs },
-    { opacity: 0.24, points: hatches },
+    { opacity: 0.22, lineWidth: 0.65, points: loop(-DEPTH) },
+    { opacity: 0.65, lineWidth: 0.95, points: loop(DEPTH) },
+    { opacity: 0.26, lineWidth: 0.65, points: ribs },
+    { opacity: 0.24, lineWidth: 0.55, points: hatches },
   ]
 }
 
@@ -85,7 +85,7 @@ export function SavingMarkWireframe() {
 
     // Two detuned sines with random phases drift the pose without repeating.
     const drift = (amplitude: number) => {
-      const slow = 0.085 + Math.random() * 0.07
+      const slow = 0.055 + Math.random() * 0.045
       const fast = slow * (1.7 + Math.random() * 0.7)
       const slowPhase = Math.random() * Math.PI * 2
       const fastPhase = Math.random() * Math.PI * 2
@@ -100,7 +100,7 @@ export function SavingMarkWireframe() {
     // of the travel never reads as a flat plan view.
     const sway = { x: 0.68, y: -0.2, z: -0.48 }
     const driftX = drift(0.22)
-    const driftY = drift(0.8)
+    const driftY = drift(0.65)
     const driftZ = drift(0.22)
 
     const rotation = { ...rest }
@@ -133,7 +133,7 @@ export function SavingMarkWireframe() {
       rotation.x += (target.x - rotation.x) * blend
       rotation.y += (target.y - rotation.y) * blend
       rotation.z += (target.z - rotation.z) * blend
-      const bob = reduced.matches ? 0 : Math.sin(time * 0.75) * 0.085
+      const bob = reduced.matches ? 0 : Math.sin(time * 0.45) * 0.045
 
       // The two matrix rows an orthographic view needs, in the XYZ Euler order
       // the sculpture has always used.
@@ -150,14 +150,35 @@ export function SavingMarkWireframe() {
       const m11 = a * e - b * f * d
       const m12 = -b * c
 
-      const scale = height / 2 / HALF_HEIGHT
+      // Fit every pose inside a quiet margin, even on narrow phone screens.
+      let extentX = 0
+      let extentY = 0
+      for (const [x, y] of OUTLINE) {
+        for (const z of [-DEPTH, DEPTH]) {
+          extentX = Math.max(
+            extentX,
+            Math.abs(m00 * (x - 2.5) + m01 * (2.5 - y) + m02 * z)
+          )
+          extentY = Math.max(
+            extentY,
+            Math.abs(m10 * (x - 2.5) + m11 * (2.5 - y) + m12 * z) +
+              Math.abs(bob)
+          )
+        }
+      }
+      const margin = Math.min(width, height) * 0.06
+      const scale = Math.min(
+        height / 2 / HALF_HEIGHT,
+        (width / 2 - margin) / extentX,
+        (height / 2 - margin) / extentY
+      )
       const originX = width / 2
       const originY = height / 2 - bob * scale
 
       context.setTransform(ratio, 0, 0, ratio, 0, 0)
       context.clearRect(0, 0, width, height)
-      context.lineWidth = 1 / ratio
-      for (const { opacity, points } of layers) {
+      for (const { opacity, lineWidth, points } of layers) {
+        context.lineWidth = lineWidth
         context.strokeStyle = `rgba(${stroke}, ${opacity})`
         context.beginPath()
         for (let i = 0; i < points.length; i += 6) {
@@ -251,7 +272,7 @@ export function SavingMarkWireframe() {
   return (
     <div
       ref={hostRef}
-      className="group relative aspect-[1.57] w-full overflow-hidden"
+      className="group relative aspect-[1.42] w-full overflow-hidden sm:aspect-[1.34]"
       role="img"
       aria-label="Saving 的空心线框 S 标志"
     >
