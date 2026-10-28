@@ -93,6 +93,8 @@
   --color-chart-2: var(--chart-2);
   --color-chart-1: var(--chart-1);
 
+  --ease-sheet: cubic-bezier(0.32, 0.72, 0, 1);
+
   --animate-spin-ccw: spin-ccw
     var(--tw-animation-duration, var(--tw-duration, 6s)) linear infinite;
 

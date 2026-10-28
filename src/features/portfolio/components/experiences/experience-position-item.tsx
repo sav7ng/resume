@@ -35,6 +35,7 @@ export function ExperiencePositionItem({
       </div>
 
       <CollapsibleTrigger
+        data-focus-item={`experience-${position.id}`}
         className={cn(
           "group block w-full text-left",
           "relative before:absolute before:-top-1 before:-right-1 before:-bottom-1.5 before:left-7 before:-z-1 before:rounded-lg before:transition-[background-color] before:ease-out hover:before:bg-accent-muted",
@@ -44,6 +45,7 @@ export function ExperiencePositionItem({
       >
         <div className="relative z-1 mb-1 flex items-start gap-3 text-base">
           <div
+            data-focus-axis="center"
             className={cn(
               "flex size-6 shrink-0 items-center justify-center rounded-md",
               "bg-muted text-muted-foreground",
@@ -109,14 +111,20 @@ export function ExperiencePositionItem({
 
       <CollapsibleContent className="overflow-hidden">
         {position.description && (
-          <div className="typeset typeset-description pt-3 pb-1 pl-9">
+          <div
+            data-focus-items={`experience-${position.id}-note`}
+            className="typeset typeset-description pt-3 pb-1 pl-9"
+          >
             <Markdown>{position.description}</Markdown>
           </div>
         )}
       </CollapsibleContent>
 
       {Array.isArray(position.skills) && position.skills.length > 0 && (
-        <ul className="flex flex-wrap gap-1.5 pt-3 pl-9">
+        <ul
+          data-focus-item={`experience-${position.id}-skills`}
+          className="flex flex-wrap gap-1.5 pt-3 pl-9"
+        >
           {position.skills.map((skill, index) => (
             <li key={index} className="flex">
               <Tag>{skill}</Tag>

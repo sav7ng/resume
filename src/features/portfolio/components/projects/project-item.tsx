@@ -34,7 +34,10 @@ export function ProjectItem({
 
   return (
     <Collapsible className={className} defaultOpen={project.isExpanded}>
-      <div className="group/project flex items-center hover:bg-accent-muted">
+      <div
+        data-focus-item={`project-${project.id}`}
+        className="group/project flex items-center focus-within:bg-accent-muted hover:bg-accent-muted"
+      >
         {project.logo ? (
           <Image
             src={project.logo}
@@ -52,9 +55,12 @@ export function ProjectItem({
           </div>
         )}
 
-        <div className="flex-1 border-l border-dashed border-line">
-          <CollapsibleTrigger className="flex w-full items-center gap-2 p-4 pr-2 text-left">
-            <div className="flex-1">
+        <div
+          data-focus-axis="start"
+          className="flex min-w-0 flex-1 items-center border-l border-dashed border-line"
+        >
+          <CollapsibleTrigger className="flex min-w-0 flex-1 items-center gap-2 p-4 pr-2 text-left focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring">
+            <div className="min-w-0 flex-1">
               <h3 className="mb-1 leading-snug font-medium text-balance">
                 {project.title}
               </h3>
@@ -80,51 +86,62 @@ export function ProjectItem({
               </dl>
             </div>
 
-            <Tooltip>
-              <TooltipTrigger
-                render={
-                  <a
-                    className="relative flex size-6 shrink-0 items-center justify-center text-muted-foreground after:absolute after:-inset-2 hover:text-foreground"
-                    href={addQueryParams(project.link, UTM_PARAMS)}
-                    target="_blank"
-                    rel="noopener"
-                    aria-label="Open project"
-                  >
-                    <LinkIcon className="pointer-events-none size-4" />
-                  </a>
-                }
-              />
-              <TooltipContent>
-                <p>Open project</p>
-              </TooltipContent>
-            </Tooltip>
-
             <div className="shrink-0 text-muted-foreground [&_svg]:size-4">
               <CollapsibleChevronsUpDownIcon duration={0.15} />
             </div>
           </CollapsibleTrigger>
+
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <a
+                  className="mr-1 flex size-10 shrink-0 items-center justify-center text-muted-foreground hover:text-foreground focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring pointer-coarse:size-11"
+                  href={addQueryParams(project.link, UTM_PARAMS)}
+                  target="_blank"
+                  rel="noopener"
+                  aria-label="Open project"
+                >
+                  <LinkIcon className="pointer-events-none size-4" />
+                </a>
+              }
+            />
+            <TooltipContent>
+              <p>Open project</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
       </div>
 
       <CollapsibleContent className="overflow-hidden">
-        <div className="space-y-4 border-t border-line p-4">
-          {project.description && (
-            <div className="typeset typeset-description">
-              <Markdown>{project.description}</Markdown>
-            </div>
-          )}
-
-          {project.skills.length > 0 && (
-            <ul className="flex flex-wrap gap-1.5">
-              {project.skills.map((skill, index) => (
-                <li key={index} className="flex">
-                  <Tag>{skill}</Tag>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+        <ProjectContent project={project} />
       </CollapsibleContent>
     </Collapsible>
+  )
+}
+
+export function ProjectContent({ project }: { project: Project }) {
+  return (
+    <div className="space-y-4 border-t border-line p-4">
+      {project.description && (
+        <div
+          data-focus-items={`project-${project.id}-note`}
+          className="typeset typeset-description"
+        >
+          <Markdown>{project.description}</Markdown>
+        </div>
+      )}
+      {project.skills.length > 0 && (
+        <ul
+          data-focus-item={`project-${project.id}-skills`}
+          className="flex flex-wrap gap-1.5"
+        >
+          {project.skills.map((skill) => (
+            <li key={skill} className="flex">
+              <Tag>{skill}</Tag>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
   )
 }

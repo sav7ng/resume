@@ -7,8 +7,8 @@ const ID = "stack"
 
 export function TechStack() {
   return (
-    <Panel id={ID}>
-      <PanelHeader>
+    <Panel id={ID} data-focus-group={ID}>
+      <PanelHeader data-focus-item={`${ID}-header`}>
         <PanelTitle>
           <a href={`#${ID}`}>Stack</a>
           <PanelTitleCopy id={ID} />
@@ -19,6 +19,7 @@ export function TechStack() {
         <div
           className="pointer-events-none absolute inset-y-0 left-(--col-left-width) -z-1 w-px bg-[linear-gradient(to_bottom,var(--line)_4px,transparent_2px)] bg-size-[1px_6px] bg-repeat-y max-sm:hidden"
           aria-hidden
+          data-focus-axis="start"
         />
 
         {Object.entries(groupByCategory(TECH_STACK)).map(
@@ -31,11 +32,12 @@ export function TechStack() {
             return (
               <div
                 key={category}
+                data-focus-item={categoryId}
                 className="grid items-start gap-y-2 border-b border-line py-4 last:border-none sm:grid-cols-[var(--col-left-width)_1fr]"
               >
                 <div
                   id={categoryId}
-                  className="pl-4 text-sm/(--badge-height) text-muted-foreground"
+                  className="pl-4 text-sm/(--badge-height) text-muted-foreground in-data-focus-active:text-foreground"
                 >
                   <span
                     className="mr-1.5 font-mono text-muted-foreground/50 select-none"

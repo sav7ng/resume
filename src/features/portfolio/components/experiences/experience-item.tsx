@@ -4,6 +4,7 @@ import { addQueryParams } from "@/utils/url"
 import { UTM_PARAMS } from "@/config/site"
 
 import type { Experience } from "../../types/experiences"
+import { NativePositions, NoScriptCollapsibles } from "../native-collapsibles"
 import { ExperiencePositionItem } from "./experience-position-item"
 
 export function ExperienceItem({ experience }: { experience: Experience }) {
@@ -12,7 +13,10 @@ export function ExperienceItem({ experience }: { experience: Experience }) {
       id={`experience-${experience.id}`}
       className="group/experience screen-line-bottom scroll-mt-14 space-y-4 py-4"
     >
-      <div className="flex items-start gap-3 sm:items-center">
+      <div
+        data-focus-item={`company-${experience.id}`}
+        className="flex items-start gap-3 sm:items-center"
+      >
         <div className="flex size-6 shrink-0 items-center justify-center select-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:text-muted-foreground [&_svg:not([class*='size-'])]:size-5">
           {experience.companyLogo ? (
             <Image
@@ -73,11 +77,17 @@ export function ExperienceItem({ experience }: { experience: Experience }) {
         </div>
       </div>
 
-      <div className="relative space-y-4 before:absolute before:left-3 before:h-full before:w-px before:bg-border">
+      <div
+        data-scripted-collapsibles
+        className="relative space-y-4 before:absolute before:left-3 before:h-full before:w-px before:bg-border"
+      >
         {experience.positions.map((position) => (
           <ExperiencePositionItem key={position.id} position={position} />
         ))}
       </div>
+      <NoScriptCollapsibles>
+        <NativePositions positions={experience.positions} />
+      </NoScriptCollapsibles>
     </div>
   )
 }

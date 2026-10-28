@@ -6,6 +6,7 @@ import { JsonLdScript } from "@/lib/json-ld"
 import { absoluteUrl, cn } from "@/lib/utils"
 import { Education } from "@/features/portfolio/components/education"
 import { Experiences } from "@/features/portfolio/components/experiences"
+import { FocusGroup } from "@/features/portfolio/components/focus-group"
 import { GitHubContributions } from "@/features/portfolio/components/github-contributions"
 import { Hello } from "@/features/portfolio/components/hello"
 import { Overview } from "@/features/portfolio/components/overview"
@@ -40,16 +41,18 @@ export default function HomePage() {
           <Hello />
           <Separator />
 
-          <TechStack />
-          <Separator />
+          <FocusGroup>
+            <TechStack />
+            <Separator />
 
-          <Experiences />
-          <Separator />
+            <Experiences />
+            <Separator />
 
-          <Projects />
-          <Separator />
+            <Projects />
+            <Separator />
 
-          <Writing />
+            <Writing />
+          </FocusGroup>
           <Separator />
 
           <Education />

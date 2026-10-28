@@ -15,6 +15,10 @@ import { PanelTitleCopy } from "@/features/portfolio/components/panel-title-copy
 import { EXPERIENCES } from "@/features/portfolio/data/experiences"
 import type { Experience } from "@/features/portfolio/types/experiences"
 
+import {
+  NativeEarlierExperiences,
+  NoScriptCollapsibles,
+} from "../native-collapsibles"
 import { ExperienceItem } from "./experience-item"
 
 const ID = "experience"
@@ -22,8 +26,8 @@ const MAX = 3
 
 export function Experiences() {
   return (
-    <Panel id={ID}>
-      <PanelHeader>
+    <Panel id={ID} data-focus-group={ID}>
+      <PanelHeader data-focus-item={`${ID}-header`}>
         <PanelTitle>
           <a href={`#${ID}`}>Experience</a>
           <PanelTitleCopy id={ID} />
@@ -35,7 +39,7 @@ export function Experiences() {
       </div>
 
       {EXPERIENCES.length > MAX && (
-        <Collapsible className="group/collapsible">
+        <Collapsible className="group/collapsible" data-scripted-collapsibles>
           <CollapsibleContent render={<div className="pr-2 pl-4" />}>
             <ExperienceList experiences={EXPERIENCES.slice(MAX)} />
           </CollapsibleContent>
@@ -62,6 +66,11 @@ export function Experiences() {
             />
           </div>
         </Collapsible>
+      )}
+      {EXPERIENCES.length > MAX && (
+        <NoScriptCollapsibles>
+          <NativeEarlierExperiences experiences={EXPERIENCES.slice(MAX)} />
+        </NoScriptCollapsibles>
       )}
     </Panel>
   )

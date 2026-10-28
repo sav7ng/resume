@@ -13,8 +13,8 @@ const ID = "writing"
 
 export function Writing() {
   return (
-    <Panel id={ID}>
-      <PanelHeader>
+    <Panel id={ID} data-focus-group={ID}>
+      <PanelHeader data-focus-item={`${ID}-header`}>
         <PanelTitle>
           <a href={`#${ID}`}>Writing</a>
           <PanelTitleSup>({WRITING.length})</PanelTitleSup>
@@ -24,14 +24,19 @@ export function Writing() {
 
       <ul>
         {WRITING.map((item, index) => (
-          <li key={item.id} className="border-b border-line last:border-none">
+          <li
+            key={item.id}
+            data-focus-item={`writing-${item.id}`}
+            className="border-b border-line last:border-none"
+          >
             <a
-              className="group/writing relative flex items-start gap-3 px-4 py-3 outline-none"
+              className="group/writing relative flex items-start gap-3 px-4 py-3 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring"
               href={item.link}
               target="_blank"
               rel="noopener"
             >
               <span
+                data-focus-axis="start"
                 className="mt-0.5 shrink-0 font-mono text-sm text-muted-foreground/50 tabular-nums select-none"
                 aria-hidden
               >
