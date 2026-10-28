@@ -1,9 +1,11 @@
 "use client"
 
-import { useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useInView, usePageInView } from "motion/react"
 
-import { TextFlip } from "@/registry/components/text-flip"
+import { DecodeText } from "@/registry/components/decode-text"
+
+const INTERVAL_MS = 3000
 
 export function FlipSentences({
   children,
@@ -14,16 +16,28 @@ export function FlipSentences({
   const ref = useRef<HTMLDivElement>(null)
   const isPageInView = usePageInView()
   const isInView = useInView(ref)
+  const play = isPageInView && isInView
+
+  const [index, setIndex] = useState(0)
+
+  useEffect(() => {
+    if (!play || children.length < 2) return
+
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % children.length)
+    }, INTERVAL_MS)
+
+    return () => clearInterval(timer)
+  }, [play, children.length])
 
   return (
     <div ref={ref} {...props}>
-      <TextFlip
-        className="shimmer font-mono text-sm text-balance text-muted-foreground shimmer-duration-1500 shimmer-once not-dark:shimmer-color-foreground"
-        interval={3}
-        play={isPageInView && isInView}
+      <DecodeText
+        className="font-mono text-sm text-balance text-muted-foreground"
+        play={play}
       >
-        {children}
-      </TextFlip>
+        {children[index % children.length]}
+      </DecodeText>
     </div>
   )
 }
